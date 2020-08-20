@@ -1,28 +1,211 @@
 <template>
   <div id="app">
-    <img alt="Vue logo" src="./assets/logo.png">
-    <HelloWorld msg="Welcome to Your Vue.js App"/>
+    <PageTitle class="bar-container" v-if="!isFullpage" :user="user"></PageTitle>
+    <PageSubtitle class="bar-container" :menus="menus" v-if="isSubBar"></PageSubtitle>
+    <!-- <div id="nav">
+      <router-link to="/">Home</router-link> |
+      <router-link to="/about">About</router-link>
+    </div>-->
+    <transition name="router-view-transition">
+      <router-view :key="$route.fullPath" />
+    </transition>
+
+    <!-- footer -->
+    <div class="columns footer" v-if="!isFullpage">
+      <div class="container">
+        <div class="columns">
+          <div class="column">Thông tin</div>
+          <div class="column">Hỏi đáp</div>
+          <div class="column">Theo dõi</div>
+        </div>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
-import HelloWorld from './components/HelloWorld.vue'
+/* eslint-disable */
+import { mapState, mapActions } from "vuex";
 
 export default {
-  name: 'App',
   components: {
-    HelloWorld
-  }
-}
+    PageTitle: () => import("@/components/PageTitle"),
+    PageSubtitle: () => import("@/components/PageSubtitle"),
+  },
+  watch: {
+    $route: function (to, from) {
+      this.toggleSubTitle();
+      this.toggleFooter();
+    },
+  },
+  data() {
+    return {
+      menus: [
+        {
+          title: "🏡 Trang chủ",
+          url: "/",
+        },
+        {
+          title: "🎇 Mới nhất",
+          url: "/latest",
+        },
+        {
+          title: "🍑 Loại quả",
+          url: "/fruit",
+        },
+        {
+          title: "📘 Bộ sưu tập",
+          url: "/collection",
+        },
+      ],
+      isSubBar: true,
+      isFullpage: false,
+    };
+  },
+  computed: {
+    ...mapState({
+      user: (state) => state.user.user,
+    }),
+  },
+  mounted() {
+    this.toggleSubTitle();
+    this.toggleFooter();
+  },
+  methods: {
+    toggleSubTitle() {
+      if (
+        this.$route.fullPath === "/" ||
+        this.$route.fullPath === "/latest" ||
+        this.$route.fullPath === "/fruit" ||
+        this.$route.fullPath === "/collection"
+      ) {
+        this.isSubBar = true;
+      } else {
+        this.isSubBar = false;
+      }
+    },
+    toggleFooter() {
+      if (
+        this.$route.fullPath.indexOf("/register") >= 0 ||
+        this.$route.fullPath.indexOf("/login") >= 0
+      ) {
+        this.isFullpage = true;
+      } else {
+        this.isFullpage = false;
+      }
+    },
+  },
+};
 </script>
 
 <style>
+@import url("https://fonts.googleapis.com/css2?family=Merriweather:wght@400;700;900&family=Roboto:wght@400;500;700;900&display=swap");
+
+/* // app */
 #app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
+  font-family: "Roboto";
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
-  color: #2c3e50;
-  margin-top: 60px;
+  margin: 0 auto;
+  background-color: #fbfbfb;
+}
+
+a {
+  font-weight: bold;
+  color: #707070;
+}
+.router-link-exact-active {
+  color: #01d28e;
+}
+
+/* // welcome message */
+.welcome {
+  width: 100%;
+  padding: 36px;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.welcome-title {
+  font-size: 23px;
+  font-weight: 900;
+}
+
+.welcome-img {
+  height: 24px;
+  margin-left: 10px;
+}
+
+/* // home */
+/* // section title */
+.home-section-title {
+  font-weight: 900;
+  font-size: 24px;
+  color: #b88cd8;
+  text-align: left;
+  margin-bottom: 16px;
+}
+
+/* // container */
+.container {
+  padding: 0 24px 60px 24px;
+  text-align: left;
+}
+
+.footer {
+  background-color: #fefefe;
+}
+
+/* // scrollbar */
+/* width */
+::-webkit-scrollbar {
+  width: 6px;
+  height: 6px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #70707024;
+}
+
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #01d28e;
+  border-radius: 10px;
+}
+
+/* Handle on hover */
+::-webkit-scrollbar-thumb:hover {
+  background: #01d28e;
+}
+
+/* // transition */
+/* // animation for views */
+.router-view-transition-enter-active {
+  animation: fadeIn 0.25s ease-in;
+}
+
+@keyframes fadeIn {
+  50% {
+    opacity: 0;
+  }
+  100% {
+    opacity: 1;
+  }
+}
+
+.router-view-transition-leave-active {
+  animation: fadeOut 0.125s ease-in;
+}
+
+@keyframes fadeOut {
+  0% {
+    opacity: 1;
+  }
+  100% {
+    opacity: 0;
+  }
 }
 </style>
