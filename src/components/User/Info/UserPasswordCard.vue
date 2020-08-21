@@ -17,7 +17,7 @@
         <div class="column">
           <div class="tile is-ancestor notification is-light is-vertical">
             <p class="section-title">Điều kiện đặt mật khẩu</p>
-            <br/>
+            <br />
             <div class="requirement" style="display: flex; align-items: center;">
               <p v-if="isLong === false">❌</p>
               <p v-else>✔️</p>
@@ -37,10 +37,10 @@
             <div class="requirement" style="display: flex; align-items: center;">
               <p v-if="isSimilar === false">❌</p>
               <p v-else>✔️</p>
-            <p
-              :class="{'failed': isSimilar === false, 'success': isSimilar === true}"
+              <p
+                :class="{'failed': isSimilar === false, 'success': isSimilar === true}"
                 style="margin-left: 12px;"
-            >Khác mật khẩu cũ và nhập lại mật khẩu giống với mật khẩu mới.</p>
+              >Khác mật khẩu cũ và nhập lại mật khẩu giống với mật khẩu mới.</p>
             </div>
           </div>
         </div>
@@ -75,6 +75,21 @@ export default {
     };
   },
   watch: {
+    password: function () {
+      this.new_password.length >= 8 && this.new_password.length <= 25
+        ? (this.isLong = true)
+        : (this.isLong = false);
+      this.new_password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/g)
+        ? (this.isChar = true)
+        : (this.isChar = false);
+      this.new_password === this.new_password_conf &&
+      this.new_password !== this.password
+        ? (this.isSimilar = true)
+        : (this.isSimilar = false);
+      this.isLong === true && this.isChar === true && this.isSimilar === true
+        ? (this.isDisabled = false)
+        : (this.isDisabled = true);
+    },
     new_password: function () {
       this.new_password.length >= 8 && this.new_password.length <= 25
         ? (this.isLong = true)
@@ -91,6 +106,12 @@ export default {
         : (this.isDisabled = true);
     },
     new_password_conf: function () {
+      this.new_password.length >= 8 && this.new_password.length <= 25
+        ? (this.isLong = true)
+        : (this.isLong = false);
+      this.new_password.match(/^(?=.*[a-z])(?=.*[A-Z])(?=.*[0-9])/g)
+        ? (this.isChar = true)
+        : (this.isChar = false);
       this.new_password === this.new_password_conf &&
       this.new_password !== this.password
         ? (this.isSimilar = true)
@@ -120,8 +141,9 @@ export default {
         })
         .catch(() => {
           this.$buefy.toast.open({
-            type: "is-error",
-            message: "Úi, hãy thử lại sau nhé. 😪",
+            type: "is-danger",
+            position: "is-top",
+            message: "Úi, hãy kiểm tra lại mật khẩu của bạn. 😪",
           });
         })
         .finally(() => {
@@ -152,7 +174,7 @@ export default {
 }
 
 .requirement {
-    padding: 2px 0;
+  padding: 2px 0;
 }
 
 .failed {

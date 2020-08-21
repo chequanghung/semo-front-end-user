@@ -12,7 +12,7 @@
         <div class="image is-96x96" style="margin: 0 auto 16px auto;">
           <img class="is-rounded" :src="fruit.icon_url" />
         </div>
-        <p class="card-info-title" style="text-transform: uppercase;">{{ fruit.title }}</p>
+        <p class="card-info-title" style="text-transform: uppercase; text-align: center;">{{ fruit.title }}</p>
       </div>
     </div>
 

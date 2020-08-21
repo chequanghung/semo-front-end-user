@@ -62,6 +62,7 @@
 
 <script>
 import { mapActions } from "vuex";
+
 export default {
   name: "Login",
   data() {
@@ -155,8 +156,8 @@ export default {
 
 .form {
   padding: 40px 24px;
-  background-color: rgba(255, 255, 255, 0.8);
-  backdrop-filter: saturate(120%) blur(10px);
+  background-color: rgba(255, 255, 255, 0.85);
+  backdrop-filter: saturate(120%) blur(20px);
   border-radius: 10px;
   box-shadow: 0 2px 8px #00000029;
 }
