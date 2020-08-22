@@ -19,7 +19,7 @@
               <b-input placeholder="🔍 Tìm kiếm sản phẩm" expanded rounded></b-input>
             </div>
             <div class="column is-narrow">
-              <b-button type="is-primary" rounded>➕ Tạo sản phẩm mới</b-button>
+              <b-button type="is-primary" rounded tag="router-link" to="/create">➕ Tạo sản phẩm mới</b-button>
             </div>
           </div>
 

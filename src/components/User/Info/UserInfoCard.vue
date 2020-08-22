@@ -30,7 +30,7 @@
 
           <!-- image -->
           <br />
-          <ImageUploader :img_url="user.img_url" directory="avatar" @set="updateAvatar"></ImageUploader>
+          <ImageUploader :img_url="user.img_url" :directory="`/user/${user.img_dir}/avatar`" @set="updateAvatar"></ImageUploader>
         </div>
       </div>
       <br />

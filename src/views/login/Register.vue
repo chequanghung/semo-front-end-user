@@ -22,7 +22,9 @@
               <!-- step 2 -->
               <RegisterStep2OTP v-if="step === 2" @next="next" @first="first"></RegisterStep2OTP>
               <!-- step 3 -->
-              <RegisterStep3Password v-if="step === 3"></RegisterStep3Password>
+              <RegisterStep3Password v-if="step === 3" @next="next"></RegisterStep3Password>
+              <!-- step 4 -->
+              <RegisterStep4Information v-if="step === 4" @next="next"></RegisterStep4Information>
             </transition>
           </div>
         </div>

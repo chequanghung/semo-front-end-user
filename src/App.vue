@@ -87,7 +87,8 @@ export default {
     toggleFooter() {
       if (
         this.$route.fullPath.indexOf("/register") >= 0 ||
-        this.$route.fullPath.indexOf("/login") >= 0
+        this.$route.fullPath.indexOf("/login") >= 0 ||
+        this.$route.fullPath.indexOf("/create") >= 0
       ) {
         this.isFullpage = true;
       } else {

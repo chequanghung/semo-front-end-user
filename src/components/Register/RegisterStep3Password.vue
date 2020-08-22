@@ -63,7 +63,7 @@
 </template>
 
 <script>
-import { mapActions } from 'vuex'
+import { mapState, mapActions } from "vuex";
 
 export default {
   data() {
@@ -107,19 +107,56 @@ export default {
         : (this.isDisabled = true);
     },
   },
+  computed: {
+    ...mapState({
+      phone: (state) => state.register.phone,
+      password: (state) => state.register.password,
+    }),
+  },
   methods: {
-      ...mapActions('register', ['createu']),
-      ...mapActions('user', ['login']),
+    ...mapActions("register", ["createu", "clear"]),
+    ...mapActions("user", ["login"]),
     submitPassword() {
-        this.createu(this.new_password)
-        .then(({ data }) => {
-            // success bubble
-            this.$buefy.toast.open({
-                type: 'is-success',
-                message: `${data.message}`,
+      this.createu(this.new_password)
+        .then((response) => {
+          console.info(response)
+          // success bubble
+          this.$buefy.toast.open({
+            type: "is-success",
+            message: `${response.data.message}`,
+          });
+
+          let vm = this
+          // then log in
+          console.log(this.phone)
+          this.login({
+            phone: this.phone,
+            password: this.password,
+          })
+          .then(() => {
+            // clear register phone and password
+            vm.clear();
+            // move to next page
+            vm.$emit("next");
+            vm.$buefy.toast.open({
+              type: 'is-warning',
+              message: `OK`
             })
-            // 
+          })
+          .catch(({ response }) => {
+            vm.$buefy.toast.open({
+              type: 'is-danger',
+              message: `${response.data.message}`
+            })
+          })
         })
+        .catch((error) => {
+          console.log(error)
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message: `${error.data}`,
+          });
+        });
     },
   },
 };

@@ -8,7 +8,6 @@ export default {
         // 
         phone: '',
         password: '',
-
     },
 
 
@@ -34,16 +33,18 @@ export default {
     actions: {
         setp: ({ commit }, phone) => {
             return axios.get(`/user/existed/${phone}`)
-            .then(() => {
+            .then(response => {
                 commit('setp', phone)
+                return response
             })
         },
-        createu: async ({ state, commit }, password) => {
+        createu: ({ state, commit }, password) => {
             return axios.post(`/user/signup`, {
                 phone: state.phone,
                 password: password
-            }).then(() => {
+            }).then((response) => {
                 commit('setpa', password)
+                return response
             })
         },
         clear: ({ commit }) => {

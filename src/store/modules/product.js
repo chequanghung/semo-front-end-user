@@ -48,7 +48,7 @@ export default {
         },
         deletep: (state, product) => {
             state.products = state.products.filter(item => item.id !== product.id)
-        }
+        },
     },
 
 
@@ -67,6 +67,6 @@ export default {
                 .then(() => {
                     commit('deletep', address)
                 })
-        }
+        },
     }
 }

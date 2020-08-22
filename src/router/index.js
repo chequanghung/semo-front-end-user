@@ -59,6 +59,14 @@ const routes = [
     }
   },
   {
+    path: '/create',
+    name: 'Create',
+    component: () => import('@/views/product/Product'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/register',
     name: 'Register',
     component: () => import('@/views/login/Register'),

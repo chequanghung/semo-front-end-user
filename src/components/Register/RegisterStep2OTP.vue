@@ -80,7 +80,6 @@ export default {
           vm.$emit("next");
         })
         .catch((error) => {
-          console.log(error);
           // error bubble
           switch (error.code) {
             // expired

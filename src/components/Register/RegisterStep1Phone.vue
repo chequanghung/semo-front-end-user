@@ -106,61 +106,74 @@ export default {
       this.disabled = true;
       this.loading = true;
 
-      let vm = this;
+      // let vm = this;
 
       // save into vuex
       this.setp(this.phone)
-        .then(() => {
-          // convert to firebase format
-          let fbFormatPhone = `+84${this.phone.substr(1, 9)}`;
+        .then(({ data }) => {
+          if (!data.existed) {
+            // convert to firebase format
+            let fbFormatPhone = `+84${this.phone.substr(1, 9)}`;
 
-          // start firebase auth
-          let appVerifier = this.appVerifier;
+            // start firebase auth
+            let appVerifier = this.appVerifier;
 
-          fb.auth()
-            .signInWithPhoneNumber(fbFormatPhone, appVerifier)
-            .then(function (confirmationResult) {
-              window.confirmationResult = confirmationResult;
-              // done sending otp
-              vm.$buefy.toast.open({
-                type: "is-success",
-                message: `Được rồi, hãy kiểm tra điện thoại của bạn nhé. 📱`,
-                position: "is-top",
+            let vm = this
+
+            fb.auth()
+              .signInWithPhoneNumber(fbFormatPhone, appVerifier)
+              .then(function (confirmationResult) {
+                window.confirmationResult = confirmationResult;
+                // done sending otp
+                vm.$buefy.toast.open({
+                  type: "is-success",
+                  message: `Được rồi, hãy kiểm tra điện thoại của bạn nhé. 📱`,
+                  position: "is-top",
+                });
+                // clear this phone
+                vm.phone = "";
+                // move to next page
+                vm.$emit("next");
+              })
+              .catch((error) => {
+                switch (error.code) {
+                  case "auth/too-many-requests":
+                    this.$buefy.toast.open({
+                      type: "is-danger",
+                      message: `Bạn đã thử nhập số điện thoại này quá nhiều lần rồi. Hãy chọn số khác nhé. 😣`,
+                      position: "is-top",
+                    });
+                    break;
+
+                  default:
+                    this.$buefy.toast.open({
+                      type: "is-danger",
+                      message: `Ối xin lỗi, bị lỗi rồi, tại chúng mình đấy. 😥`,
+                      position: "is-top",
+                    });
+                    //
+                    this.$buefy.snackbar.open({
+                      type: "is-danger",
+                      message: `Hãy gửi lỗi này tới chúng mình để được trợ giúp nhé: ${error.message}`,
+                      position: "is-top",
+                    });
+                    break;
+                }
+                // return normal state for submit button
+                this.disabled = false;
+                this.loading = false;
               });
-              // clear this phone
-              vm.phone = "";
-              // move to next page
-              vm.$emit("next");
-            })
-            .catch((error) => {
-                console.log(error)
-              switch (error.code) {
-                case "auth/too-many-requests":
-                  this.$buefy.toast.open({
-                    type: "is-danger",
-                    message: `Bạn đã thử nhập số điện thoại này quá nhiều lần rồi. Hãy chọn số khác nhé. 😣`,
-                    position: "is-top",
-                  });
-                  break;
-
-                default:
-                  this.$buefy.toast.open({
-                    type: "is-danger",
-                    message: `Ối xin lỗi, bị lỗi rồi, tại chúng mình đấy. 😥`,
-                    position: "is-top",
-                  });
-                  //
-                  this.$buefy.snackbar.open({
-                    type: "is-danger",
-                    message: `Hãy gửi lỗi này tới chúng mình để được trợ giúp nhé: ${error.message}`,
-                    position: "is-top",
-                  });
-                  break;
-              }
-              // return normal state for submit button
-              this.disabled = false;
-              this.loading = false;
+          } else {
+            this.$buefy.toast.open({
+              type: "is-danger",
+              message: `Số điện thoại này đã được đăng ký rồi. 😥`,
+              position: "is-top",
             });
+
+            // return normal state for submit button
+            this.disabled = false;
+            this.loading = false;
+          }
         })
         .catch((error) => {
           this.$buefy.toast.open({
