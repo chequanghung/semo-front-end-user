@@ -83,10 +83,10 @@ export default {
         ? (this.isChar = true)
         : (this.isChar = false);
       this.new_password === this.new_password_conf &&
-      this.new_password !== this.password
+      this.new_password !== this.password && this.password.length > 0
         ? (this.isSimilar = true)
         : (this.isSimilar = false);
-      this.isLong === true && this.isChar === true && this.isSimilar === true && this.password.length === 0
+      this.isLong === true && this.isChar === true && this.isSimilar === true
         ? (this.isDisabled = false)
         : (this.isDisabled = true);
     },
@@ -98,10 +98,10 @@ export default {
         ? (this.isChar = true)
         : (this.isChar = false);
       this.new_password === this.new_password_conf &&
-      this.new_password !== this.password
+      this.new_password !== this.password && this.password.length > 0
         ? (this.isSimilar = true)
         : (this.isSimilar = false);
-      this.isLong === true && this.isChar === true && this.isSimilar === true && this.password.length === 0
+      this.isLong === true && this.isChar === true && this.isSimilar === true
         ? (this.isDisabled = false)
         : (this.isDisabled = true);
     },
@@ -113,10 +113,10 @@ export default {
         ? (this.isChar = true)
         : (this.isChar = false);
       this.new_password === this.new_password_conf &&
-      this.new_password !== this.password
+      this.new_password !== this.password && this.password.length > 0
         ? (this.isSimilar = true)
         : (this.isSimilar = false);
-      this.isLong === true && this.isChar === true && this.isSimilar === true && this.password.length === 0
+      this.isLong === true && this.isChar === true && this.isSimilar === true
         ? (this.isDisabled = false)
         : (this.isDisabled = true);
     },
