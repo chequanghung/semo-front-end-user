@@ -13,13 +13,19 @@
     </div>
     <div class="container columns is-vcentered is-mobile" style="margin: 0 auto;">
       <div class="column is-full" v-if="index === 1">
-        <ProductType @next="submitType"></ProductType>
+        <transition name="router-view-transition">
+          <ProductType @next="submitType"></ProductType>
+        </transition>
       </div>
       <div class="column is-full" v-if="index === 2">
-        <ProductCreate @submit="addProduct"></ProductCreate>
+        <transition name="router-view-transition">
+          <ProductCreate @submit="addProduct"></ProductCreate>
+        </transition>
       </div>
       <div class="column is-full" v-if="index === 3">
-        <ProductCreateFinished :product_id="product_id"></ProductCreateFinished>
+        <transition name="router-view-transition">
+          <ProductCreateFinished :product_id="product_id"></ProductCreateFinished>
+        </transition>
       </div>
     </div>
   </div>
@@ -69,6 +75,7 @@ export default {
           diameter_avg: product.diameter_avg,
           price_init: product.price_init,
           price_step: product.price_step,
+          notes: product.notes,
           product_type: this.product_type,
         })
         // added successfully

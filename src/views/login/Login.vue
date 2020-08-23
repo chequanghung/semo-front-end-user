@@ -31,6 +31,7 @@
                   placeholder="Mật khẩu"
                   type="password"
                   maxlength="255"
+                  password-reveal
                   :has-counter="false"
                 ></b-input>
               </b-field>

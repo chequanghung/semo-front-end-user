@@ -1,9 +1,9 @@
 <template>
   <div class="page-container">
     <div class="columns">
-      <div class="column is-10">
+      <div class="column is-full">
         <!-- basic info -->
-        <div class="card-container">
+        <div class="card-container" ref="card-container-basic">
           <p class="card-title">📦 Thông tin cơ bản</p>
           <br />
           <!-- title -->
@@ -41,7 +41,7 @@
 
         <br />
         <!-- specific info -->
-        <div class="card-container">
+        <div class="card-container" ref="card-container-info">
           <p class="card-title">📋 Thông tin chi tiết</p>
           <br />
           <!-- weight avg -->
@@ -120,7 +120,7 @@
 
         <br />
         <!-- specific info -->
-        <div class="card-container">
+        <div class="card-container" ref="card-container-media">
           <p class="card-title">🖼️ Quản lý hình ảnh</p>
           <br />
           <p>Hãy chụp ảnh lại sản phẩm của bạn thật đẹp để người mua ấn tượng nhé. 📷</p>
@@ -162,7 +162,7 @@
         </div>
 
         <!-- sale info -->
-        <div class="card-container">
+        <div class="card-container" ref="card-container-seller">
           <p class="card-title">💰 Thông tin bán hàng</p>
           <br />
           <!-- price init -->
@@ -194,13 +194,20 @@
             </b-select>
           </b-field>
         </div>
-      </div>
-      <div class="column is-2"></div>
-    </div>
 
-    <div class="columns is-centered">
-      <div class="column is-narrow">
-        <b-button @click="submitProduct">✈️ Gửi đi kiểm duyệt</b-button>
+        <br />
+
+        <!-- submit button -->
+        <div class="columns">
+          <div class="column"></div>
+          <div class="column is-narrow">
+            <b-button
+              @click="submitProduct"
+              type="is-primary"
+              :disabled="isDisabled"
+            >✈️ Gửi đi kiểm duyệt</b-button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -208,7 +215,7 @@
 
 <script>
 import uniqid from "uniqid";
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   components: {
@@ -221,8 +228,26 @@ export default {
   },
   computed: {
     ...mapState({
-      user: state => state.user.user
-    })
+      user: (state) => state.user.user,
+    }),
+    isDisabled: function () {
+      if (
+        this.title === "" ||
+        this.fruit === {} ||
+        this.weight === "" ||
+        this.address === "" ||
+        this.weight_avg === "" ||
+        this.diameter_avg === "" ||
+        this.notes === "" ||
+        this.media.length === 0 ||
+        this.price_init === "" ||
+        this.price_step === ""
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   data() {
     return {
@@ -251,7 +276,7 @@ export default {
     },
     submitProduct() {
       // submit product
-      this.$emit('submit', {
+      this.$emit("submit", {
         fruit_id: this.fruit.id,
         title: this.title,
         weight: this.weight,
@@ -263,8 +288,8 @@ export default {
         notes: this.notes,
         price_init: this.price_init,
         price_step: this.price_step,
-        media: this.media.map(item => item.media_url)
-      })
+        media: this.media.map((item) => item.media_url),
+      });
     },
     uploadImages() {
       if (this.files.length > 12) {
@@ -279,17 +304,26 @@ export default {
         this.files = this.files.slice(0, 12);
       }
 
-      this.media = this.files.map(item => {
-        return {index: uniqid(), file: item, media_url: null}
-      })
+      this.media = this.files.map((item) => {
+        return { index: uniqid(), file: item, media_url: null };
+      });
     },
     setImageURL(img) {
-      // filter 
+      // filter
       if (img.media_url !== null) {
-        this.media = this.media.map(item => item.index === img.index ? {...item, media_url: img.media_url} : item)
+        this.media = this.media.map((item) =>
+          item.index === img.index
+            ? { ...item, media_url: img.media_url }
+            : item
+        );
       } else {
-        this.media = this.media.filter(item => item.index !== img.index)
+        this.media = this.media.filter((item) => item.index !== img.index);
       }
+    },
+    goto(refName) {
+      var element = this.$refs[refName];
+      var top = element.offsetTop;
+      window.scrollTo(0, top);
     },
   },
 };
@@ -301,11 +335,14 @@ export default {
   border-radius: 10px;
   background-color: white;
   padding: 32px;
+  scroll-behavior: smooth;
 }
 
 .card-title {
   font-weight: 700;
   color: #07d390;
   font-size: 20px;
+}
+.anchors {
 }
 </style>
