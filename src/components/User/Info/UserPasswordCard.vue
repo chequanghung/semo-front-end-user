@@ -83,7 +83,7 @@ export default {
         ? (this.isChar = true)
         : (this.isChar = false);
       this.new_password === this.new_password_conf &&
-      this.new_password !== this.password && this.password.length > 0
+      this.new_password !== this.password && this.password.length > 0 && this.isChar === true
         ? (this.isSimilar = true)
         : (this.isSimilar = false);
       this.isLong === true && this.isChar === true && this.isSimilar === true
@@ -98,7 +98,7 @@ export default {
         ? (this.isChar = true)
         : (this.isChar = false);
       this.new_password === this.new_password_conf &&
-      this.new_password !== this.password && this.password.length > 0
+      this.new_password !== this.password && this.password.length > 0 && this.isChar === true
         ? (this.isSimilar = true)
         : (this.isSimilar = false);
       this.isLong === true && this.isChar === true && this.isSimilar === true
@@ -113,7 +113,7 @@ export default {
         ? (this.isChar = true)
         : (this.isChar = false);
       this.new_password === this.new_password_conf &&
-      this.new_password !== this.password && this.password.length > 0
+      this.new_password !== this.password && this.password.length > 0 && this.isChar === true
         ? (this.isSimilar = true)
         : (this.isSimilar = false);
       this.isLong === true && this.isChar === true && this.isSimilar === true
