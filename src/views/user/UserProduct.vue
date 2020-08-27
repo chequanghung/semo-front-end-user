@@ -31,7 +31,15 @@
                 v-for="product in products"
                 :key="product.id"
               >
-                <ProductCard :product="product" @edit="editProduct" @delete="deleteProduct"></ProductCard>
+                <ProductCard
+                  :item="product"
+                  @edit="editProduct"
+                  @delete="deleteProduct"
+                  @create="createAuction"
+                  @auction="intoAuction"
+                  @affair="intoAffair"
+                  @restore="restoreProduct"
+                ></ProductCard>
               </div>
             </transition-group>
           </div>
@@ -117,10 +125,19 @@ export default {
         },
       ],
       index: 0,
+      // product
+      product: {},
     };
   },
   methods: {
-    ...mapActions("product", ["gets", "deletep"]),
+    ...mapActions("product", [
+      "gets",
+      "deletep",
+      "restorep",
+      "createa",
+      "createaclosure",
+    ]),
+
     changeSideIndex(index) {
       this.index = index;
     },
@@ -132,19 +149,21 @@ export default {
       console.log(product);
     },
     deleteProduct(product) {
+      let vm = this;
+
       this.$buefy.dialog.confirm({
         message: "Bạn chắc chắn muốn xóa sản phẩm này chứ? 😧",
         onConfirm: function () {
-          this.deletep(product)
+          vm.deletep(product)
             .then(() => {
-              this.$buefy.toast.open({
+              vm.$buefy.toast.open({
                 type: "is-success",
                 position: "is-top",
                 message: "Sản phẩm đã được đưa đến thư mục đã xóa. 🗑️",
               });
             })
             .catch(() => {
-              this.$buefy.toast.open({
+              vm.$buefy.toast.open({
                 type: "is-danger",
                 position: "is-top",
                 message: "Úi, hãy thử lại sau nhé. 😪",
@@ -156,6 +175,72 @@ export default {
         confirmText: "🗑️ Xóa",
       });
     },
+    // for auction
+    createAuction(item) {
+      // create auction
+      this.createa(item)
+        .then(() => {
+          this.createaclosure(item)
+          .then(() => {
+            this.$buefy.toast.open({
+              message: "Tạo buổi đấu giá thành công. 😋",
+              type: "is-success",
+              position: "is-top",
+            });
+          })
+          .catch(error => {
+            this.$buefy.toast.open({
+            message: `${error.response.data.message} 😪`,
+            type: "is-warning",
+            position: "is-top",
+          });
+          })
+          ;
+        })
+        .catch((error) => {
+          // "Úi, có chút lỗi rồi, bạn thử lại sau nhé. 😪"
+          this.$buefy.toast.open({
+            message: `${error.response.data.message} 😪`,
+            type: "is-danger",
+            position: "is-top",
+          });
+        });
+    },
+    intoAuction(item) {
+      this.$router.push({ name: 'Auction', params: { id: item.Auctions[0].id } })
+    },
+    // for affair
+    intoAffair(item) {
+      this.$router.push({ name: 'Affair', params: { id: item.Affairs[0].id } })
+    },
+    // for deleted product
+    restoreProduct(product) {
+      let vm = this;
+
+      this.$buefy.dialog.confirm({
+        message: "Bạn chắc chắn muốn khôi phục sản phẩm này chứ? 🤗",
+        onConfirm: function () {
+          vm.restorep(product)
+            .then(() => {
+              vm.$buefy.toast.open({
+                type: "is-success",
+                position: "is-top",
+                message: "Sản phẩm đã được đưa khôi phục và chờ kiểm duyệt. 🔄",
+              });
+            })
+            .catch(() => {
+              vm.$buefy.toast.open({
+                type: "is-danger",
+                position: "is-top",
+                message: "Úi, hãy thử lại sau nhé. 😪",
+              });
+            });
+        },
+        cancelText: "Không, tôi đổi ý rồi.",
+        type: "is-info",
+        confirmText: "🔄 Khôi phục",
+      });
+    },
   },
 };
 </script>
@@ -164,13 +249,12 @@ export default {
 .enlist-enter-to {
   opacity: 0;
   animation: zoomIn;
-  animation-duration: .35s;
-  animation-delay: .25s;
+  animation-duration: 0.35s;
+  animation-delay: 0.25s;
 }
 
 .enlist-leave-to {
   animation: zoomOut;
-  animation-duration: .2s;
+  animation-duration: 0.2s;
 }
-
 </style>

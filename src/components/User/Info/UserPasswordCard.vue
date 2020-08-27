@@ -5,13 +5,13 @@
         <div class="column is-two-thirds">
           <p class="home-section-title">🔑 Mật khẩu</p>
           <b-field label="Mật khẩu hiện tại" label-position="on-border">
-            <b-input type="password" v-model="password" password-reveal maxlength="255"></b-input>
+            <b-input type="password" v-model="password" password-reveal maxlength="25"></b-input>
           </b-field>
           <b-field label="Mật khẩu mới" label-position="on-border">
-            <b-input type="password" v-model="new_password" password-reveal maxlength="255"></b-input>
+            <b-input type="password" v-model="new_password" password-reveal maxlength="25"></b-input>
           </b-field>
           <b-field label="Nhập lại mật khẩu mới" label-position="on-border">
-            <b-input type="password" v-model="new_password_conf" password-reveal maxlength="255"></b-input>
+            <b-input type="password" v-model="new_password_conf" password-reveal maxlength="25"></b-input>
           </b-field>
         </div>
         <div class="column">

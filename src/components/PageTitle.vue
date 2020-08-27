@@ -3,7 +3,7 @@
     <div class="title-bar columns is-vcentered is-mobile" style="padding: 20px;">
       <div class="column is-2">
         <router-link to="/">
-          <img src="@/assets/logo.png" style="width: auto; height: auto; max-height: 40px;" />
+          <img src="@/assets/logo.png" style="margin-left: 0; width: auto; height: auto; max-height: 40px;" />
         </router-link>
       </div>
       <div class="column">

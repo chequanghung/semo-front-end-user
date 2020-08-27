@@ -30,7 +30,11 @@
 
           <!-- image -->
           <br />
-          <ImageUploader :img_url="user.img_url" :directory="`/user/${user.img_dir}/avatar`" @set="updateAvatar"></ImageUploader>
+          <ImageUploader
+            :img_url="user.img_url"
+            :directory="`/user/${user.img_dir}/avatar`"
+            @set="updateAvatar"
+          ></ImageUploader>
         </div>
       </div>
       <br />
@@ -57,6 +61,15 @@ export default {
     ...mapState({
       user: (state) => state.user.user,
     }),
+
+    isDisabled: function () {
+      let cur_date = new Date();
+      console.log(this.name)
+      console.log(cur_date.getYear() - this.dob.getYear())
+      return this.name === "" || cur_date.getYear() - this.dob.getYear() < 15
+        ? true
+        : false;
+    },
   },
   async mounted() {
     this.dob = new Date(this.user.dob);
@@ -70,7 +83,7 @@ export default {
       dob: new Date(),
       gender: Number,
       name: String,
-      isDisabled: false,
+      // isDisabled: false,
       isLoading: false,
     };
   },
@@ -109,7 +122,7 @@ export default {
             type: "is-error",
             message: "Úi, hãy thử lại sau nhé. 😪",
           });
-          
+
           this.isDisabled = false;
           this.isLoading = false;
         });

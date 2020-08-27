@@ -70,6 +70,23 @@ const routes = [
     path: '/register',
     name: 'Register',
     component: () => import('@/views/login/Register'),
+  },
+  {
+    path: '/affair/:id',
+    name: 'Affair',
+    component: () => import('@/views/affair/Affair'),
+    meta: {
+      requiresAuth: true
+    },
+  },
+  {
+    path: '/contract/:id',
+    props: true,
+    name: 'Contract',
+    component: () => import('@/views/affair/Contract'),
+    meta: {
+      requiresAuth: true
+    },
   }
 ]
 

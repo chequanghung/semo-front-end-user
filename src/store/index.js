@@ -6,6 +6,8 @@ import home from './modules/home'
 import user from './modules/user'
 import product from './modules/product'
 import register from './modules/register'
+import auction from './modules/auction'
+import affair from './modules/affair'
 
 Vue.use(Vuex)
 
@@ -14,7 +16,9 @@ export default new Vuex.Store({
     home: home,
     user: user,
     product: product,
-    register: register
+    register: register,
+    auction: auction,
+    affair: affair,
   },
   state: {
   },

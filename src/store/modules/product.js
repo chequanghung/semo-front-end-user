@@ -1,3 +1,5 @@
+/* eslint-disable */
+
 import axios from 'axios'
 import moment from 'moment'
 
@@ -33,6 +35,7 @@ export default {
                 style: 'currency',
                 currency: 'VND',
             })
+
             state.products = products.map(item => {
                 return { ...item, date_created: moment(item.date_created).format('hh:mm DD/MM/YYYY'), price_cur: formatter.format(item.price_cur), price_step: formatter.format(item.price_step), price_init: formatter.format(item.price_init) }
             })
@@ -47,7 +50,7 @@ export default {
             state.request = request
         },
         deletep: (state, product) => {
-            state.products = state.products.filter(item => item.id !== product.id)
+            state.products = state.products.filter(item => item.id != product.id)
         },
     },
 
@@ -59,14 +62,42 @@ export default {
                     commit('gets', data)
                 })
         },
-        deletep: async ({ commit }, address) => {
+        deletep: async ({ commit }, product) => {
             return axios.put(`/product/changeStatus`, {
-                id: address.id,
+                id: product.id,
                 product_status: 9
             })
                 .then(() => {
-                    commit('deletep', address)
+                    commit('deletep', product)
                 })
         },
+        restorep: async ({ commit }, product) => {
+            return axios.put(`/product/changeStatus`, {
+                id: product.id,
+                product_status: 1
+            })
+                .then(() => {
+                    commit('deletep', product)
+                })
+        },
+        createa: async ({ commit }, item) => {
+            return axios.put(`/product/changeStatus`, {
+                id: item.product.id,
+                product_status: 3
+            })
+        },
+        createaclosure: async ({ commit }, product) => {
+            return axios.put(`/auction/create`, {
+                id: product.product.id,
+                date_closure: product.date
+            })
+                .then((response) => {
+                    commit('deletep', product.product)
+                    return response
+                })
+                .catch((error) => {
+                    return error
+                })
+        }
     }
 }

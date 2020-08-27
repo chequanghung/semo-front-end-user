@@ -3,10 +3,12 @@
     <!-- image -->
     <div
       class="card-image"
+      v-if="auction.Product.ProductMedia !== undefined"
       :style="{backgroundImage: 'url(' + auction.Product.ProductMedia[0].media_url + ')'}"
     ></div>
     <!-- info -->
     <div class="card-content">
+    <p style="font-weight: 700; font-size: 14px; color: #07d390;">ĐANG ĐẤU GIÁ</p>
       <div class="card-title">{{ auction.Product.title }}</div>
       <!-- price -->
       <div class="card-info">
