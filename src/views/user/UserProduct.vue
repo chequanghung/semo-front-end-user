@@ -181,21 +181,20 @@ export default {
       this.createa(item)
         .then(() => {
           this.createaclosure(item)
-          .then(() => {
-            this.$buefy.toast.open({
-              message: "Tạo buổi đấu giá thành công. 😋",
-              type: "is-success",
-              position: "is-top",
+            .then(() => {
+              this.$buefy.toast.open({
+                message: "Tạo buổi đấu giá thành công. 😋",
+                type: "is-success",
+                position: "is-top",
+              });
+            })
+            .catch((error) => {
+              this.$buefy.toast.open({
+                message: `${error.response.data.message} 😪`,
+                type: "is-warning",
+                position: "is-top",
+              });
             });
-          })
-          .catch(error => {
-            this.$buefy.toast.open({
-            message: `${error.response.data.message} 😪`,
-            type: "is-warning",
-            position: "is-top",
-          });
-          })
-          ;
         })
         .catch((error) => {
           // "Úi, có chút lỗi rồi, bạn thử lại sau nhé. 😪"
@@ -207,11 +206,14 @@ export default {
         });
     },
     intoAuction(item) {
-      this.$router.push({ name: 'Auction', params: { id: item.Auctions[0].id } })
+      this.$router.push({
+        name: "Auction",
+        params: { id: item.Auctions[0].id },
+      });
     },
     // for affair
     intoAffair(item) {
-      this.$router.push({ name: 'Affair', params: { id: item.Affairs[0].id } })
+      this.$router.push({ name: "Affair", params: { id: item.Affairs[0].id } });
     },
     // for deleted product
     restoreProduct(product) {

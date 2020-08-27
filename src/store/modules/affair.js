@@ -55,7 +55,7 @@ export default {
         populate: async ({ commit }, id) => {
             axios.get(`/affair/id/${id}`)
                 .then(({ data }) => {
-                    console.log(data)
+                    // console.log(data)
                     let affair = data
 
                     commit('geta', affair)

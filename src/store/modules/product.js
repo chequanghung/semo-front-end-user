@@ -59,6 +59,7 @@ export default {
         gets: async ({ commit, rootState }, status) => {
             return axios.get(`/product/user/${rootState.user.user.id}/${status}`)
                 .then(({ data }) => {
+                    console.log(status)
                     commit('gets', data)
                 })
         },

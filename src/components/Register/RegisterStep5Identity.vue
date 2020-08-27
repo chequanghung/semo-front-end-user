@@ -100,16 +100,22 @@ export default {
     
     isDisabled: function () {
       let cur_date = new Date();
-
-      if (this.front == "" ||
-        this.back == "" ||
-        this.name == "" ||
-        this.number == "" ||
+      console.log(this.front === '')
+      console.log(this.back === '')
+      console.log(this.name === '')
+      console.log(this.number === '')
+      console.log(cur_date.getTime() < this.date.getTime())
+      console.log(Object.keys(this.province).length === 0)
+      if ((this.front === "" ||
+        this.back === "" ||
+        this.name === "" ||
+        this.number === "" ||
         cur_date.getTime() < this.date.getTime() ||
-        Object.keys(this.province).length == 0) {
-          return false
-        } else {
+        Object.keys(this.province).length === 0) &&
+        this.isLoading === false) {
           return true
+        } else {
+          return false
         }
     },
     error: function () {
@@ -172,8 +178,7 @@ export default {
     }),
     submitIdentity() {
       this.isLoading = true;
-      this.isDisabled = true;
-
+      console.log(this.user.id)
       this.addi({
         user_id: this.user.id,
         front_img_url: this.front,
@@ -193,7 +198,6 @@ export default {
         })
         .catch(() => {
           this.isLoading = false;
-          this.isDisabled = false;
         });
     },
     updateFront(url) {

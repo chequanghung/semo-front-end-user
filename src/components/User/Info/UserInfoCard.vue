@@ -64,8 +64,6 @@ export default {
 
     isDisabled: function () {
       let cur_date = new Date();
-      console.log(this.name)
-      console.log(cur_date.getYear() - this.dob.getYear())
       return this.name === "" || cur_date.getYear() - this.dob.getYear() < 15
         ? true
         : false;

@@ -49,6 +49,7 @@ export default {
 
     back() {
       this.clear()
+      this.$router.go(-1)
     },
     editContract() {
       // this.editc()

@@ -17,7 +17,7 @@
         </div>
         <div class="column">
           <b-field label="Giới tính" label-position="on-border">
-            <div class="columns">
+            <div class="columns is-mobile">
               <div class="column">
                 <b-radio v-model="gender" native-value="0">Nữ</b-radio>
               </div>
@@ -29,8 +29,9 @@
         </div>
       </div>
 
-      <br />
 
+      <p>Địa chỉ hiện tại của bạn</p>
+      <br />
       <!-- address -->
       <div class="form">
         <b-field>
@@ -144,12 +145,12 @@ export default {
       let cur_date = new Date();
 
       if (
-        this.name === "" ||
+        (this.name === "" ||
         cur_date.getYear() - this.dob.getYear() < 15 ||
         this.address === "" ||
         Object.keys(this.province).length === 0 ||
         Object.keys(this.district).length === 0 ||
-        Object.keys(this.ward).length === 0
+        Object.keys(this.ward).length === 0) && this.isLoading === false
       ) {
         return true;
       } else {
@@ -284,6 +285,8 @@ export default {
     }, 250),
     // submit data
     async submitInformation() {
+      this.isLoading = true
+
       let vm = this;
       this.submitAddress()
         .then(() => {
@@ -292,6 +295,7 @@ export default {
           });
         })
         .catch(() => {
+          this.isLoading = false
           this.$buefy.toast.open({
             type: "is-danger",
             message: "Chúng mình gặp lỗi rồi, bạn hãy thử lại sau nhé. 😥",

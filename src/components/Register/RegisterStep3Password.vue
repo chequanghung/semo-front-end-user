@@ -117,6 +117,9 @@ export default {
     ...mapActions("register", ["createu", "clear"]),
     ...mapActions("user", ["login"]),
     submitPassword() {
+      this.isDisabled = true
+      this.isLoading = true
+
       this.createu(this.new_password)
         .then((response) => {
           // success bubble
@@ -139,6 +142,9 @@ export default {
               vm.$emit("next");
             })
             .catch(({ response }) => {
+              vm.isLoading = false
+              vm.isDisabled = false
+
               vm.$buefy.toast.open({
                 type: "is-danger",
                 message: `${response.data.message}`,
@@ -146,7 +152,8 @@ export default {
             });
         })
         .catch((error) => {
-          console.log(error);
+          this.isLoading = false
+          this.isDisabled = false
           this.$buefy.toast.open({
             type: "is-danger",
             message: `${error.data}`,

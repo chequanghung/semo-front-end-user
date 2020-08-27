@@ -80,6 +80,7 @@ export default {
                 .then(response => {
                     commit('gett', response.data.token)
                     commit('getu', response.data.user)
+                    commit('geta', response.data.user.Addresses)
                 })
         },
         // update avatar
@@ -111,8 +112,8 @@ export default {
                 ward: address.ward,
                 address: address.address
             })
-                .then(response => {
-                    commit('adda', response.data)
+                .then(() => {
+                    commit('adda', address)
                 })
         },
         editad: async ({ commit }, address) => {

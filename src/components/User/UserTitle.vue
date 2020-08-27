@@ -7,7 +7,7 @@
       </div>
       <div class="column">
         <p class="title">{{ user.name }}</p>
-        <p class="subtitle">{{ user.Addresses[0].province }}</p>
+        <p class="subtitle">{{ address[0].province }}</p>
       </div>
       <div class="column is-narrow">
         <p class="section-title">ĐÁNH GIÁ</p>
@@ -26,9 +26,16 @@
 </template>
 
 <script>
+import { mapState } from 'vuex'
+
 export default {
   name: "UserTitle",
-  props: ["user"],
+  computed: {
+    ...mapState ({
+      user: state => state.user.user,
+      address: state => state.user.address
+    })
+  }
 };
 </script>
 
