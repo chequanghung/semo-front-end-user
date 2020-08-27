@@ -49,7 +49,7 @@
           </div>
         </div>
         <!-- place bid -->
-        <div class="bid" style="margin-top: 40px;" v-if="auction.user_id !== userInfo.id">
+        <div class="bid" style="margin-top: 40px;" v-if="auction.user_id !== userInfo.id && Object.keys($store.state.user.user).length > 0">
           <div class="columns is-centered is-vcentered is-mobile">
             <div class="column is-narrow">
               <p class="bidnow">Bạn muốn đấu giá sản phẩm này chứ?</p>

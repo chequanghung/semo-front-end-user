@@ -79,6 +79,7 @@ export default {
 .card-title {
   font-weight: 700;
   height: 50px;
+  overflow: hidden;
 }
 
 .card-info {

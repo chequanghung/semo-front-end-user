@@ -7,13 +7,16 @@
         </router-link>
       </div>
       <div class="column">
+       <form @submit.prevent="search">
         <b-input
           class="search"
           placeholder="🔍 Tìm kiếm quả ngon"
           rounded
           maxlength="255"
           :has-counter="false"
+          v-model='searchWord'
         ></b-input>
+       </form>
       </div>
       <div class="column is-narrow">
         <router-link
@@ -41,6 +44,18 @@
 export default {
   name: "PageTitle",
   props: ["user"],
+  data() {
+    return {
+      searchWord: ''
+    }
+  },
+  methods: {
+    search() {
+      if(this.searchWord !== '') {
+        this.$router.push({ name: 'Search', params: { search: this.searchWord } })
+      }
+    }
+  }
 };
 </script>
 

@@ -162,6 +162,7 @@ export default {
                 // return normal state for submit button
                 this.disabled = false;
                 this.loading = false;
+                this.$router.go()
               });
           } else {
             this.$buefy.toast.open({

@@ -27,7 +27,7 @@
 import moment from "moment";
 
 export default {
-  props: ["contract", 'product'],
+  props: ["contract"],
   components: {
     ContractStatement: () => import("./AffairContractStatement"),
   },
@@ -72,8 +72,6 @@ export default {
     }
   },
   mounted() {
-      console.info(this.contract)
-      console.info(this.product)
   }
 };
 </script>

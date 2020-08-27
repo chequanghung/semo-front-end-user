@@ -11,11 +11,12 @@
       <!-- status, contract entry, chats and functions -->
       <div class="column">
         <div class="tile is-ancestor">
+          <!-- seller to ship -->
           <div class="tile is-vertical is-parent">
-            <!-- <div class="tile is-child box"> -->
+            <div class="tile is-child box">
               <!-- status -->
-              <!-- <p class="home-section-title"></p> -->
-            <!-- </div> -->
+              <p class="home-section-title"></p>
+            </div>
           </div>
           <div class="tile is-vertical is-parent">
             <div class="tile is-child box">

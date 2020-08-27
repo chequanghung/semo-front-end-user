@@ -8,14 +8,19 @@
       accept="image/*"
       @input="upload"
     >
-      <img :src="media_url" />
+      <img :src="media_url.length > 0 ? media_url : require('@/assets/Placeholder-Icon.png')" />
     </b-upload>
     <transition name="slide-fade">
       <p v-if="isDisabled" style="text-align: center;">Đang tải lên ...</p>
     </transition>
-    <div class="columns is-centered is-vcentered" v-if="index !== undefined" style="margin-top: 8px;">
+    <div
+      class="columns is-centered is-vcentered"
+      v-if="index !== undefined"
+      style="margin-top: 8px;"
+    >
       <div class="column">
-        Ảnh số <Strong>{{ (no + 1) }}</Strong>
+        Ảnh số
+        <Strong>{{ (no + 1) }}</Strong>
       </div>
       <div class="column is-narrow">
         <b-button type="is-danger" @click="deleteImage">🗑️ Xóa</b-button>

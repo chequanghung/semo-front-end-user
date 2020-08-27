@@ -18,6 +18,11 @@
         </div>
       </div>
     </div>
+
+    <!-- collapse -->
+    <div class="tile notification is-light">
+      
+    </div>
   </div>
 </template>
 

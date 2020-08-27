@@ -13,7 +13,7 @@
     <AuctionCarouselList title="😍 Đông đảo bà con" :auctions="mostviewed"></AuctionCarouselList>
 
     <!-- top fruits -->
-    <FruitGridList title="🍑 Loại quả" :fruits="fruits"></FruitGridList>
+    <FruitGridList title="🍑 Loại quả" :fruits="fruits.slice(0, 20)"></FruitGridList>
 
     <!-- newest and closing -->
     <div class="container">
@@ -39,7 +39,14 @@
     </div>
 
     <!-- views -->
-    <AuctionGridList :auctions="auctionMenuIndex === 1 ? newest : ending"></AuctionGridList>
+    <AuctionGridList :auctions="auctionMenuIndex === 1 ? newest.slice(0, 20) : ending.slice(0, 20)"></AuctionGridList>
+
+    <!-- show all -->
+    <div class="columns is-mobile is-centered" v-if="auctionMenuIndex === 1">
+      <div class="column is-narrow">
+        <b-button outlined rounded @click="$router.push({ path: '/latest' })">📰 Xem thêm</b-button>
+      </div>
+    </div>
   </div>
 </template>
 

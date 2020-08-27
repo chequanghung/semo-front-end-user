@@ -8,6 +8,8 @@ import product from './modules/product'
 import register from './modules/register'
 import auction from './modules/auction'
 import affair from './modules/affair'
+import search from './modules/search'
+import fruit from './modules/fruit'
 
 Vue.use(Vuex)
 
@@ -19,6 +21,8 @@ export default new Vuex.Store({
     register: register,
     auction: auction,
     affair: affair,
+    search: search,
+    fruit: fruit,
   },
   state: {
   },

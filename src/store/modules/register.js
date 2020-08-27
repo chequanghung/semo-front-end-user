@@ -42,9 +42,9 @@ export default {
             return axios.post(`/user/signup`, {
                 phone: state.phone,
                 password: password
-            }).then((response) => {
+            }).then(({ data }) => {
                 commit('setpa', password)
-                return response
+                return data
             })
         },
         clear: ({ commit }) => {

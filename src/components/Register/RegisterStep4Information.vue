@@ -39,7 +39,6 @@
             placeholder="Tỉnh/Thành phố"
             :loading="isFetchingP"
             :data="dataP"
-            :value="addressInfo ? addressInfo.province : ''"
             field="title"
             maxlength="255"
             :has-counter="false"
@@ -62,7 +61,6 @@
             placeholder="Quận/Huyện"
             :loading="isFetchingD"
             :data="dataD"
-            :value="addressInfo ? addressInfo.district : ''"
             field="title"
             maxlength="255"
             :has-counter="false"
@@ -85,7 +83,6 @@
             placeholder="Phường/Xã"
             :loading="isFetchingW"
             :data="dataW"
-            :value="addressInfo ? addressInfo.ward : ''"
             field="title"
             :has-counter="false"
             clearable
@@ -134,15 +131,31 @@
 </template>
 
 <script>
-import { mapState, mapActions } from 'vuex'
+import { mapState, mapActions } from "vuex";
 import debounce from "debounce";
-import axios from 'axios'
+import axios from "axios";
 
 export default {
   computed: {
-      ...mapState ({
-          user: state => state.user.user
-      })
+    ...mapState({
+      user: (state) => state.user.user,
+    }),
+    isDisabled: function () {
+      let cur_date = new Date();
+
+      if (
+        this.name === "" ||
+        cur_date.getYear() - this.dob.getYear() < 15 ||
+        this.address === "" ||
+        Object.keys(this.province).length === 0 ||
+        Object.keys(this.district).length === 0 ||
+        Object.keys(this.ward).length === 0
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
   },
   data() {
     return {
@@ -164,12 +177,13 @@ export default {
       dob: new Date(),
       gender: 0,
       // for button
-      isDisabled: false,
+      // isDisabled: false,
       isLoading: false,
     };
   },
   methods: {
-      ...mapActions ('user', ['editui', 'adda']),
+    ...mapActions("user", ["editui", "adda"]),
+    // btn
     // for address fetch
     // load provinces
     loadProvince: debounce(function (province) {
@@ -269,38 +283,41 @@ export default {
         });
     }, 250),
     // submit data
-    submitInformation() {
-        Promise.all([this.submitAddress, this.submitProfile])
+    async submitInformation() {
+      let vm = this;
+      this.submitAddress()
         .then(() => {
-            this.$emit('next')
+          this.submitProfile().then(() => {
+            vm.$emit("next");
+          });
         })
-        .catch((error) => {
-            this.$buefy.toast.open({
-                type: 'is-danger',
-                message: 'Chúng mình gặp lỗi rồi, bạn hãy thử lại sau nhé. 😥',
-                position: 'is-top'
-            })
-        })
+        .catch(() => {
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message: "Chúng mình gặp lỗi rồi, bạn hãy thử lại sau nhé. 😥",
+            position: "is-top",
+          });
+        });
     },
     // submit address
     async submitAddress() {
-        return this.adda({
-            user_id: this.user.id,
-            province: this.province.title,
-            district: this.district.title,
-            ward: this.ward.title,
-            address: this.address
-        })
+      return this.adda({
+        user_id: this.user.id,
+        province: this.province.title,
+        district: this.district.title,
+        ward: this.ward.title,
+        address: this.address,
+      });
     },
     // submit profile
     async submitProfile() {
-        return this.editui({
-            id: this.user.id,
-            name: this.name,
-            gender: this.gender,
-            dob: this.dob
-        })
-    }
+      return this.editui({
+        id: this.user.id,
+        name: this.name,
+        gender: this.gender,
+        dob: this.dob,
+      });
+    },
   },
 };
 </script>

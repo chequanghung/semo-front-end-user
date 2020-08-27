@@ -62,10 +62,10 @@ export default {
         },
         // logout
         logout: (state) => {
-            state.token = null,
-                state.user = {},
-                state.address = [],
-                state.identity = {}
+            state.token = null
+            state.user = {}
+            state.address = []
+            state.identity = {}
         }
     },
 
@@ -111,9 +111,9 @@ export default {
                 ward: address.ward,
                 address: address.address
             })
-            .then(response => {
-                commit('adda', response.data)
-            })
+                .then(response => {
+                    commit('adda', response.data)
+                })
         },
         editad: async ({ commit }, address) => {
             return axios.put(`/address/id/${address.id}`, {
@@ -122,27 +122,34 @@ export default {
                 ward: address.ward,
                 address: address.address
             })
-            .then(() => {
-                commit('edita', address)
-            })
+                .then(() => {
+                    commit('edita', address)
+                })
         },
         deletea: async ({ commit }, address) => {
             return axios.delete(`/address/${address.id}`)
-            .then(() => {
-                commit('deletea', address)
-            })
+                .then(() => {
+                    commit('deletea', address)
+                })
         },
         geta: async ({ state, commit }) => {
             return axios.get(`/address/id/${state.user.id}`)
-            .then(({ data }) => {
-                commit('geta', data)
-            })
+                .then(({ data }) => {
+                    commit('geta', data)
+                })
         },
         geti: async ({ state, commit }) => {
             return axios.get(`/identity/user/id/${state.user.id}`)
-            .then(({ data }) => {
-                commit('geti', data)
-            })
+                .then(({ data }) => {
+                    commit('geti', data)
+                })
+        },
+        // add identity
+        addi: async ({ commit }, identity) => {
+            return axios.post(`/identity/`, identity)
+                .then(() => {
+                    commit('geti', identity)
+                })
         },
         updatepwd: async ({ state }, passwords) => {
             return axios.put(`/user/password/${state.user.id}`, {

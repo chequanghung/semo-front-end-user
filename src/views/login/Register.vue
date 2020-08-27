@@ -25,6 +25,8 @@
               <RegisterStep3Password v-if="step === 3" @next="next"></RegisterStep3Password>
               <!-- step 4 -->
               <RegisterStep4Information v-if="step === 4" @next="next"></RegisterStep4Information>
+              <!-- step 5 -->
+              <RegisterStep5Identity v-if="step === 5" @home="home"></RegisterStep5Identity>
             </transition>
           </div>
         </div>
@@ -42,7 +44,9 @@ export default {
     RegisterStep1Phone: () =>
       import("@/components/Register/RegisterStep1Phone"),
     RegisterStep2OTP: () => import("@/components/Register/RegisterStep2OTP"),
-    RegisterStep3Password: () => import('@/components/Register/RegisterStep3Password')
+    RegisterStep3Password: () => import('@/components/Register/RegisterStep3Password'),
+    RegisterStep4Information: () => import('@/components/Register/RegisterStep4Information'),
+    RegisterStep5Identity: () => import('@/components/Register/RegisterStep5Identity')
   },
   data() {
     return {
@@ -62,6 +66,9 @@ export default {
       this.clear();
       this.step = 1;
     },
+    home() {
+      this.$router.push({ path: '/' })
+    }
   },
 };
 </script>
@@ -69,7 +76,8 @@ export default {
 <style scoped>
 .home {
   width: 100vw;
-  height: 100vh;
+  min-height: 100vh;
+  height: 100%;
   background-image: url("https://cdn.shopify.com/s/files/1/0222/9446/2560/articles/a4fb537e5e0b96621896e2f158c60b3f.jpg?v=1576830925");
   background-size: cover;
   background-position: center;

@@ -13,12 +13,12 @@
     <!-- pagination -->
     <div class="columns is-vcentered is-centered is-mobile">
       <div class="column"></div>
-      <div class="column">
+      <div class="column is-narrow">
         <div class="columns is-vcentered is-centered is-mobile">
-          <div class="column is-narrow">
+          <div class="column is-narrow" v-if="index > 0">
             <b-button outlined rounded @click="prev">👈 Trang trước</b-button>
           </div>
-          <div class="column is-narrow">
+          <div class="column is-narrow" v-if="index < totalPage - 1">
             <b-button outlined rounded @click="next">👉 Trang sau</b-button>
           </div>
         </div>
@@ -30,16 +30,16 @@
 <script>
 export default {
   name: "AuctionGridList",
-  props: ["auctions"],
+  props: ["auctions", 'index', 'totalPage'],
   components: {
     AuctionCard: () => import("@/components/Auction/AuctionCard"),
   },
   methods: {
       prev() {
-
+        this.$emit('prev', this.index)
       },
       next() {
-
+        this.$emit('next', this.index)
       }
   }
 };

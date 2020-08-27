@@ -12,26 +12,33 @@
         <div class="image is-96x96" style="margin: 0 auto 16px auto;">
           <img class="is-rounded" :src="fruit.icon_url" />
         </div>
-        <p class="card-info-title" style="text-transform: uppercase; text-align: center;">{{ fruit.title }}</p>
+        <p
+          class="card-info-title"
+          style="text-transform: uppercase; text-align: center;"
+        >{{ fruit.title }}</p>
       </div>
     </div>
 
     <!-- show all -->
-    <b-button outlined rounded @click="$router.push({ path: '/fruit' })">📰 Xem thêm</b-button>
+    <div class="columns is-mobile is-centered" v-if="notHome === undefined">
+      <div class="column is-narrow">
+        <b-button outlined rounded @click="$router.push({ path: '/fruit' })">📰 Xem thêm</b-button>
+      </div>
+    </div>
   </div>
 </template>
 
 <script>
 export default {
   name: "FruitGridList",
-  props: ["title", "fruits"],
+  props: ["title", "fruits", 'notHome'],
 };
 </script>
 
 <style scoped>
 .fruit {
   cursor: pointer;
-  transition: .25s;
+  transition: 0.25s;
 }
 
 .fruit:hover {

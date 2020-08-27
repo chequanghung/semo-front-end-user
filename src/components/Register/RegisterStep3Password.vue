@@ -4,10 +4,10 @@
       <p>Đặt mật khẩu cho tài khoản của bạn. 🔑</p>
       <br />
       <b-field label="Mật khẩu mới" label-position="on-border">
-        <b-input type="password" v-model="new_password" password-reveal maxlength="255"></b-input>
+        <b-input type="password" v-model="new_password" password-reveal maxlength="25"></b-input>
       </b-field>
       <b-field label="Nhập lại mật khẩu mới" label-position="on-border">
-        <b-input type="password" v-model="new_password_conf" password-reveal maxlength="255"></b-input>
+        <b-input type="password" v-model="new_password_conf" password-reveal maxlength="25"></b-input>
       </b-field>
 
       <div class="tile is-ancestor notification is-light is-vertical">
@@ -119,39 +119,34 @@ export default {
     submitPassword() {
       this.createu(this.new_password)
         .then((response) => {
-          console.info(response)
           // success bubble
           this.$buefy.toast.open({
             type: "is-success",
-            message: `${response.data.message}`,
+            message: `${response.message}`,
           });
 
-          let vm = this
+          let vm = this;
           // then log in
-          console.log(this.phone)
+          console.log(this.phone);
           this.login({
             phone: this.phone,
             password: this.password,
           })
-          .then(() => {
-            // clear register phone and password
-            vm.clear();
-            // move to next page
-            vm.$emit("next");
-            vm.$buefy.toast.open({
-              type: 'is-warning',
-              message: `OK`
+            .then(() => {
+              // clear register phone and password
+              vm.clear();
+              // move to next page
+              vm.$emit("next");
             })
-          })
-          .catch(({ response }) => {
-            vm.$buefy.toast.open({
-              type: 'is-danger',
-              message: `${response.data.message}`
-            })
-          })
+            .catch(({ response }) => {
+              vm.$buefy.toast.open({
+                type: "is-danger",
+                message: `${response.data.message}`,
+              });
+            });
         })
         .catch((error) => {
-          console.log(error)
+          console.log(error);
           this.$buefy.toast.open({
             type: "is-danger",
             message: `${error.data}`,

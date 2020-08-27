@@ -9,6 +9,7 @@ export default {
         product: {},
         contract: {},
         chats: [],
+        update: {}
     },
 
 
@@ -16,7 +17,8 @@ export default {
         affair: state => state.affair,
         product: state => state.product,
         contract: state => state.contract,
-        chats: state => state.chats
+        chats: state => state.chats,
+        update: state => state.update
     },
 
 
@@ -34,9 +36,16 @@ export default {
         getcs: (state, chats) => {
             state.chats = chats
         },
+        getu: (state, update) => {
+            state.update = update
+        },
         // edit contract
         editc: (state, contract) => {
             state.contract = contract
+        },
+        clear: (state) => {
+            state.contract = {},
+            state.update = {}
         }
     },
 
@@ -64,7 +73,9 @@ export default {
         getc: async ({ commit }, id) => {
             return axios.get(`/affair/contract/id/${id}`)
                 .then(({ data }) => {
+                    console.info(data)
                     commit('getc', data)
+                    commit('getu', data.AffairContractUpdates.length > 0 ? data.AffairContractUpdates[0] : {})
                 })
         },
         // edit contract
@@ -74,5 +85,8 @@ export default {
                 commit('editc', contract)
             })  
         },
+        clear: ({ commit }) => {
+            commit('clear')
+        }
     }
 }

@@ -9,26 +9,24 @@
     <div class="tile is-ancestor">
       <div class="tile is-vertical is-parent">
         <div class="tile is-child box">
-          <p class="home-section-title">📋 Hợp đồng</p>
-        </div>
-      </div>
-      <div class="tile is-vertical is-parent">
-        <div class="tile is-child box">
           <p class="home-section-title">🗃️ Điều khoản</p>
           <!-- statements -->
           <p style="text-align: center;">Nhấp vào điều khoản để chỉnh sửa</p>
           <AffairContractStatementList :contract="contract" :product="product"></AffairContractStatementList>
+          <!-- submit -->
+          <br/>
+          <b-button type="is-success" @click="editContract">✈️ Yêu cầu sửa hợp đồng</b-button>
         </div>
       </div>
     </div>
     <div class="tile is-child box is-narrow">
-          <div class="columns is-mobile">
-              <div class="column"></div>
-            <div class="column is-narrow">
-              <b-button type="is-danger" @click="back">❌ Hủy hợp đồng</b-button>
-            </div>
-          </div>
+      <div class="columns is-mobile">
+        <div class="column"></div>
+        <div class="column is-narrow">
+          <b-button type="is-danger" @click="back">❌ Hủy hợp đồng</b-button>
         </div>
+      </div>
+    </div>
   </div>
 </template>
 
@@ -43,16 +41,22 @@ export default {
   computed: {
     ...mapState({
       contract: (state) => state.affair.contract,
+      product: state => state.affair.product
     }),
   },
   methods: {
-    ...mapActions("affair", ["getc", "editc"]),
+    ...mapActions("affair", ["getc", "editc", "clear"]),
 
-    back() {},
+    back() {
+      this.clear()
+    },
+    editContract() {
+      // this.editc()
+    }
   },
   async mounted() {
-      this.getc(this.$route.params.id)
-  }
+    this.getc(this.$route.params.id);
+  },
 };
 </script>
 
