@@ -72,7 +72,6 @@ export default {
           this.auctions.length % 20 > 0
             ? Math.ceil(this.auctions.length / 20)
             : Math.floor(this.auctions.length / 20);
-        console.log(this.pageTotal);
       } else if (this.index === 1) {
         alert("ok");
       }

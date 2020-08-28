@@ -82,6 +82,7 @@ export default {
         .then((response) => {
           // get product_id
           let product_id = response.data.id;
+          this.product_id = product_id
 
           // put image to db
           Promise.all(

@@ -15,7 +15,9 @@ export default {
         // media
         media: [],
         // update request
-        request: {}
+        request: {},
+        // institutions
+        institutions: []
     },
 
 
@@ -25,7 +27,8 @@ export default {
         // product view
         product: state => state.product,
         media: state => state.media,
-        request: state => state.request
+        request: state => state.request,
+        institutions: state => state.institutions
     },
 
 
@@ -52,6 +55,9 @@ export default {
         deletep: (state, product) => {
             state.products = state.products.filter(item => item.id != product.id)
         },
+        geti: (state, institutions) => {
+            state.institutions = institutions
+        }
     },
 
 
@@ -59,7 +65,6 @@ export default {
         gets: async ({ commit, rootState }, status) => {
             return axios.get(`/product/user/${rootState.user.user.id}/${status}`)
                 .then(({ data }) => {
-                    console.log(status)
                     commit('gets', data)
                 })
         },
@@ -99,6 +104,12 @@ export default {
                 .catch((error) => {
                     return error
                 })
+        },
+        geti: async ({ commit }) => {
+            return axios.get(`/institution`)
+            .then (({ data }) => {
+                commit('geti', data)
+            })
         }
     }
 }

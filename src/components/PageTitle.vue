@@ -27,7 +27,7 @@
         <router-link class="router-link" to="/user/info" v-else>
           <div class="columns is-vcentered is-centered">
             <div class="column is-narrow">
-              <div class="image is-32x32 user-avatar" :style="{backgroundImage: 'url(' + user.img_url + ')'}">
+              <div class="image is-32x32 user-avatar" :style="{backgroundImage: user.img_url ? `url(${user.img_url})` : `url('https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png')`}">
               </div>
             </div>
             <div class="column is-narrow is-hidden-mobile user-name">

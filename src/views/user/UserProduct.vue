@@ -16,7 +16,7 @@
           <!-- search bar -->
           <div class="columns is-variable is-2 is-mobile is-centered">
             <div class="column">
-              <b-input placeholder="🔍 Tìm kiếm sản phẩm" expanded rounded></b-input>
+              <b-input v-model="keyword" placeholder="🔍 Tìm kiếm sản phẩm" expanded rounded></b-input>
             </div>
             <div class="column is-narrow">
               <b-button type="is-primary" rounded tag="router-link" to="/create">➕ Tạo sản phẩm mới</b-button>
@@ -28,7 +28,7 @@
             <transition-group name="enlist" class="columns is-variable is-2 is-multiline">
               <div
                 class="product column is-full-mobile is-full-tablet is-half-desktop is-half-widescreen is-one-third-fullhd"
-                v-for="product in products"
+                v-for="product in product_list"
                 :key="product.id"
               >
                 <ProductCard
@@ -70,9 +70,14 @@ export default {
     index: function () {
       this.populate();
     },
+    keyword: function() {
+      this.keyword !== '' ?
+      this.product_list = this.product_list.filter(item => item.title.toLowerCase().indexOf(this.keyword.toLowerCase()) >= 0)
+      : this.product_list = this.products
+    }
   },
-  mounted() {
-    this.gets(this.index);
+  async mounted() {
+    this.populate();
   },
   data() {
     return {
@@ -126,7 +131,9 @@ export default {
       ],
       index: 0,
       // product
-      product: {},
+      product_list: [],
+      // search
+      keyword: ''
     };
   },
   methods: {
@@ -142,7 +149,11 @@ export default {
       this.index = index;
     },
     populate() {
-      this.gets(this.index);
+      this.gets(this.index)
+      .then(() => {
+        this.keyword = ''
+        this.product_list = this.products
+      });
     },
     // for product
     editProduct(product) {

@@ -39,13 +39,13 @@ export default {
       types: [
         {
           icon: "🌳",
-          title: "Vườn cây",
-          description: "Bạn muốn tìm con buôn cho vườn trồng của bạn",
+          title: "Đấu giá sau",
+          description: "Bạn muốn tìm người bao tiêu cho vườn trồng của bạn",
           value: 1,
         },
         {
           icon: "🍑",
-          title: "Trái cây",
+          title: "Đấu giá ngay",
           description: "Bạn tìm người mua cho lô nông sản đã thu hoạch",
           value: 2,
         },

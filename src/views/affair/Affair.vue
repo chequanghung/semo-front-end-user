@@ -41,30 +41,18 @@
               <!-- content -->
               <div class="chat-content"></div>
               <!-- input -->
-                <br/>
+              <br />
               <div class="columns is-mobile is-vcentered">
                 <div class="column">
                   <b-input v-model="message" placeholder="Nhắn cho đối tác của bạn gì đó ..."></b-input>
                 </div>
                 <div class="column is-narrow">
                   <b-button type="is-primary" rounded :disabled="isDisabled" @click="sendMsg">✈️ Gửi</b-button>
-              </div>
+                </div>
               </div>
             </div>
           </div>
         </div>
-
-        <!-- <div class="columns is-multiline">
-
-          <div class="column">
-            
-          </div>
-          <div class="column">
-            
-          </div>
-          <div class="column is-full">
-            
-        </div>-->
       </div>
     </div>
   </div>
@@ -78,11 +66,6 @@ export default {
   components: {
     AffairProductCard: () => import("@/components/Affair/AffairProductCard"),
   },
-  watch: {
-    // message: function() {
-    //   this.message.length === 0 ? this.isDisabled = true : this.isDisabled = false
-    // }
-  },
   computed: {
     ...mapState({
       affair: (state) => state.affair.affair,
@@ -91,16 +74,20 @@ export default {
     }),
 
     date: function () {
-      return moment(this.affair.AffairContract.date_updated).format("hh:mm DD/MM/YYYY");
+      if (this.affair !== undefined && this.affair.AffairContract !== undefined)
+        return moment(this.affair.AffairContract.date_updated).format(
+          "hh:mm DD/MM/YYYY"
+        );
+      else return null;
     },
 
-    isDisabled: function() {
-      return this.message.length === 0 ? true : false
-    }
+    isDisabled: function () {
+      return this.message.length === 0 ? true : false;
+    },
   },
   data() {
     return {
-      message: '',
+      message: "",
       // isDisabled: true
     };
   },
@@ -108,11 +95,14 @@ export default {
     ...mapActions("affair", ["populate"]),
 
     intoContract() {
-      this.$router.push({ name: "Contract", params: { id: this.affair.AffairContract.id } });
+      this.$router.push({
+        name: "Contract",
+        params: { id: this.affair.AffairContract.id },
+      });
     },
     sendMsg() {
-      alert('ok')
-    }
+      alert("ok");
+    },
   },
   async mounted() {
     this.populate(this.$route.params.id);

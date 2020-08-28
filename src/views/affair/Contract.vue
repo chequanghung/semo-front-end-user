@@ -12,10 +12,14 @@
           <p class="home-section-title">🗃️ Điều khoản</p>
           <!-- statements -->
           <p style="text-align: center;">Nhấp vào điều khoản để chỉnh sửa</p>
-          <AffairContractStatementList :contract="contract" :product="product"></AffairContractStatementList>
+          <AffairContractStatementList :contract="contract" :product="product" :affair="affair"></AffairContractStatementList>
           <!-- submit -->
-          <br/>
-          <b-button type="is-success" @click="editContract">✈️ Yêu cầu sửa hợp đồng</b-button>
+          <br />
+          <div class="columns is-centered is-mobile">
+            <div class="column is-narrow">
+            <b-button type="is-success" @click="editContract">✈️ Yêu cầu sửa hợp đồng</b-button>
+          </div>
+          </div>
         </div>
       </div>
     </div>
@@ -31,7 +35,7 @@
 </template>
 
 <script>
-import { mapState, mapActions } from "vuex";
+import { mapState, mapActions } from "vuex"
 
 export default {
   components: {
@@ -41,21 +45,22 @@ export default {
   computed: {
     ...mapState({
       contract: (state) => state.affair.contract,
-      product: state => state.affair.product
+      product: (state) => state.affair.product,
+      affair: (state) => state.affair.affair,
     }),
   },
   methods: {
     ...mapActions("affair", ["getc", "editc", "clear"]),
 
     back() {
-      this.clear()
-      this.$router.go(-1)
+      this.clear();
+      this.$router.go(-1);
     },
     editContract() {
       // this.editc()
-    }
+    },
   },
-  async mounted() {
+  mounted() {
     this.getc(this.$route.params.id);
   },
 };

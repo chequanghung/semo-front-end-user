@@ -7,6 +7,9 @@
           <p class="card-title">📦 Thông tin cơ bản</p>
           <br />
           <!-- title -->
+          <!-- fruit -->
+          <FruitInput @select="selectFruit"></FruitInput>
+          <br />
           <b-field label="Tên sản phẩm*" label-position="on-border" group-multiline>
             <b-input
               v-model="title"
@@ -16,9 +19,6 @@
               maxlength="255"
             ></b-input>
           </b-field>
-          <!-- fruit -->
-          <FruitInput @select="selectFruit"></FruitInput>
-          <br />
           <!-- weight -->
           <b-field label="Khối lượng (ước tính)*" label-position="on-border" group-multiline>
             <b-input
@@ -161,6 +161,7 @@
           </p>
         </div>
 
+        <br />
         <!-- sale info -->
         <div class="card-container" ref="card-container-seller">
           <p class="card-title">💰 Thông tin bán hàng</p>

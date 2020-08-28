@@ -12,6 +12,8 @@ export default {
         address: [],
         // identity
         identity: {},
+        // wallet
+        wallet: {},
     },
 
 
@@ -19,7 +21,8 @@ export default {
         token: state => state.token,
         user: state => state.user,
         address: state => state.address,
-        identity: state => state.identity
+        identity: state => state.identity,
+        wallet: state => state.wallet
     },
 
 
@@ -59,6 +62,10 @@ export default {
         // delete information
         deletea: (state, address) => {
             state.address = state.address.filter(item => item.id !== address.id)
+        },
+        // get wallet
+        getw: (state, wallet) => {
+            state.wallet = wallet
         },
         // logout
         logout: (state) => {

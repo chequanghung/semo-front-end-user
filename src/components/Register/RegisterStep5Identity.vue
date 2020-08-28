@@ -100,12 +100,6 @@ export default {
     
     isDisabled: function () {
       let cur_date = new Date();
-      console.log(this.front === '')
-      console.log(this.back === '')
-      console.log(this.name === '')
-      console.log(this.number === '')
-      console.log(cur_date.getTime() < this.date.getTime())
-      console.log(Object.keys(this.province).length === 0)
       if ((this.front === "" ||
         this.back === "" ||
         this.name === "" ||

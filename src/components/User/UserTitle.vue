@@ -2,7 +2,7 @@
   <div class="container">
     <div class="columns is-vcentered is-mobile">
       <div class="column is-narrow">
-        <div class="image is-64x64 user-avatar" :style="{backgroundImage: 'url(' + user.img_url + ')'}">
+        <div class="image is-64x64 user-avatar" :style="{backgroundImage: user.img_url ? `url(${user.img_url})` : `url('https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png')`}">
         </div>
       </div>
       <div class="column">
