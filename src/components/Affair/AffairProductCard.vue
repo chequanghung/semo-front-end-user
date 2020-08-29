@@ -75,7 +75,7 @@
         </div>
       </div>
       <!-- weight -->
-      <div class="columns is-mobile" v-if="product !== undefined">
+      <div class="columns is-mobile" v-if="product">
         <div class="column">
           <p class="sub-title">SẢN LƯỢNG</p>
         </div>
@@ -84,7 +84,7 @@
         </div>
       </div>
       <!-- location -->
-      <div class="columns is-mobile" v-if="product.Address !== undefined">
+      <div class="columns is-mobile" v-if="product.Address">
         <div class="column">
           <p class="sub-title">VỊ TRÍ</p>
         </div>
