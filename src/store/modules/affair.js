@@ -34,8 +34,10 @@ export default {
             state.contract = contract
         },
         // add chat
-        addc: (state, chats) => {
-            state.chats = [...state.chats, chats]
+        addcs: (state, chats) => {
+            chats.forEach(item => {
+                state.chats = [item, ...state.chats]
+            });
         },
         // get contract update
         getu: (state, update) => {
@@ -47,7 +49,7 @@ export default {
         },
         clear: (state) => {
             state.contract = {},
-            state.update = {}
+                state.update = {}
         },
     },
 
@@ -64,13 +66,6 @@ export default {
                     commit('getp', affair.Product)
                 })
         },
-        // get affair
-        geta: async ({ commit }, id) => {
-            return axios.get(`/affair/id/${id}`)
-                .then(({ data }) => {
-                    commit('geta', data)
-                })
-        },
         // get contract
         getc: async ({ commit }, id) => {
             return axios.get(`/affair/contract/id/${id}`)
@@ -83,20 +78,26 @@ export default {
         // get chats
         getcs: async ({ state, commit }, offset) => {
             return axios.get(`/affair/chat/${state.affair.id}?offset='${offset}'`)
-            .then(({ data }) => {
-                commit('addcs', data)
-            })
+                .then(({ data }) => {
+                    commit('addcs', data)
+                })
         },
         // add chat
-        // addcs: async ({ commit }, chat) => {
-
-        // },
+        addcs: async ({ state, commit }, chat) => {
+            axios.post(`/affair/addChat`, {
+                affair_id: state.affair.id,
+                sender_user_id: chat.sender_user_id,
+                content: chat.content
+            }).then(() => {
+                commit('addcs', [chat])
+            })
+        },
         // edit contract
         editc: async ({ commit }, contract) => {
             return axios.put(`/affair/contract/${contract.id}`, contract)
-            .then(() => {
-                commit('editc', contract)
-            })  
+                .then(() => {
+                    commit('editc', contract)
+                })
         },
         clear: ({ commit }) => {
             commit('clear')

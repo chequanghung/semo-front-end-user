@@ -124,7 +124,7 @@ a {
 /* // welcome message */
 .welcome {
   width: 100%;
-  padding: 36px;
+  padding: 36px 0;
   display: flex;
   justify-content: center;
   align-items: center;

@@ -1,6 +1,6 @@
 
 <template>
-  <div class="card-container column is-full" v-if="product !== undefined">
+  <div class="card-container tile is-child box">
     <!-- fruit -->
     <div class="cursor columns is-vcentered" v-if="product.Fruit !== undefined">
       <div class="column is-narrow" style="margin: 0">
@@ -23,7 +23,6 @@
     <div
       class="cursor columns is-vcentered is-mobile"
       @click="$router.push({ name: 'UserView', params: { id: product.User.id }})"
-      v-if="product.User !== undefined"
     >
       <div class="column is-narrow" style="margin: 0">
         <div
@@ -47,15 +46,11 @@
       </div>
     </div>
 
-    <br />
-
     <!-- image -->
     <div class="images">
-      <div class="columns">
+      <div class="columns is-variable is-2 is-mobile">
         <div class="column is-narrow" v-for="(medium, index) in product.ProductMedia" :key="index">
-          <figure class="image is-128x128">
-            <img :src="medium.media_url" :alt="index" style="border-radius: 10px" />
-          </figure>
+            <img :src="medium.media_url" :alt="index" style="border-radius: 10px; height: 128px;" />
         </div>
       </div>
     </div>
@@ -188,10 +183,7 @@ export default {
 
 <style scoped>
 .card-container {
-  padding: 24px;
-  background-color: white;
-  box-shadow: 0 2px 8px #00000016;
-  border-radius: 10px;
+  /* padding: 24px; */
   overflow: hidden;
 }
 

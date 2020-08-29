@@ -26,9 +26,12 @@ export default {
   backdrop-filter: saturate(180%) blur(20px);
 }
 
+
+
 .subtitle-bar {
   margin: 0 auto;
   padding: 0;
+  max-width: 1266px;
 }
 
 .router-link {

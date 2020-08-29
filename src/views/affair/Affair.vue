@@ -4,8 +4,10 @@
     <div class="columns">
       <!-- product -->
       <div class="column is-5 is-mobile">
-        <div class="columns">
-          <AffairProductCard :affair="affair" :product="product"></AffairProductCard>
+        <div class="tile is-ancestor">
+          <div class="tile is-parent">
+            <AffairProductCard :affair="affair" :product="product"></AffairProductCard>
+          </div>
         </div>
       </div>
       <!-- status, contract entry, chats and functions -->
@@ -39,17 +41,37 @@
             <div class="tile is-child box">
               <p class="home-section-title">💬 Trò chuyện</p>
               <!-- content -->
-              <div class="chat-content"></div>
-              <!-- input -->
-              <br />
-              <div class="columns is-mobile is-vcentered">
-                <div class="column">
-                  <b-input v-model="message" placeholder="Nhắn cho đối tác của bạn gì đó ..."></b-input>
-                </div>
-                <div class="column is-narrow">
-                  <b-button type="is-primary" rounded :disabled="isDisabled" @click="sendMsg">✈️ Gửi</b-button>
+              <div class="chat-content">
+                <div class="columns is-mobile" v-for="(chat, i) in affair_chats" :key="i">
+                  <div class="column">
+                    <div class="bubble" v-if="chat.sender_user_id !== user.id">
+                      <p>{{ chat.content }}</p>
+                    </div>
+                  </div>
+                  <div class="column">
+                    <div class="bubble you" v-if="chat.sender_user_id === user.id">
+                      <p>{{ chat.content }}</p>
+                    </div>
+                  </div>
                 </div>
               </div>
+              <!-- input -->
+              <br />
+              <form @submit.prevent="sendMsg">
+                <div class="columns is-mobile is-vcentered">
+                  <div class="column">
+                    <b-input v-model="message" placeholder="Nhắn cho đối tác của bạn gì đó ..."></b-input>
+                  </div>
+                  <div class="column is-narrow">
+                    <b-button
+                      type="is-primary"
+                      rounded
+                      :disabled="isDisabled"
+                      @click="sendMsg"
+                    >✈️ Gửi</b-button>
+                  </div>
+                </div>
+              </form>
             </div>
           </div>
         </div>
@@ -63,6 +85,9 @@ import { mapState, mapActions } from "vuex";
 import moment from "moment";
 
 export default {
+  beforeDestroy() {
+    clearInterval(this.interval);
+  },
   components: {
     AffairProductCard: () => import("@/components/Affair/AffairProductCard"),
   },
@@ -71,6 +96,7 @@ export default {
       affair: (state) => state.affair.affair,
       product: (state) => state.affair.product,
       chats: (state) => state.affair.chats,
+      user: state => state.user.user,
     }),
 
     date: function () {
@@ -88,11 +114,13 @@ export default {
   data() {
     return {
       message: "",
+      affair_chats: [],
+      interval: null,
       // isDisabled: true
     };
   },
   methods: {
-    ...mapActions("affair", ["populate"]),
+    ...mapActions("affair", ["populate", "getcs", "addcs"]),
 
     intoContract() {
       this.$router.push({
@@ -101,12 +129,34 @@ export default {
       });
     },
     sendMsg() {
-      alert("ok");
+      // alert("ok");
+      this.addcs({
+        affair_id: this.affair.id,
+        sender_user_id: this.user.id,
+        content: this.message,
+      }).then(() => {
+        this.message = ''
+      })
     },
   },
   async mounted() {
-    console.log(this.affair)
-    this.populate(this.$route.params.id);
+    // console.log(this.affair);
+    this.populate(this.$route.params.id).then(() => {
+
+      this.interval = setInterval(
+        function () {
+          this.getcs(0);
+        }.bind(this),
+        5000
+      );
+
+      this.affair_chats = this.chats;
+    });
+  },
+  watch: {
+    chats: function () {
+      this.affair_chats = this.chats;
+    },
   },
 };
 </script>
@@ -121,5 +171,16 @@ export default {
 .chat-content {
   height: 480px;
   overflow-y: scroll;
+}
+
+.bubble {
+  border-radius: 10px;
+  color: #707070;
+  background-color: #ececec;
+}
+
+.you {
+  color: white;
+  background-color: #01d28e;
 }
 </style>
