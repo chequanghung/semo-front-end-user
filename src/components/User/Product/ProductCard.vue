@@ -20,7 +20,10 @@
           <div class="column" v-if="item.product_status === 3">
             <div class="card-info">
               <p class="card-info-title">Thời gian còn lại</p>
-              <p class="card-info-content major" :class="{'red': item.Auctions[0].remain_days === 0}">{{ remain }}</p>
+              <p
+                class="card-info-content major"
+                :class="{'red': item.Auctions[0].remain_days === 0}"
+              >{{ remain }}</p>
             </div>
           </div>
         </div>
@@ -76,6 +79,16 @@
       <b-field label="Ngày kết thúc đấu giá">
         <b-datetimepicker locale="en-GB" v-model="date" required expanded></b-datetimepicker>
       </b-field>
+      <div class="tile is-warning is-light notification">
+        <div class="columns is-mobile is-vcentered">
+          <div class="column is-narrow">
+            <p>💡</p>
+          </div>
+          <div class="column">
+            <p>Một buổi đấu giá có thời lượng từ 3 ngày đến 3 tháng kể từ thời điểm bắt đầu.</p>
+          </div>
+        </div>
+      </div>
       <!-- submit -->
       <b-button
         style="margin: 0 auto;"
@@ -141,10 +154,10 @@ export default {
       });
     },
     intoAuction() {
-      this.$emit("auction", this.item)
+      this.$emit("auction", this.item);
     },
     intoAffair() {
-      this.$emit("affair", this.item)
+      this.$emit("affair", this.item);
     },
     restoreItem() {
       this.$emit("restore", this.item);
@@ -198,6 +211,6 @@ export default {
 }
 
 .red {
-  color: #FD5E53;
+  color: #fd5e53;
 }
 </style>

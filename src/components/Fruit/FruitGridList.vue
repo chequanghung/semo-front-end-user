@@ -9,8 +9,10 @@
         :key="fruit.id"
         @click="$router.push({ name: 'FruitView', params: { id: fruit.id } })"
       >
-        <div class="image is-96x96" style="margin: 0 auto 16px auto;">
-          <img class="is-rounded" :src="fruit.icon_url" />
+        <div
+        :style="{backgroundImage: 'url(' + fruit.icon_url + ')'}"
+        style="height: 96px; width: 96px; margin: 0 auto 16px auto; background-size: cover; background-position: center; border-radius: 50%;">
+          <!-- <img class="is-rounded" :src="fruit.icon_url" /> -->
         </div>
         <p
           class="card-info-title"

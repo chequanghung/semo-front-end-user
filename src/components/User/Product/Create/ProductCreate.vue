@@ -6,10 +6,10 @@
         <div class="card-container" ref="card-container-basic">
           <p class="card-title">📦 Thông tin cơ bản</p>
           <br />
-          <!-- title -->
           <!-- fruit -->
           <FruitInput @select="selectFruit"></FruitInput>
           <br />
+          <!-- title -->
           <b-field label="Tên sản phẩm*" label-position="on-border" group-multiline>
             <b-input
               v-model="title"

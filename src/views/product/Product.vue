@@ -14,12 +14,12 @@
     <div class="container columns is-vcentered is-mobile" style="margin: 0 auto;">
       <div class="column is-full" v-if="index === 1">
         <transition name="router-view-transition">
-          <ProductType @next="submitType"></ProductType>
+          <ProductType :product="productMorph" @next="submitType"></ProductType>
         </transition>
       </div>
       <div class="column is-full" v-if="index === 2">
         <transition name="router-view-transition">
-          <ProductCreate @submit="addProduct"></ProductCreate>
+          <ProductCreate :product="productMorph" @submit="addProduct"></ProductCreate>
         </transition>
       </div>
       <div class="column is-full" v-if="index === 3">
@@ -37,6 +37,7 @@ import axios from "axios";
 
 import ProductType from "@/components/User/Product/Create/ProductType";
 export default {
+  props: ["product"],
   components: {
     ProductType,
     ProductCreate: () =>
@@ -52,75 +53,87 @@ export default {
   data() {
     return {
       index: 1,
+      productMorph: {},
       product_type: "",
       product_id: "",
     };
   },
+  async mounted() {
+    if (this.product !== undefined) {
+      this.productMorph = this.product;
+    }
+  },
   methods: {
     submitType(type) {
       ++this.index;
-      this.product_type = type;
+      this.productMorph.product_type = type;
     },
     async addProduct(product) {
-      axios
-        .post(`/product/`, {
-          user_id: this.user.id,
-          fruit_id: product.fruit_id,
-          address_id: product.address_id,
-          title: product.title,
-          weight: product.weight,
-          fruit_pct: product.fruit_pct,
-          sugar_pct: product.sugar_pct,
-          weight_avg: product.weight_avg,
-          diameter_avg: product.diameter_avg,
-          price_init: product.price_init,
-          price_step: product.price_step,
-          notes: product.notes,
-          product_type: this.product_type,
-        })
-        // added successfully
-        .then((response) => {
-          // get product_id
-          let product_id = response.data.id;
-          this.product_id = product_id
+      if (this.product === undefined) {
+        // add product
+        axios
+          .post(`/product/`, {
+            user_id: this.user.id,
+            fruit_id: product.fruit_id,
+            address_id: product.address_id,
+            title: product.title,
+            weight: product.weight,
+            fruit_pct: product.fruit_pct,
+            sugar_pct: product.sugar_pct,
+            weight_avg: product.weight_avg,
+            diameter_avg: product.diameter_avg,
+            price_init: product.price_init,
+            price_step: product.price_step,
+            notes: product.notes,
+            product_type: this.product_type,
+          })
+          // added successfully
+          .then((response) => {
+            // get product_id
+            let product_id = response.data.id;
+            this.product_id = product_id;
 
-          // put image to db
-          Promise.all(
-            product.media.map((item) => {
-              return axios.post(`/product/productMedia`, {
-                product_id: product_id,
-                media_url: item,
-              });
-            })
-          )
-            .then(() => {
-              // success toast
-              this.$buefy.toast.open({
-                type: "is-success",
-                position: "is-top",
-                message: "Đã đăng sản phẩm thành công. 😎",
-              });
+            // put image to db
+            Promise.all(
+              product.media.map((item) => {
+                return axios.post(`/product/productMedia`, {
+                  product_id: product_id,
+                  media_url: item,
+                });
+              })
+            )
+              .then(() => {
+                // success toast
+                this.$buefy.toast.open({
+                  type: "is-success",
+                  position: "is-top",
+                  message: "Đã đăng sản phẩm thành công. 😎",
+                });
 
-              // redirect to my product page
-              this.index = 3;
-            })
-            .catch((error) => {
-              console.info(error);
-              this.$buefy.toast.open({
-                type: "is-danger",
-                position: "is-top",
-                message: "Ối, lỗi rồi. Chờ chút rồi thử lại nhé! 😪",
+                // redirect to my product page
+                this.index = 3;
+              })
+              .catch((error) => {
+                console.info(error);
+                this.$buefy.toast.open({
+                  type: "is-danger",
+                  position: "is-top",
+                  message: "Ối, lỗi rồi. Chờ chút rồi thử lại nhé! 😪",
+                });
               });
+          })
+          .catch((error) => {
+            console.info(error);
+            this.$buefy.toast.open({
+              type: "is-danger",
+              position: "is-top",
+              message: "Ối, lỗi rồi. Chờ chút rồi thử lại nhé! 😪",
             });
-        })
-        .catch((error) => {
-          console.info(error);
-          this.$buefy.toast.open({
-            type: "is-danger",
-            position: "is-top",
-            message: "Ối, lỗi rồi. Chờ chút rồi thử lại nhé! 😪",
           });
-        });
+      }
+      else {
+        console.log('edit')
+      }
     },
     cancel() {
       this.$router.go(-1);

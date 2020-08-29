@@ -198,22 +198,35 @@ export default {
                 type: "is-success",
                 position: "is-top",
               });
+
+              this.populate()
             })
             .catch((error) => {
+              let prompt = error.response.data.message
+
+              if (prompt.startsWith('Unknown column')) {
+                prompt = prompt.substr(prompt.indexOf(`'`) + 1)
+                prompt = prompt.substr(0, prompt.indexOf(`'`) - 1)
+              }
               this.$buefy.toast.open({
-                message: `${error.response.data.message} 😪`,
-                type: "is-warning",
+                message: `${prompt} 😪`,
+                type: "is-danger",
                 position: "is-top",
               });
             });
         })
         .catch((error) => {
-          // "Úi, có chút lỗi rồi, bạn thử lại sau nhé. 😪"
-          this.$buefy.toast.open({
-            message: `${error.response.data.message} 😪`,
-            type: "is-danger",
-            position: "is-top",
-          });
+          let prompt = error.response.data.message
+              
+              if (prompt.startsWith('Unknown column')) {
+                prompt = prompt.substr(prompt.indexOf(`'`) + 1)
+                prompt = prompt.substr(0, prompt.indexOf(`'`) - 1)
+              }
+              this.$buefy.toast.open({
+                message: `${prompt} 😪`,
+                type: "is-danger",
+                position: "is-top",
+              });
         });
     },
     intoAuction(item) {

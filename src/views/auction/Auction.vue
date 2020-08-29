@@ -1,6 +1,6 @@
 <template>
   <div class="container">
-    <br/>
+    <br />
     <!-- title -->
     <div class="columns is-variable is-3 is-vcentered">
       <!-- product title -->
@@ -22,8 +22,11 @@
             <div class="column">
               <div class="columns is-mobile" style="margin: 0;">
                 <div class="column is-narrow">
-                  <div class="image is-24x24" :style="{backgroundImage: 'url(' + user.img_url + ')'}" style="background-size: cover; background-position: center; border-radius: 50%;">
-                  </div>
+                  <div
+                    class="image is-24x24"
+                    :style="{backgroundImage: 'url(' + user.img_url + ')'}"
+                    style="background-size: cover; background-position: center; border-radius: 50%;"
+                  ></div>
                 </div>
                 <div class="column is-narrow">
                   <a class="is-text">{{user.name}} ★ {{user.rate}}</a>
@@ -49,7 +52,11 @@
           </div>
         </div>
         <!-- place bid -->
-        <div class="bid" style="margin-top: 40px;" v-if="auction.user_id !== userInfo.id && Object.keys($store.state.user.user).length > 0">
+        <div
+          class="bid"
+          style="margin-top: 40px;"
+          v-if="auction.user_id !== userInfo.id && Object.keys($store.state.user.user).length > 0"
+        >
           <div class="columns is-centered is-vcentered is-mobile">
             <div class="column is-narrow">
               <p class="bidnow">Bạn muốn đấu giá sản phẩm này chứ?</p>
@@ -97,8 +104,11 @@
           class="banners"
         >
           <b-carousel-item v-for="(item, i) in media" :key="i">
-            <div class="img" :style="{backgroundImage: 'url(' + item.media_url + ')'}" style="background-color: white; background-position: center; background-size: cover; height: 440px; border-radius: 10px;">
-            </div>
+            <div
+              class="img"
+              :style="{backgroundImage: 'url(' + item.media_url + ')'}"
+              style="background-color: white; background-position: center; background-size: cover; height: 440px; border-radius: 10px;"
+            ></div>
           </b-carousel-item>
         </b-carousel>
       </div>
@@ -273,7 +283,7 @@
         <!-- place bid -->
         <div style="margin-top: 24px;">
           <form @submit.prevent="placeBid">
-            <p class="filter-title active">🤑 Trả giá</p>
+            <p class="home-section-title">🤑 Trả giá</p>
             <!-- notification -->
             <b-notification
               type="is-danger"
@@ -313,13 +323,13 @@
                   <p class="cell-title" style="padding: 0">👛 Ví của bạn:</p>
                 </div>
                 <div class="column is-narrow">
-                  <p class="active">23,500,000đ</p>
+                  <p class="active">{{ balance }}</p>
                 </div>
               </div>
             </div>
             <div class="column"></div>
             <div class="column is-narrow">
-              <router-link to="/">NẠP TIỀN</router-link>
+              <router-link to="/user/wallet">NẠP TIỀN</router-link>
             </div>
           </div>
         </div>
@@ -456,8 +466,17 @@ export default {
           }, 2500);
         })
         .catch((error) => {
-          this.error = true;
-          this.error_msg = error.response.data.message;
+          let prompt = error.response.data.message;
+
+          if (prompt.startsWith("Unknown column")) {
+            prompt = prompt.substr(prompt.indexOf(`'`) + 1);
+            prompt = prompt.substr(0, prompt.indexOf(`'`) - 1);
+          }
+          this.$buefy.toast.open({
+            message: `${prompt} 😪`,
+            type: "is-danger",
+            position: "is-top",
+          });
         });
     },
     next() {
@@ -478,7 +497,15 @@ export default {
   computed: {
     ...mapState({
       userInfo: (state) => state.user.user,
+      wallet: (state) => state.wallet.wallet
     }),
+
+    balance: function() {
+      return new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(this.wallet.amount);
+    }
   },
   data() {
     return {

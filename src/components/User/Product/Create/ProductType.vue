@@ -29,6 +29,7 @@
 
 <script>
 export default {
+  props: ['product'],
   components: {
     ProductTypeButton: () => import("./ProductTypeButton"),
   },
@@ -51,6 +52,9 @@ export default {
         },
       ],
     };
+  },
+  async mounted() {
+    this.product_type = this.product.product_type
   },
   methods: {
     submit() {

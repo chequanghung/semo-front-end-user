@@ -164,6 +164,9 @@ export default {
                 password: passwords.password,
                 new_password: passwords.new_password
             })
-        }
+        },
+        // logout: ({ state }) => {
+            
+        // }
     }
 }

@@ -21,6 +21,9 @@
         <p class="section-title">THAM GIA</p>
         <p class="section-content">{{ user.rate }} tháng</p>
       </div>
+      <div class="column is-narrow">
+        <b-button type="is-danger" @click="logOut">🚪 Đăng xuất</b-button>
+      </div>
     </div>
   </div>
 </template>
@@ -35,6 +38,11 @@ export default {
       user: state => state.user.user,
       address: state => state.user.address
     })
+  },
+  methods: {
+    logOut () {
+      this.$router.go()
+    }
   }
 };
 </script>

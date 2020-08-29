@@ -30,7 +30,9 @@ export default {
         gett: (state, transaction) => {
             state.transaction = transaction
         },
-
+        addm: (state, amount) => {
+            state.wallet.amount += amount
+        }
     },
 
 
@@ -43,17 +45,28 @@ export default {
             })
         },
         // get deposits
-        getd: async ({ commit }) => {
+        getd: async ({ state, commit }) => {
             return axios.get(`/wallet/deposit/wallet/id/${state.wallet.id}`)
             .then (({ data }) => {
                 commit('getd', data)
             })
         },
         // transaction
-        gett: async ({ commit }) => {
+        gett: async ({ state, commit }) => {
             return axios.get(`/wallet/transaction/wallet/id/${state.wallet.id}`)
             .then (({ data }) => {
                 commit('gett', data)
+            })
+        },
+        // add money
+        addm: async ({ state, commit }, amount) => {
+            return axios.post(`/wallet/topUp`, {
+                id: state.wallet.id,
+                amount: amount
+            })
+            .then ((response) => {
+                commit('addm', amount)
+                return response
             })
         }
     }

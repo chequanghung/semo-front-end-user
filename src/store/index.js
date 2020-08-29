@@ -10,6 +10,7 @@ import auction from './modules/auction'
 import affair from './modules/affair'
 import search from './modules/search'
 import fruit from './modules/fruit'
+import wallet from './modules/wallet'
 
 Vue.use(Vuex)
 
@@ -23,6 +24,7 @@ export default new Vuex.Store({
     affair: affair,
     search: search,
     fruit: fruit,
+    wallet: wallet,
   },
   state: {
   },
