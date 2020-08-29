@@ -14,6 +14,10 @@ Vue.use(Buefy)
 import axios from 'axios'
 import VueAxios from 'vue-axios'
  
+// timezone
+import moment from 'moment-timezone'
+moment.tz.setDefault('Asia/Bangkok')
+
 Vue.use(VueAxios, axios)
 axios.defaults.baseURL = "http://localhost:3003/"
 

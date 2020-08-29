@@ -14,7 +14,7 @@
             </div>
           </b-button>
           <!-- title -->
-          <p class="auction-title active column">{{auction.title}}</p>
+          <p class="auction-title active column" style="font-family: Merriweather; font-weight: 900; line-height: 48px;">{{auction.title}}</p>
         </div>
         <!-- user -->
         <div class="user">

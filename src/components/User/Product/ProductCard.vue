@@ -110,7 +110,7 @@ export default {
     return {
       isCreateCollapsed: false,
       date: "",
-      isDisabled: true,
+      isDisabled: false,
     };
   },
   computed: {
@@ -129,15 +129,15 @@ export default {
       this.isCreateCollapsed ? (this.date = new Date()) : (this.date = "");
     },
     date: function () {
-      if (this.date !== "") {
-        let cur_date = new Date();
+      // if (this.date !== "") {
+      //   let cur_date = new Date();
 
-        if (this.date.getTime() - cur_date.getTime() > 24 * 3600 * 1000 * 3) {
-          this.isDisabled = false;
-        } else {
-          this.isDisabled = true;
-        }
-      }
+      //   if (this.date.getTime() - cur_date.getTime() > 24 * 3600 * 1000 * 3) {
+      //     this.isDisabled = false;
+      //   } else {
+      //     this.isDisabled = true;
+      //   }
+      // }
     },
   },
   methods: {
@@ -150,7 +150,7 @@ export default {
     createAuction() {
       this.$emit("create", {
         product: this.item,
-        date: moment(this.date).format("YYYY-MM-DD hh:mm:ss"),
+        date: moment(this.date).format('YYYY-MM-DD HH:mm:ss'),
       });
     },
     intoAuction() {

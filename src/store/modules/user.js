@@ -88,6 +88,7 @@ export default {
                     commit('gett', response.data.token)
                     commit('getu', response.data.user)
                     commit('geta', response.data.user.Addresses)
+                    commit('wallet/getw', response.data.user.Wallet, { root: true })
                 })
         },
         // update avatar
