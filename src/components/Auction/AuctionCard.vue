@@ -8,7 +8,8 @@
     ></div>
     <!-- info -->
     <div class="card-content">
-    <p style="font-weight: 700; font-size: 14px; color: #07d390;">ĐANG ĐẤU GIÁ</p>
+      <p style="font-weight: 700; font-size: 14px; color: #07d390;" v-if="auction.remain_time.split(':')[0] >= 24">ĐANG ĐẤU GIÁ</p>
+      <p style="font-weight: 700; font-size: 14px; color: #FD5F54;" v-else>SẮP KẾT THÚC</p>
       <div class="card-title">{{ auction.Product.title }}</div>
       <!-- price -->
       <div class="card-info">
@@ -18,7 +19,11 @@
       <!-- remaining time -->
       <div class="card-info">
         <p class="card-info-title">Thời gian còn lại</p>
-        <p class="card-info-content">{{ auction.remain }} ngày</p>
+        <p
+          class="card-info-content"
+          v-if="auction.remain >= 1 && auction.remain_time.split(':')[0] >= 24"
+        >{{ auction.remain }} ngày</p>
+        <p class="card-info-content" style="color: #FD5F54;" v-else>{{ format_time(auction.remain_time) }}</p>
       </div>
       <!-- footer info -->
       <div class="columns">
@@ -43,6 +48,10 @@ export default {
         name: "Auction",
         params: { id: this.auction.id },
       });
+    },
+    format_time(time) {
+      let times = time.split(":");
+      return `${times[0]} giờ ${times[1]} phút`;
     },
   },
 };

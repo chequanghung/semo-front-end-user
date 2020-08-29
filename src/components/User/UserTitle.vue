@@ -1,49 +1,60 @@
 <template>
   <div class="container">
-    <div class="columns is-vcentered is-mobile">
-      <div class="column is-narrow">
-        <div class="image is-64x64 user-avatar" :style="{backgroundImage: user.img_url ? `url(${user.img_url})` : `url('https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png')`}">
+    <div class="columns is-vcentered is-multiline">
+      <div class="column">
+        <div class="columns is-vcentered is-centered is-mobile">
+          <div class="column is-narrow">
+            <div
+              class="image is-64x64 user-avatar"
+              :style="{backgroundImage: user.img_url ? `url(${user.img_url})` : `url('https://www.pngitem.com/pimgs/m/30-307416_profile-icon-png-image-free-download-searchpng-employee.png')`}"
+            ></div>
+          </div>
+          <div class="column is-narrow">
+            <p class="title">{{ user.name }}</p>
+            <p class="subtitle">{{ address[0].province }}</p>
+          </div>
         </div>
       </div>
+      <hr/>
       <div class="column">
-        <p class="title">{{ user.name }}</p>
-        <p class="subtitle">{{ address[0].province }}</p>
-      </div>
-      <div class="column is-narrow">
-        <p class="section-title">ĐÁNH GIÁ</p>
-        <p class="section-content">★ {{ user.rate }}</p>
-      </div>
-      <div class="column is-narrow">
-        <p class="section-title">SẢN LƯỢNG</p>
-        <p class="section-content">{{ user.rate }}</p>
-      </div>
-      <div class="column is-narrow">
-        <p class="section-title">THAM GIA</p>
-        <p class="section-content">{{ user.rate }} tháng</p>
-      </div>
-      <div class="column is-narrow">
-        <b-button type="is-danger" @click="logOut">🚪 Đăng xuất</b-button>
+        <div class="columns is-vcentered is-centered is-mobile">
+          <div class="column is-narrow">
+            <p class="section-title">ĐÁNH GIÁ</p>
+            <p class="section-content">★ {{ user.rate }}</p>
+          </div>
+          <div class="column is-narrow">
+            <p class="section-title">SẢN LƯỢNG</p>
+            <p class="section-content">{{ user.rate }}</p>
+          </div>
+          <div class="column is-narrow">
+            <p class="section-title">THAM GIA</p>
+            <p class="section-content">{{ user.rate }} tháng</p>
+          </div>
+          <div class="column is-narrow">
+            <b-button type="is-danger" @click="logOut">🚪 Đăng xuất</b-button>
+          </div>
+        </div>
       </div>
     </div>
   </div>
 </template>
 
 <script>
-import { mapState } from 'vuex'
+import { mapState } from "vuex";
 
 export default {
   name: "UserTitle",
   computed: {
-    ...mapState ({
-      user: state => state.user.user,
-      address: state => state.user.address
-    })
+    ...mapState({
+      user: (state) => state.user.user,
+      address: (state) => state.user.address,
+    }),
   },
   methods: {
-    logOut () {
-      this.$router.go()
-    }
-  }
+    logOut() {
+      this.$router.go();
+    },
+  },
 };
 </script>
 

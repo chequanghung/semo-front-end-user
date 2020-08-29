@@ -9,29 +9,38 @@
           <!-- fruit -->
           <b-button type="is-text" tag="router-link" :to="'/fruit/' + fruit.id">
             <div style="display: flex; align-items: center;">
-              <img :src="fruit.icon_url" style="height: 24px; margin-right: 12px;" />
+              <div
+                :style="{backgroundImage: `url(${fruit.icon_url})`}"
+                style="height: 24px; width: 24px; margin-right: 12px; border-radius: 50%; background-size: cover; background-position: center;"
+              ></div>
               <p>{{fruit.title}}</p>
             </div>
           </b-button>
           <!-- title -->
-          <p class="auction-title active column" style="font-family: Merriweather; font-weight: 900; line-height: 48px;">{{auction.title}}</p>
+          <p
+            class="auction-title active column"
+            style="font-family: Merriweather; font-weight: 900; line-height: 48px;"
+          >{{auction.title}}</p>
         </div>
         <!-- user -->
         <div class="user">
           <div class="columns">
             <div class="column">
               <div class="columns is-mobile" style="margin: 0;">
-                <div class="column is-narrow">
-                  <div
-                    class="image is-24x24"
-                    :style="{backgroundImage: 'url(' + user.img_url + ')'}"
-                    style="background-size: cover; background-position: center; border-radius: 50%;"
-                  ></div>
+                <div class="column">
+                <div class="columns is-mobile">
+                  <div class="column is-narrow">
+                    <div
+                      class="image is-24x24"
+                      :style="{backgroundImage: 'url(' + user.img_url + ')'}"
+                      style="background-size: cover; background-position: center; border-radius: 50%;"
+                    ></div>
+                  </div>
+                  <div class="column is-narrow">
+                    <a class="is-text">{{user.name}} ★ {{user.rate}}</a>
+                  </div>
                 </div>
-                <div class="column is-narrow">
-                  <a class="is-text">{{user.name}} ★ {{user.rate}}</a>
                 </div>
-                <div class="column"></div>
                 <div
                   class="column is-narrow"
                   v-if="auction !== undefined"
@@ -46,7 +55,10 @@
             <div class="column">
               <data-block v-if="auction !== undefined">
                 <template v-slot:title>THỜI GIAN CÒN LẠI</template>
-                <template v-slot:content>{{auction.Auctions[0].remain}} ngày</template>
+                <template v-slot:content>
+                  <p v-if="auction.Auctions[0].remain_days > 0 && auction.Auctions[0].remain_time.split(':')[0] >= 24">{{auction.Auctions[0].remain_days}} ngày</p>
+                  <p v-else style="color: #FD5F54">{{ format_time(auction.Auctions[0].remain_time) }}</p>
+                  </template>
               </data-block>
             </div>
           </div>
@@ -501,6 +513,10 @@ export default {
     numberWithCommas(x) {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
+    format_time(value) {
+      let times = value.split(':')
+      return `${times[0]} giờ ${times[1]} phút`
+    }
   },
   computed: {
     ...mapState({

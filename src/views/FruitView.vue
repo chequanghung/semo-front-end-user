@@ -6,7 +6,7 @@
         style="border-radius: 50%; width: 64px; height: 64px; background-size: cover; background-position: center;"
         :style="{backgroundImage: 'url(' + fruit.icon_url + ')'}"
       ></div>
-      <p class="welcome-title"> {{ fruit.title }} | {{ auctions.length }} SẢN PHẨM</p>
+      <p class="welcome-title" style="margin-left: 16px;">{{ fruit.title }} | {{ auctions.length }} SẢN PHẨM</p>
     </div>
     <br />
     <!-- auctions -->

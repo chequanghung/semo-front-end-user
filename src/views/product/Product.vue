@@ -69,71 +69,79 @@ export default {
       this.productMorph.product_type = type;
     },
     async addProduct(product) {
-      if (this.product === undefined) {
-        // add product
-        axios
-          .post(`/product/`, {
-            user_id: this.user.id,
-            fruit_id: product.fruit_id,
-            address_id: product.address_id,
-            title: product.title,
-            weight: product.weight,
-            fruit_pct: product.fruit_pct,
-            sugar_pct: product.sugar_pct,
-            weight_avg: product.weight_avg,
-            diameter_avg: product.diameter_avg,
-            price_init: product.price_init,
-            price_step: product.price_step,
-            notes: product.notes,
-            product_type: this.product_type,
-          })
-          // added successfully
-          .then((response) => {
-            // get product_id
-            let product_id = response.data.id;
-            this.product_id = product_id;
+      // add product
+      axios
+        .post(`/product/`, {
+          user_id: this.user.id,
+          fruit_id: product.fruit_id,
+          address_id: product.address_id,
+          title: product.title,
+          weight: product.weight,
+          fruit_pct: product.fruit_pct,
+          sugar_pct: product.sugar_pct,
+          weight_avg: product.weight_avg,
+          diameter_avg: product.diameter_avg,
+          price_init: product.price_init,
+          price_step: product.price_step,
+          notes: product.notes,
+          product_type: this.productMorph.product_type,
+        })
+        // added successfully
+        .then((response) => {
+          // get product_id
+          let product_id = response.data.id;
+          this.product_id = product_id;
 
-            // put image to db
-            Promise.all(
-              product.media.map((item) => {
-                return axios.post(`/product/productMedia`, {
-                  product_id: product_id,
-                  media_url: item,
-                });
-              })
-            )
-              .then(() => {
+          // put image to db
+          Promise.all(
+            product.media.map((item) => {
+              return axios.post(`/product/productMedia`, {
+                product_id: product_id,
+                media_url: item,
+              });
+            })
+          )
+            .then(() => {
+              // redirect to my product page
+              if (this.product === undefined) {
                 // success toast
                 this.$buefy.toast.open({
                   type: "is-success",
                   position: "is-top",
                   message: "Đã đăng sản phẩm thành công. 😎",
                 });
-
-                // redirect to my product page
-                this.index = 3;
-              })
-              .catch((error) => {
-                console.info(error);
+                // next step
+                ++this.index;
+              } else {
+                // success toast for edit product
                 this.$buefy.toast.open({
-                  type: "is-danger",
+                  type: "is-success",
                   position: "is-top",
-                  message: "Ối, lỗi rồi. Chờ chút rồi thử lại nhé! 😪",
+                  message: "Đã sửa sản phẩm thành công. 😎",
                 });
+                // back to product page
+                this.$router.go(-1)
+              }
+            })
+            .catch((error) => {
+              console.info(error.data.message);
+              console.info(error.response);
+              this.$buefy.toast.open({
+                type: "is-danger",
+                position: "is-top",
+                message: "Ối, lỗi rồi. Chờ chút rồi thử lại nhé! 😪",
               });
-          })
-          .catch((error) => {
-            console.info(error);
-            this.$buefy.toast.open({
-              type: "is-danger",
-              position: "is-top",
-              message: "Ối, lỗi rồi. Chờ chút rồi thử lại nhé! 😪",
             });
+        })
+        .catch((error) => {
+          console.info(error.message);
+          console.info(error.response);
+          this.$buefy.toast.open({
+            type: "is-danger",
+            position: "is-top",
+            message: "Ối, lỗi rồi. Chờ chút rồi thử lại nhé! 😪",
           });
-      }
-      else {
-        console.log('edit')
-      }
+        });
     },
     cancel() {
       this.$router.go(-1);

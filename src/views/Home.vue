@@ -13,7 +13,7 @@
     <AuctionCarouselList title="😍 Đông đảo bà con" :auctions="mostviewed"></AuctionCarouselList>
 
     <!-- top fruits -->
-    <FruitGridList title="🍑 Loại quả" :fruits="fruits.slice(0, 20)"></FruitGridList>
+    <FruitGridList title="🍑 Loại quả" :fruits="fruits.slice(0, 10)"></FruitGridList>
 
     <!-- newest and closing -->
     <div class="container">

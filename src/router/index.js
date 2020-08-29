@@ -110,6 +110,7 @@ const router = new VueRouter({
 })
 
 router.beforeEach((to, from, next) => {
+  window.scrollTo(0,0)
   if (to.matched.some(record => record.meta.requiresAuth)) {
     if (Object.keys(store.state.user.user).length === 0) {
       next({
