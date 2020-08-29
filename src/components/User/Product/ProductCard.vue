@@ -22,7 +22,7 @@
               <p class="card-info-title">Thời gian còn lại</p>
               <p
                 class="card-info-content major"
-                :class="{'red': item.Auctions[0].remain_days === 0}"
+                :class="{'red': item.Auctions[0].remain_time.split(':')[0] <= 23}"
               >{{ remain }}</p>
             </div>
           </div>
@@ -90,12 +90,15 @@
         </div>
       </div>
       <!-- submit -->
-      <b-button
-        style="margin: 0 auto;"
-        type="is-primary"
-        :disabled="isDisabled"
-        @click="createAuction"
-      >✅ Tạo buổi đấu giá</b-button>
+      <div class="columns is-centered is-mobile">
+        <div class="column is-narrow">
+          <b-button
+            type="is-primary"
+            :disabled="isDisabled"
+            @click="createAuction"
+          >✅ Tạo buổi đấu giá</b-button>
+        </div>
+      </div>
     </div>
   </div>
 </template>
@@ -115,12 +118,11 @@ export default {
   },
   computed: {
     remain: function () {
-      if (this.item.Auctions[0].remain_days > 0) {
+      let times = this.item.Auctions[0].remain_time.split(":");
+      if (times[0] >= 24) {
         return `${this.item.Auctions[0].remain_days} ngày`;
       } else {
-        return moment(this.item.Auctions[0].remain_days).format(
-          "hh giờ mm phút"
-        );
+        return `${times[0]} giờ ${times[1]} phút`;
       }
     },
   },
@@ -131,7 +133,6 @@ export default {
     date: function () {
       // if (this.date !== "") {
       //   let cur_date = new Date();
-
       //   if (this.date.getTime() - cur_date.getTime() > 24 * 3600 * 1000 * 3) {
       //     this.isDisabled = false;
       //   } else {
@@ -150,7 +151,7 @@ export default {
     createAuction() {
       this.$emit("create", {
         product: this.item,
-        date: moment(this.date).format('YYYY-MM-DD HH:mm:ss'),
+        date: moment(this.date).format("YYYY-MM-DD HH:mm:ss"),
       });
     },
     intoAuction() {

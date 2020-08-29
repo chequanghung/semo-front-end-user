@@ -1,5 +1,5 @@
 <template>
-  <div class="home">
+  <div class="container">
     <div class="welcome">
       <p class="welcome-title">
         Những loại quả đang có mặt tại

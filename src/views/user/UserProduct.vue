@@ -74,6 +74,9 @@ export default {
       this.keyword !== '' ?
       this.product_list = this.product_list.filter(item => item.title.toLowerCase().indexOf(this.keyword.toLowerCase()) >= 0)
       : this.product_list = this.products
+    },
+    products: function() {
+      this.product_list = this.products
     }
   },
   async mounted() {

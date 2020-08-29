@@ -105,6 +105,7 @@ export default {
     },
   },
   async mounted() {
+    console.log(this.affair)
     this.populate(this.$route.params.id);
   },
 };
