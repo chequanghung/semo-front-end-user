@@ -373,10 +373,18 @@ export default {
   },
   props: ["id"],
   async mounted() {
+    // set
     this.refreshData();
+
+    this.interval = setInterval(
+      function () {
+        this.refreshData();
+      }.bind(this),
+      10000
+    );
   },
-  destroyed() {
-    this.$destroy();
+  beforeDestroy() {
+    clearInterval(this.interval);
   },
   methods: {
     getImgUrl(value) {
@@ -497,18 +505,19 @@ export default {
   computed: {
     ...mapState({
       userInfo: (state) => state.user.user,
-      wallet: (state) => state.wallet.wallet
+      wallet: (state) => state.wallet.wallet,
     }),
 
-    balance: function() {
+    balance: function () {
       return new Intl.NumberFormat("vi-VN", {
         style: "currency",
         currency: "VND",
       }).format(this.wallet.amount);
-    }
+    },
   },
   data() {
     return {
+      interval: null,
       index: 0,
       steps: [
         {
