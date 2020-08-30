@@ -52,6 +52,7 @@ export default {
   computed: {
     ...mapState({
       user: (state) => state.user.user,
+      products: (state) => state.product.products,
     }),
   },
   data() {
@@ -92,6 +93,19 @@ export default {
       keyword: "",
       product_list: [],
     };
+  },
+  watch: {
+    index: function () {
+      this.populate();
+    },
+    keyword: function() {
+      this.keyword !== '' ?
+      this.product_list = this.product_list.filter(item => item.title.toLowerCase().indexOf(this.keyword.toLowerCase()) >= 0)
+      : this.product_list = this.products
+    },
+    products: function() {
+      this.product_list = this.products
+    }
   },
   async mounted() {
     this.populate();

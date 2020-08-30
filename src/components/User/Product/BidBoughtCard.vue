@@ -4,46 +4,46 @@
       <div class="column is-narrow">
         <div
           class="product-thumbnail image is-96x96"
-          :style="{backgroundImage: 'url(' + item.ProductMedia[0].media_url + ')'}"
+          :style="{backgroundImage: 'url(' + item.Product.ProductMedia[0].media_url + ')'}"
         ></div>
       </div>
       <div class="column">
-        <p class="card-title">{{ item.title }}</p>
+        <p class="card-title">{{ item.Product.title }}</p>
         <div class="columns is-mobile">
           <!-- price -->
           <div class="column">
             <div class="card-info">
               <p class="card-info-title">Giá hiện tại</p>
-              <p class="card-info-content major">{{ item.price_cur }}</p>
+              <p class="card-info-content major">{{ item.Product.price_cur }}</p>
             </div>
           </div>
-          <div class="column" v-if="item.product_status === 3">
+          <div class="column" v-if="item.Product.product_status === 3">
             <div class="card-info">
               <p class="card-info-title">Thời gian còn lại</p>
               <p
                 class="card-info-content major"
-                :class="{'red': info.remain_time.split(':')[0] <= 23}"
+                :class="{'red': item.remain_time.split(':')[0] <= 23}"
               >{{ remain }}</p>
             </div>
           </div>
         </div>
         <!-- brief info -->
-        <p class="card-info-title">{{ item.weight }} tạ | {{ item.Address.province }}</p>
+        <p class="card-info-title">{{ item.Product.weight }} tạ | {{ item.Product.Address.province }}</p>
       </div>
     </div>
 
     <div class="columns is-vcentered is-mobile">
       <div class="column">
-        <p class="card-info-subtle">{{ item.date_created }}</p>
+        <p class="card-info-subtle">{{ item.Product.date_created }}</p>
       </div>
       <div class="column is-narrow">
         <div class="columns is-variable is-1 is-mobile">
           <!-- view auction for status 3 -->
-          <div class="column is-narrow" v-if="item.product_status === 3">
+          <div class="column is-narrow" v-if="item.Product.product_status === 3">
             <b-button type="is-green" @click="intoAuction">📑 Xem đấu giá</b-button>
           </div>
           <!-- view affair for status 4, 5 -->
-          <div class="column is-narrow" v-if="item.product_status <= 5 && item.product_status >= 4">
+          <div class="column is-narrow" v-if="item.Product.product_status <= 5 && item.Product.product_status >= 4">
             <b-button type="is-green" @click="intoAffair">📑 Xem giao kèo</b-button>
           </div>
         </div>
@@ -56,21 +56,17 @@
 // import moment from "moment";
 
 export default {
-  props: ["info"],
+  props: ["item"],
   components: {},
   data() {
     return {
-      item: {},
     };
-  },
-  async mounted() {
-    this.item = this.info.Product;
   },
   computed: {
     remain: function () {
-      let times = this.info.remain_time.split(":");
+      let times = this.item.remain_time.split(":");
       if (times[0] >= 24) {
-        return `${this.info.remain_days} ngày`;
+        return `${this.item.remain_days} ngày`;
       } else {
         return `${times[0]} giờ ${times[1]} phút`;
       }
@@ -78,10 +74,10 @@ export default {
   },
   methods: {
     intoAuction() {
-      this.$emit("auction", this.info);
+      this.$emit("auction", this.item);
     },
     intoAffair() {
-      this.$emit("affair", this.info);
+      this.$emit("affair", this.item);
     },
   },
 };
