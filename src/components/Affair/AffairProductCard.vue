@@ -23,18 +23,24 @@
     <div
       class="cursor columns is-vcentered is-mobile"
       @click="$router.push({ name: 'UserView', params: { id: product.User.id }})"
+      v-if="product"
     >
       <div class="column is-narrow" style="margin: 0">
         <div
           class="image-icon"
           :style="{backgroundImage: 'url(' + product.User.img_url + ')'}"
+          v-if="product && product.User !== undefined"
         ></div>
       </div>
       <div class="column is-narrow">
-        <p class="sub-title">{{ product.User.name }}</p>
+        <p class="sub-title"
+          v-if="product && product.User !== undefined"
+        >{{ product.User.name }}</p>
       </div>
       <div class="column is-narrow">
-        <p class="sub-title">★ {{ product.User.rate }}</p>
+        <p class="sub-title"
+          v-if="product && product.User !== undefined"
+        >★ {{ product.User.rate }}</p>
       </div>
     </div>
 
@@ -50,7 +56,7 @@
     <div class="images">
       <div class="columns is-variable is-2 is-mobile">
         <div class="column is-narrow" v-for="(medium, index) in product.ProductMedia" :key="index">
-            <img :src="medium.media_url" :alt="index" style="border-radius: 10px; height: 128px;" />
+          <img :src="medium.media_url" :alt="index" style="border-radius: 10px; height: 128px;" />
         </div>
       </div>
     </div>
@@ -168,15 +174,14 @@
 import moment from "moment";
 
 export default {
-  props: ['affair', "product"],
+  props: ["affair", "product"],
   data() {
-    return {
-    };
+    return {};
   },
   computed: {
-    date: function() {
-      return moment(this.affair.date_created).format('hh:mm DD/MM/YYYY')
-    }
+    date: function () {
+      return moment(this.affair.date_created).format("hh:mm DD/MM/YYYY");
+    },
   },
 };
 </script>
@@ -221,6 +226,11 @@ export default {
   width: auto;
   padding-bottom: 20px;
   height: 148px;
+}
+
+.edited {
+  background-color: #fff7cc;
+  box-shadow: 0 2px 4px #fff7cc59;
 }
 
 .cursor,

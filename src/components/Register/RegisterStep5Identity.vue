@@ -63,6 +63,7 @@
         :disabled="isDisabled"
         :loading="isLoading"
         rounded
+        type="is-green"
         expanded
       ></b-button>
     </form>

@@ -6,7 +6,7 @@
         <p class="home-section-title">🏡 Địa chỉ</p>
       </div>
       <div class="column is-narrow">
-        <b-button type="is-primary" @click="isCreateModal = true">➕ Thêm địa chỉ mới</b-button>
+        <b-button type="is-green" @click="isCreateModal = true">➕ Thêm địa chỉ mới</b-button>
       </div>
     </div>
 

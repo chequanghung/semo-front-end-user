@@ -124,6 +124,7 @@
         label="😜 Xong rồi"
         :disabled="isDisabled"
         :loading="isLoading"
+        type="is-green"
         rounded
         expanded
       ></b-button>

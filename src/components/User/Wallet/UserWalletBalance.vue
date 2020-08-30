@@ -19,7 +19,7 @@
     <!-- button -->
     <div class="columns is-centered is-mobile">
       <div class="column is-narrow">
-        <b-button type="is-primary" @click="topUp" :disabled='wallet.wallet_status === 0'>➕ Nạp tiền vào ví</b-button>
+        <b-button type="is-green" @click="topUp" :disabled='wallet.wallet_status === 0'>➕ Nạp tiền vào ví</b-button>
       </div>
     </div>
     <br/>

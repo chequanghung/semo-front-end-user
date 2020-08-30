@@ -11,6 +11,7 @@
         id="sign-up-button"
         native-type="submit"
         label="👉 Tiếp tục"
+        type="is-green"
         :disabled="error === true || phone.length < 10 || disabled === true"
         :loading="loading ? true : false"
         rounded

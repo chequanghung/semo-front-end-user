@@ -40,7 +40,7 @@
       <br />
       <div style="display: flex; justify-content: center;">
         <b-button
-          type="is-primary"
+          type="is-green"
           @click="updateInfo"
           :disabled="isDisabled"
           :loading="isLoading"

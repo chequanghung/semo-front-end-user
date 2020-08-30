@@ -21,6 +21,7 @@
                 <b-input
                   v-model="phone"
                   placeholder="Số điện thoại"
+                type="is-green"
                   maxlength="10"
                   :has-counter="false"
                 ></b-input>
@@ -41,6 +42,7 @@
                 label="👋 Đăng nhập"
                 :disabled="error === true || password === '' || phone === ''"
                 :loading="loading ? true : false"
+                type="is-green"
                 rounded
                 expanded
               ></b-button>

@@ -20,6 +20,7 @@
         label="👉 Tiếp tục"
         :disabled="error === true || otp.length < 6 || disabled === true"
         :loading="loading ? true : false"
+        type="is-green"
         rounded
         expanded
       ></b-button>

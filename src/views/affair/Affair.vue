@@ -2,6 +2,11 @@
   <div class="container">
     <br />
     <div class="columns">
+      <div class="column">
+        <b-button type="is-danger" outlined @click="back">👈 Quay lại</b-button>
+      </div>
+    </div>
+    <div class="columns">
       <!-- product -->
       <div class="column is-5 is-mobile">
         <div class="tile is-ancestor">
@@ -43,13 +48,14 @@
               <!-- content -->
               <div class="chat-content">
                 <div class="columns is-mobile" v-for="(chat, i) in affair_chats" :key="i">
-                  <div class="column">
-                    <div class="bubble" v-if="chat.sender_user_id !== user.id">
+                  <div class="column is-narrow" v-if="chat.sender_user_id !== user.id">
+                    <div class="bubble">
                       <p>{{ chat.content }}</p>
                     </div>
                   </div>
-                  <div class="column">
-                    <div class="bubble you" v-if="chat.sender_user_id === user.id">
+                  <div class="column"></div>
+                  <div class="column is-narrow" v-if="chat.sender_user_id === user.id">
+                    <div class="bubble you">
                       <p>{{ chat.content }}</p>
                     </div>
                   </div>
@@ -123,6 +129,8 @@ export default {
     ...mapActions("affair", ["populate", "getcs", "addcs"]),
 
     intoContract() {
+    clearInterval(this.interval);
+
       this.$router.push({
         name: "Contract",
         params: { id: this.affair.AffairContract.id },
@@ -138,6 +146,9 @@ export default {
         this.message = ''
       })
     },
+    back () {
+      this.$router.go(-1)
+    }
   },
   async mounted() {
     // console.log(this.affair);
@@ -171,12 +182,14 @@ export default {
 .chat-content {
   height: 480px;
   overflow-y: scroll;
+  padding: 0 12px;
 }
 
 .bubble {
   border-radius: 10px;
   color: #707070;
   background-color: #ececec;
+  padding: 8px 16px;
 }
 
 .you {

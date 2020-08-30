@@ -67,14 +67,14 @@
         <div
           class="bid"
           style="margin-top: 40px;"
-          v-if="auction.user_id !== userInfo.id && Object.keys($store.state.user.user).length > 0"
+          v-if="auction.user_id !== userInfo.id && Object.keys($store.state.user.user).length > 0 && auction.Auctions[0].auction_status === 3"
         >
           <div class="columns is-centered is-vcentered is-mobile">
             <div class="column is-narrow">
               <p class="bidnow">Bạn muốn đấu giá sản phẩm này chứ?</p>
             </div>
             <div class="column is-narrow">
-              <b-button class="btn" type="is-primary" @click="enterBid" rounded>Trả giá ngay</b-button>
+              <b-button class="btn" type="is-green" @click="enterBid" rounded>Trả giá ngay</b-button>
               <!-- enterBid -->
             </div>
           </div>
@@ -243,7 +243,7 @@
                       >{{step.description}}</p>
                       <b-button
                         rounded
-                        type="is-primary"
+                        type="is-green"
                         style="margin: 40px 0;"
                         @click="next"
                       >{{step.button}}</b-button>
@@ -320,7 +320,7 @@
                 <b-button
                   :disabled="amount.length === 0"
                   native-type="submit"
-                  type="is-primary"
+                  type="is-green"
                   expanded
                   rounded
                 >Đấu giá</b-button>

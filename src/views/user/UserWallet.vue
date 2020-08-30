@@ -39,7 +39,7 @@
             </div>
           </div>
         </div>
-        <b-button type="is-primary" @click="submitTopUp" :disabled="isDisabled">💳 Nạp tiền</b-button>
+        <b-button type="is-green" @click="submitTopUp" :disabled="isDisabled">💳 Nạp tiền</b-button>
       </div>
     </b-modal>
   </div>

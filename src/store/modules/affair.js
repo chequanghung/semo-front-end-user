@@ -60,7 +60,6 @@ export default {
         populate: async ({ commit }, id) => {
             axios.get(`/affair/id/${id}`)
                 .then(({ data }) => {
-                    // console.log(data)
                     let affair = data
 
                     commit('geta', affair)
@@ -71,7 +70,6 @@ export default {
         getc: async ({ commit }, id) => {
             return axios.get(`/affair/contract/id/${id}`)
                 .then(({ data }) => {
-                    console.info(data)
                     commit('getc', data)
                     commit('getu', data.AffairContractUpdates.length > 0 ? data.AffairContractUpdates[0] : {})
                 })
@@ -95,9 +93,9 @@ export default {
         },
         // edit contract
         editc: async ({ commit }, contract) => {
-            return axios.put(`/affair/contract/${contract.id}`, contract)
+            return axios.post(`/affair/contract/update`, contract)
                 .then(() => {
-                    commit('editc', contract)
+                    commit('getu', contract)
                 })
         },
         clear: ({ commit }) => {

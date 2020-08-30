@@ -204,7 +204,7 @@
           <div class="column is-narrow">
             <b-button
               @click="submitProduct"
-              type="is-primary"
+              type="is-green"
               :disabled="isDisabled"
             >✈️ Gửi đi kiểm duyệt</b-button>
           </div>

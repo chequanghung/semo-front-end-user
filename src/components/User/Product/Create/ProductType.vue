@@ -18,7 +18,7 @@
       <!-- submit -->
       <div class="columns is-centered">
         <b-button
-          :type="product_type === '' ? 'is-light' : 'is-primary'"
+          :type="product_type === '' ? 'is-light' : 'is-green'"
           @click="submit"
           :disabled="product_type === ''"
         >👉 Tiếp tục</b-button>

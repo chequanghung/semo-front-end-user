@@ -22,6 +22,10 @@
           v-if="date !== undefined"
         >{{ date !== null ? formatDate(date) : 'Chưa thỏa thuận' }}</p>
         <!-- user -->
+        <p
+          class="cell-content"
+          v-if="user === null"
+        >Chưa thỏa thuận</p>
         <div
           class="columns is-vcentered is-mobile is-variable is-2"
           style="padding: 0;"
@@ -31,11 +35,14 @@
             <div
               class="image is-24x24"
               style="border-radius: 50%; background-size: cover; background-position: center;"
-              :style="{backgroundImage: 'url(' + user.img_url + ')'}"
+              :style="{backgroundImage: `url(${user.img_url})`}"
+              v-if="user"
             ></div>
           </div>
           <div class="column is-narrow">
-            <p class="cell-content">{{ user.name }}</p>
+            <p class="cell-content"
+              v-if="user"
+            >{{ user.name }}</p>
           </div>
         </div>
       </div>
@@ -49,16 +56,16 @@
               <b-input v-model="percentEdit" type="number" :min="min" :max="max" expanded></b-input>
             </b-field>
             <b-field v-if="date !== undefined">
-              <b-datepicker locale="en-GB" v-model="dateEdit"></b-datepicker>
+              <b-datepicker locale="en-GB" v-model="dateEdit" expanded></b-datepicker>
             </b-field>
             <b-field v-if="user !== undefined">
-              <b-select v-model="userEdit">
+              <b-select v-model="userEdit" expanded>
                 <option v-for="item in users" :key="item.id" :value="item">{{ item.name }}</option>
               </b-select>
             </b-field>
           </div>
           <div class="column is-narrow">
-            <b-button @click="submit" :disabled="isDisabled">🖊️ Xong</b-button>
+            <b-button @click="submit" :disabled="isDisabled" expanded>🖊️ Xong</b-button>
           </div>
         </div>
       </div>
@@ -70,7 +77,7 @@
 import moment from "moment";
 
 export default {
-  props: ["title", "money", "percent", "min", "max", "users", "user", "date"],
+  props: ["title", "money", "percent", "min", "max", "users", "user", "date", "uneditable"],
   computed: {
     isDisabled: function () {
       if (this.money !== undefined) {
@@ -105,7 +112,7 @@ export default {
       userEdit: {},
     };
   },
-  mounted() {
+  created() {
     this.money !== undefined ? (this.moneyEdit = this.money) : "";
     this.percent !== undefined ? (this.percentEdit = this.percent) : "";
     this.date !== undefined
@@ -117,7 +124,7 @@ export default {
   },
   methods: {
     edit() {
-      this.editMode ? "" : (this.editMode = !this.editMode);
+      this.editMode || this.uneditable ? "" : (this.editMode = !this.editMode);
     },
     submit() {
       // check type

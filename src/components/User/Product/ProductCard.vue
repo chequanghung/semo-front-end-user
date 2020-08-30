@@ -40,7 +40,7 @@
         <div class="columns is-variable is-1 is-mobile">
           <!-- edit for status 0, 1, 2 -->
           <div class="column is-narrow" v-if="item.product_status < 2">
-            <b-button type="is-primary" @click="editItem">🖊️ Chỉnh sửa</b-button>
+            <b-button type="is-green" @click="editItem">🖊️ Chỉnh sửa</b-button>
           </div>
           <!-- create auction for status 2 -->
           <div class="column is-narrow" v-if="item.product_status === 2">
@@ -93,7 +93,7 @@
       <div class="columns is-centered is-mobile">
         <div class="column is-narrow">
           <b-button
-            type="is-primary"
+            type="is-green"
             :disabled="isDisabled"
             @click="createAuction"
           >✅ Tạo buổi đấu giá</b-button>

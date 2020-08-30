@@ -49,7 +49,7 @@
       <br />
       <div style="display: flex; justify-content: center;">
         <b-button
-          type="is-primary"
+          type="is-green"
           @click="updatePassword"
           :disabled="isDisabled"
           :loading="isLoading"

@@ -46,6 +46,7 @@
         label="🙌 Tạo tài khoản"
         :disabled="isDisabled"
         :loading="isLoading"
+        type="is-green"
         rounded
         expanded
       ></b-button>

@@ -90,7 +90,7 @@
       <!-- submit -->
       <div class="columns is-centered is-mobile">
         <div class="column is-narrow">
-          <b-button type="is-primary" :disabled="isDisabled" @click="submitAddress">{{ btn_title }}</b-button>
+          <b-button type="is-green" :disabled="isDisabled" @click="submitAddress">{{ btn_title }}</b-button>
         </div>
         <div
           class="column is-narrow"

@@ -8,12 +8,12 @@
     </div>
     <div class="columns is-vcentered is-mobile">
       <div class="column">
-        <b-tag type="is-success" v-if="address.default_address === 1">Mặc định</b-tag>
+        <b-tag type="is-green" v-if="address.default_address === 1">Mặc định</b-tag>
       </div>
       <div class="column is-narrow">
         <div class="columns is-vcentered is-mobile is-variable is-2">
           <div class="column">
-            <b-button type="is-primary" @click="$emit('edit', address)">🖊️ Chỉnh sửa</b-button>
+            <b-button type="is-green" @click="$emit('edit', address)">🖊️ Chỉnh sửa</b-button>
           </div>
           <div class="column" v-if="address.default_address !== 1">
             <b-button type="is-danger" @click="$emit('delete', address)">🗑️ Xóa</b-button>

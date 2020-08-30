@@ -60,7 +60,7 @@
     </div>
     <div class="columns is-mobile is-centered">
       <div class="column is-narrow">
-        <b-button type="is-primary" tag="router-link" to="/user/product">✔️ Hoàn tất</b-button>
+        <b-button type="is-green" tag="router-link" to="/user/product">✔️ Hoàn tất</b-button>
       </div>
     </div>
   </div>
