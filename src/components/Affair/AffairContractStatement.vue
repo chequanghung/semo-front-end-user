@@ -22,10 +22,7 @@
           v-if="date !== undefined"
         >{{ date !== null ? formatDate(date) : 'Chưa thỏa thuận' }}</p>
         <!-- user -->
-        <p
-          class="cell-content"
-          v-if="user === null"
-        >Chưa thỏa thuận</p>
+        <p class="cell-content" v-if="user === null">Chưa thỏa thuận</p>
         <div
           class="columns is-vcentered is-mobile is-variable is-2"
           style="padding: 0;"
@@ -40,9 +37,7 @@
             ></div>
           </div>
           <div class="column is-narrow">
-            <p class="cell-content"
-              v-if="user"
-            >{{ user.name }}</p>
+            <p class="cell-content" v-if="user">{{ user.name }}</p>
           </div>
         </div>
       </div>
@@ -77,7 +72,17 @@
 import moment from "moment";
 
 export default {
-  props: ["title", "money", "percent", "min", "max", "users", "user", "date", "uneditable"],
+  props: [
+    "title",
+    "money",
+    "percent",
+    "min",
+    "max",
+    "users",
+    "user",
+    "date",
+    "uneditable",
+  ],
   computed: {
     isDisabled: function () {
       if (this.money !== undefined) {
@@ -112,7 +117,7 @@ export default {
       userEdit: {},
     };
   },
-  created() {
+  async created() {
     this.money !== undefined ? (this.moneyEdit = this.money) : "";
     this.percent !== undefined ? (this.percentEdit = this.percent) : "";
     this.date !== undefined
@@ -134,7 +139,7 @@ export default {
         this.submitPercent();
       } else if (this.money !== undefined) {
         this.submitMoney();
-      } else {
+      } else if (this.user !== undefined) {
         this.submitUser();
       }
       // turn off edit mode
@@ -192,6 +197,7 @@ export default {
 
 .cell-content {
   font-weight: 500;
+  color: #707070;
 }
 
 #edit-btn {

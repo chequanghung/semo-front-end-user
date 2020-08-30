@@ -18,9 +18,6 @@
             <div class="column">
               <b-input v-model="keyword" placeholder="🔍 Tìm kiếm sản phẩm" expanded rounded></b-input>
             </div>
-            <div class="column is-narrow">
-              <b-button type="is-green" rounded tag="router-link" to="/create">➕ Tạo sản phẩm mới</b-button>
-            </div>
           </div>
 
           <!-- products -->
@@ -31,11 +28,7 @@
                 v-for="product in product_list"
                 :key="product.id"
               >
-                <ProductCard
-                  :item="product"
-                  @auction="intoAuction"
-                  @affair="intoAffair"
-                ></ProductCard>
+                <BidBoughtCard :item="product" @auction="intoAuction" @affair="intoAffair"></BidBoughtCard>
               </div>
             </transition-group>
           </div>
@@ -46,7 +39,7 @@
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   name: "UserInfo",
@@ -54,6 +47,7 @@ export default {
     UserTitle: () => import("@/components/User/UserTitle"),
     PageSubtitle: () => import("@/components/PageSubtitle"),
     UserMenu: () => import("@/components/User/UserMenu"),
+    BidBoughtCard: () => import("@/components/User/Product/BidBoughtCard"),
   },
   computed: {
     ...mapState({
@@ -95,13 +89,30 @@ export default {
         },
       ],
       index: 3,
-      keyword: '',
+      keyword: "",
       product_list: [],
     };
   },
+  async mounted() {
+    this.populate();
+  },
   methods: {
-      changeSideIndex(index) {
+    ...mapActions("product", ["getbs"]),
+
+    populate() {
+      this.getbs(this.index).then(() => {
+        this.keyword = "";
+        this.product_list = this.products;
+      });
+    },
+    changeSideIndex(index) {
       this.index = index;
+    },
+    intoAuction(info) {
+      console.log(info);
+    },
+    intoAffair(info) {
+      console.log(info);
     },
   },
 };

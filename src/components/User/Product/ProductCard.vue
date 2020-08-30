@@ -45,7 +45,7 @@
           <!-- create auction for status 2 -->
           <div class="column is-narrow" v-if="item.product_status === 2">
             <b-button
-              :type="isCreateCollapsed ? 'is-light' : 'is-success'"
+              :type="isCreateCollapsed ? 'is-light' : 'is-green'"
               @click="isCreateCollapsed = !isCreateCollapsed"
             >➕ Tạo buổi đấu giá</b-button>
           </div>
@@ -55,11 +55,11 @@
           </div>
           <!-- view auction for status 3 -->
           <div class="column is-narrow" v-if="item.product_status === 3">
-            <b-button type="is-success" @click="intoAuction">📑 Xem đấu giá</b-button>
+            <b-button type="is-green" @click="intoAuction">📑 Xem đấu giá</b-button>
           </div>
           <!-- view affair for status 4, 5 -->
           <div class="column is-narrow" v-if="item.product_status <= 5 && item.product_status >= 4">
-            <b-button type="is-success" @click="intoAffair">📑 Xem giao kèo</b-button>
+            <b-button type="is-green" @click="intoAffair">📑 Xem giao kèo</b-button>
           </div>
           <!-- restore for status 9 -->
           <div class="column is-narrow" v-if="item.product_status === 9">

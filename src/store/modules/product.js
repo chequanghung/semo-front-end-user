@@ -68,6 +68,12 @@ export default {
                     commit('gets', data)
                 })
         },
+        getbs: async ({ commit, rootState }, status) => {
+            return axios.get(`/product/user/bought/${rootState.user.user.id}/${status}`)
+                .then(({ data }) => {
+                    commit('gets', data)
+                })
+        },
         deletep: async ({ commit }, product) => {
             return axios.put(`/product/changeStatus`, {
                 id: product.id,
@@ -107,9 +113,9 @@ export default {
         },
         geti: async ({ commit }) => {
             return axios.get(`/institution`)
-            .then (({ data }) => {
-                commit('geti', data)
-            })
+                .then(({ data }) => {
+                    commit('geti', data)
+                })
         }
     }
 }

@@ -7,17 +7,15 @@
       title="Bên vận chuyển"
       :user="shipment_user"
       :users="[affair.buyer, affair.seller]"
-      :class="{'edited' : shipment_user !== contract.shipment_user && shipment_user !== null}"
-      :uneditable="temp"
+      :class="{'edited' : shipment_user !== contract.shipment_user && shipment_user}"
       @changeUser="changeShipmentUser"
     ></ContractStatement>
     <!-- transportation deadline -->
     <ContractStatement
       title="Ngày bắt đầu vận chuyển"
       :date="shipment_date"
-      :uneditable="temp"
       @changeDate="changeShipDate"
-      :class="{'edited' : shipment_date !== contract.shipment_date && shipment_date !== null}"
+      :class="{'edited' : shipment_date !== contract.shipment_date && shipment_date}"
     ></ContractStatement>
     <!-- transportation fee -->
     <ContractStatement
@@ -25,9 +23,8 @@
       :money="shipment_late_fee"
       :min="0"
       :max="product.price_cur"
-      :uneditable="temp"
       @changeMoney="changeShipmentLateFee"
-      :class="{'edited' : shipment_late_fee !== contract.shipment_late_fee && shipment_late_fee !== null}"
+      :class="{'edited' : shipment_late_fee !== contract.shipment_late_fee && shipment_late_fee}"
     ></ContractStatement>
     <!-- transaction -->
     <p class="section-title">THANH TOÁN</p>
@@ -36,7 +33,7 @@
       title="Ngày thanh toán"
       :date="payment_date"
       @changeDate="changePaymentDate"
-      :class="{'edited' : payment_date !== contract.payment_date && payment_date !== null}"
+      :class="{'edited' : payment_date !== contract.payment_date && payment_date}"
     ></ContractStatement>
     <!-- payment amount -->
     <ContractStatement title="Số tiền thanh toán" :money="price_cur" :uneditable="true"></ContractStatement>
@@ -46,9 +43,8 @@
       :money="payment_late_fee"
       :min="0"
       :max="product.price_cur"
-      :uneditable="temp"
       @changeMoney="changePaymentLateFee"
-      :class="{'edited' : payment_late_fee !== contract.payment_late_fee && payment_late_fee !== null}"
+      :class="{'edited' : payment_late_fee !== contract.payment_late_fee && payment_late_fee}"
     ></ContractStatement>
     <!-- extra -->
     <p class="section-title">CHẤT LƯỢNG</p>
@@ -58,66 +54,71 @@
       :percent="preservative_amount"
       :min="0"
       :max="100"
-      :uneditable="temp"
       @changePercent="changePreservativeAmount"
-      :class="{'edited' : preservative_amount !== contract.preservative_amount && preservative_amount !== null}"
+      :class="{'edited' : preservative_amount !== contract.preservative_amount && preservative_amount}"
     ></ContractStatement>
+
+    {{ shipment_user }}
+    <br/>
+    {{ shipment_date }}
+    <br/>
+    {{ shipment_late_fee }}
   </div>
 </template>
 
 <script>
 import { mapState } from "vuex";
-import moment from 'moment'
+import moment from "moment";
 
 export default {
-  props: ["product", "affair"],
   components: {
     ContractStatement: () => import("./AffairContractStatement"),
   },
   computed: {
     ...mapState({
       contract: (state) => state.affair.contract,
+      product: (state) => state.affair.product,
+      affair: (state) => state.affair.affair,
       user: (state) => state.user.user,
     }),
   },
   data() {
     return {
-      shipment_user: "",
-      shipment_date: "",
-      shipment_late_fee: "",
-      payment_date: "",
-      payment_late_fee: "",
-      preservative_amount: "",
-      price_cur: "",
-      temp: true,
+      shipment_user: null,
+      shipment_date: null,
+      shipment_late_fee: null,
+      payment_date: null,
+      payment_late_fee: null,
+      preservative_amount: null,
+      price_cur: null,
     };
   },
   methods: {
     changeShipDate(date) {
-      this.shipment_date = moment(date).format('YYYY-MM-DD HH:mm:ss');
-      this.bindChange()
+      this.shipment_date = moment(date).format("YYYY-MM-DD HH:mm:ss");
+      this.bindChange();
     },
     changeShipmentLateFee(content) {
       this.shipment_late_fee = content;
-      this.bindChange()
+      this.bindChange();
     },
     changePaymentLateFee(content) {
       this.payment_late_fee = content;
-      this.bindChange()
+      this.bindChange();
     },
     changePaymentDate(date) {
-      this.payment_date = moment(date).format('YYYY-MM-DD HH:mm:ss');
-      this.bindChange()
+      this.payment_date = moment(date).format("YYYY-MM-DD HH:mm:ss");
+      this.bindChange();
     },
     changePreservativeAmount(percent) {
       this.preservative_amount = percent;
-      this.bindChange()
+      this.bindChange();
     },
     changeShipmentUser(user) {
       this.shipment_user = user;
-      this.bindChange()
+      this.bindChange();
     },
-    async setAtr() {
+    setAtr() {
       this.shipment_user = this.contract.shipment_user;
       this.shipment_date = this.contract.shipment_date;
       this.shipment_late_fee = this.contract.shipment_late_fee;
@@ -126,25 +127,23 @@ export default {
       this.preservative_amount = this.contract.preservative_amount;
       this.price_cur = this.product.price_cur;
     },
-    bindChange () {
+    bindChange() {
+      console.log(this.shipment_user.id)
       let contract_edit = {
-        id: this.contract.id,
-        shipment_user_id: this.shipment_user !== null ? this.shipment_user.id : null,
+        shipment_user_id:
+          this.shipment_user ? this.shipment_user.id : null,
         shipment_date: this.shipment_date,
         shipment_late_fee: this.shipment_late_fee,
         payment_date: this.payment_date,
         payment_late_fee: this.payment_late_fee,
         preservative_amount: this.preservative_amount,
-        change_user_id: this.user.id,
-      }
+      };
 
-      this.$emit('change', contract_edit)
-    }
+      this.$emit("change", contract_edit);
+    },
   },
-  async mounted() {
-    this.setAtr().then(() => {
-      this.temp = false
-    })
+  mounted() {
+    this.setAtr();
   },
 };
 </script>
@@ -152,11 +151,6 @@ export default {
 <style scoped>
 .page-container {
   padding: 0;
-}
-
-.edited {
-  background-color: #fff7cc;
-  box-shadow: 0 2px 4px #fff7cc59;
 }
 
 .section-title {
