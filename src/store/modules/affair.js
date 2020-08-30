@@ -48,10 +48,14 @@ export default {
             state.contract = contract
         },
         clear: (state) => {
-            state.contract = {},
-                state.update = {}
+            state.contract = {}
+            state.update = {}
         },
-        
+        close: (state) => {
+            state.affair = {}
+            state.product = {}
+            state.chats = []
+        }
     },
 
 
@@ -100,6 +104,9 @@ export default {
         },
         clear: ({ commit }) => {
             commit('clear')
+        },
+        close: ({ commit }) => {
+            commit('close')
         }
     }
 }

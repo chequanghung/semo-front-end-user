@@ -2,7 +2,7 @@
 <template>
   <div class="card-container tile is-child box">
     <!-- fruit -->
-    <div class="cursor columns is-vcentered" v-if="product.Fruit !== undefined">
+    <div class="cursor columns is-vcentered" v-if="product.Fruit !== undefined" @click="$router.push({ name: 'FruitView', params: { id: product.Fruit.id } })">
       <div class="column is-narrow" style="margin: 0">
         <div
           class="image-icon is-32x32 is-rounded"

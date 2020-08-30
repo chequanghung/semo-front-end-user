@@ -28,18 +28,18 @@
             <div class="column">
               <div class="columns is-mobile" style="margin: 0;">
                 <div class="column">
-                <div class="columns is-mobile">
-                  <div class="column is-narrow">
-                    <div
-                      class="image is-24x24"
-                      :style="{backgroundImage: 'url(' + user.img_url + ')'}"
-                      style="background-size: cover; background-position: center; border-radius: 50%;"
-                    ></div>
+                  <div class="columns is-mobile">
+                    <div class="column is-narrow">
+                      <div
+                        class="image is-24x24"
+                        :style="{backgroundImage: 'url(' + user.img_url + ')'}"
+                        style="background-size: cover; background-position: center; border-radius: 50%;"
+                      ></div>
+                    </div>
+                    <div class="column is-narrow">
+                      <a class="is-text">{{user.name}} ★ {{user.rate}}</a>
+                    </div>
                   </div>
-                  <div class="column is-narrow">
-                    <a class="is-text">{{user.name}} ★ {{user.rate}}</a>
-                  </div>
-                </div>
                 </div>
                 <div
                   class="column is-narrow"
@@ -56,9 +56,14 @@
               <data-block v-if="auction !== undefined">
                 <template v-slot:title>THỜI GIAN CÒN LẠI</template>
                 <template v-slot:content>
-                  <p v-if="auction.Auctions[0].remain_days > 0 && auction.Auctions[0].remain_time.split(':')[0] >= 24">{{auction.Auctions[0].remain_days}} ngày</p>
-                  <p v-else style="color: #FD5F54">{{ format_time(auction.Auctions[0].remain_time) }}</p>
-                  </template>
+                  <p
+                    v-if="auction.Auctions[0].remain_days > 0 && auction.Auctions[0].remain_time.split(':')[0] >= 24"
+                  >{{auction.Auctions[0].remain_days}} ngày</p>
+                  <p
+                    v-else
+                    style="color: #FD5F54"
+                  >{{ format_time(auction.Auctions[0].remain_time) }}</p>
+                </template>
               </data-block>
             </div>
           </div>
@@ -67,7 +72,7 @@
         <div
           class="bid"
           style="margin-top: 40px;"
-          v-if="auction.user_id !== userInfo.id && Object.keys($store.state.user.user).length > 0 && auction.Auctions[0].auction_status === 3"
+          v-if="auction.user_id !== userInfo.id && auction.Auctions[0].auction_status === 1"
         >
           <div class="columns is-centered is-vcentered is-mobile">
             <div class="column is-narrow">
@@ -454,10 +459,14 @@ export default {
       });
     },
     enterBid() {
-      if (this.$store.state.user.first_bids) {
-        this.isFirstModal = true;
+      if (Object.keys(this.$store.state.user.user).length > 0) {
+        if (this.$store.state.user.first_bids) {
+          this.isFirstModal = true;
+        } else {
+          this.isBiddingModal = true;
+        }
       } else {
-        this.isBiddingModal = true;
+        this.$router.push({ path: "/login" });
       }
     },
     openBid() {
@@ -514,9 +523,9 @@ export default {
       return x.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
     },
     format_time(value) {
-      let times = value.split(':')
-      return `${times[0]} giờ ${times[1]} phút`
-    }
+      let times = value.split(":");
+      return `${times[0]} giờ ${times[1]} phút`;
+    },
   },
   computed: {
     ...mapState({

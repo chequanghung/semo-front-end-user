@@ -92,7 +92,7 @@ import moment from "moment";
 
 export default {
   beforeDestroy() {
-    clearInterval(this.interval);
+      this.close()
   },
   components: {
     AffairProductCard: () => import("@/components/Affair/AffairProductCard"),
@@ -126,7 +126,7 @@ export default {
     };
   },
   methods: {
-    ...mapActions("affair", ["populate", "getcs", "addcs"]),
+    ...mapActions("affair", ["populate", "getcs", "addcs", "close"]),
 
     intoContract() {
       clearInterval(this.interval);
@@ -185,14 +185,15 @@ export default {
 }
 
 .bubble {
-  border-radius: 10px;
   color: #707070;
   background-color: #ececec;
+  border-radius: 20px 20px 20px 4px;
   padding: 8px 16px;
 }
 
 .you {
   color: white;
   background-color: #01d28e;
+  border-radius: 20px 20px 4px 20px;
 }
 </style>
