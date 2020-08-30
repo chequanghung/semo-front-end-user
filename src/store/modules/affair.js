@@ -36,7 +36,7 @@ export default {
         // add chat
         addcs: (state, chats) => {
             chats.forEach(item => {
-                state.chats = [item, ...state.chats]
+                state.chats = [...state.chats, item]
             });
         },
         // get contract update
@@ -58,7 +58,7 @@ export default {
     actions: {
         // populate content
         populate: async ({ commit }, id) => {
-            axios.get(`/affair/id/${id}`)
+            return axios.get(`/affair/id/${id}`)
                 .then(({ data }) => {
                     let affair = data
 

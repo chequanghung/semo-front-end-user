@@ -102,7 +102,7 @@ export default {
       affair: (state) => state.affair.affair,
       product: (state) => state.affair.product,
       chats: (state) => state.affair.chats,
-      user: state => state.user.user,
+      user: (state) => state.user.user,
     }),
 
     date: function () {
@@ -129,7 +129,7 @@ export default {
     ...mapActions("affair", ["populate", "getcs", "addcs"]),
 
     intoContract() {
-    clearInterval(this.interval);
+      clearInterval(this.interval);
 
       this.$router.push({
         name: "Contract",
@@ -143,25 +143,24 @@ export default {
         sender_user_id: this.user.id,
         content: this.message,
       }).then(() => {
-        this.message = ''
-      })
+        this.message = "";
+      });
     },
-    back () {
-      this.$router.go(-1)
-    }
+    back() {
+      this.$router.go(-1);
+    },
   },
   async mounted() {
     // console.log(this.affair);
     this.populate(this.$route.params.id).then(() => {
-
-      this.interval = setInterval(
-        function () {
-          this.getcs(0);
-        }.bind(this),
-        5000
-      );
-
+      this.getcs(0);
       this.affair_chats = this.chats;
+
+      // this.interval = setInterval(
+      // function () {
+      // }.bind(this),
+      // 5000
+      // );
     });
   },
   watch: {
