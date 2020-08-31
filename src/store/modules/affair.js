@@ -36,8 +36,17 @@ export default {
         // add chat
         addcs: (state, chats) => {
             chats.forEach(item => {
-                state.chats = [...state.chats, item]
+                if (state.chats.indexOf(item) < 0) {
+                    state.chats = [...state.chats, item]
+                }
             });
+
+            state.chats.sort (function (a, b) {
+                let x = a.date_created
+                let y = b.date_created
+
+                return x < y ? -1 : (x === y ? 0 : 1)
+            })
         },
         // get contract update
         getu: (state, update) => {
@@ -79,8 +88,8 @@ export default {
                 })
         },
         // get chats
-        getcs: async ({ state, commit }, offset) => {
-            return axios.get(`/affair/chat/${state.affair.id}?offset='${offset}'`)
+        getcs: async ({ state, commit }) => {
+            return axios.get(`/affair/chat/${state.affair.id}`)
                 .then(({ data }) => {
                     commit('addcs', data)
                 })

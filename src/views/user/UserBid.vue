@@ -123,10 +123,10 @@ export default {
       this.index = index;
     },
     intoAuction(info) {
-      console.log(info);
+      this.$router.push({ name: 'Auction', params: { id: info.id } })
     },
     intoAffair(info) {
-      console.log(info);
+      this.$router.push({ name: 'Affair', params: { id: info.id } })
     },
   },
 };
