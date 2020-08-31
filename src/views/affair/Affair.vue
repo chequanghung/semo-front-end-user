@@ -153,6 +153,7 @@ export default {
   async mounted() {
     // console.log(this.affair);
     this.populate(this.$route.params.id).then(() => {
+        this.getcs();
     });
   },
   watch: {
