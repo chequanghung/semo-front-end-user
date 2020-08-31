@@ -48,18 +48,18 @@
               <!-- content -->
               <div class="chat-content" ref="chats">
                 <div class="columns is-mobile" v-for="(chat, i) in affair_chats" :key="i">
-                  <div class="column is-half" v-if="chat.sender_user_id !== user.id">
+                  <div class="column is-two-thirds" v-if="chat.sender_user_id !== user.id">
                     <div>
-                      <div class="bubble">
-                        <p style="word-break: break-all;">{{ chat.content }}</p>
+                      <div class="bubble" style="width: fit-content">
+                        <p style="word-break: break-all; width: fit-content;">{{ chat.content }}</p>
                       </div>
                     </div>
                   </div>
-                  <div class="column is-half"></div>
-                  <div class="column is-half" v-if="chat.sender_user_id === user.id">
-                    <div>
-                      <div class="bubble you">
-                        <p style="word-break: break-all;">{{ chat.content }}</p>
+                  <div class="column"></div>
+                  <div class="column is-two-thirds" style="float: right;" v-if="chat.sender_user_id === user.id">
+                    <div style="float: right;">
+                      <div class="bubble you" style="width: fit-content">
+                        <p style="word-break: break-all; width: fit-content; text-align: right;">{{ chat.content }}</p>
                       </div>
                     </div>
                   </div>
@@ -221,13 +221,12 @@ export default {
 .bubble {
   color: #707070;
   background-color: #ececec;
-  border-radius: 20px 20px 20px 4px;
+  border-radius: 20px 20px 20px 20px;
   padding: 8px 16px;
 }
 
 .you {
   color: white;
   background-color: #01d28e;
-  border-radius: 20px 20px 4px 20px;
 }
 </style>

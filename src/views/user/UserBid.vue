@@ -85,7 +85,7 @@ export default {
           index: 4,
         },
         {
-          name: "💰 Đã bán",
+          name: "💰 Đã mua",
           index: 5,
         },
       ],

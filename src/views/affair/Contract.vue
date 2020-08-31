@@ -17,6 +17,8 @@
           ></AffairContractStatementList>
           <!-- submit -->
           <br />
+
+          {{ cont }}
           <div class="columns is-centered is-mobile">
             <div class="column is-narrow">
               <b-button
@@ -55,6 +57,7 @@ export default {
   computed: {
     ...mapState({
       contract: (state) => state.affair.contract,
+      user: state => state.user.user,
     }),
     isDisabled: function () {
       if (this.compare() === true || this.isLoading === true) {
@@ -106,7 +109,6 @@ export default {
       this.cont.payment_date = contract_edit.payment_date;
       this.cont.payment_late_fee = contract_edit.payment_late_fee;
       this.cont.preservative_amount = contract_edit.preservative_amount;
-      this.cont.change_user_id = this.user.id;
     },
     // compare cont with contract in the db
     compare() {
@@ -128,15 +130,14 @@ export default {
     this.getc(this.$route.params.id).then(() => {
       // bind data from contractinto cont
       this.cont = {
-        id: this.contract.id,
+        affair_contract_id: this.contract.id,
         shipment_user_id: this.contract.shipment_user_id,
         shipment_date: this.contract.shipment_date,
         shipment_late_fee: this.contract.shipment_late_fee,
         payment_date: this.contract.payment_date,
         payment_late_fee: this.contract.payment_late_fee,
         preservative_amount: this.contract.preservative_amount,
-        contract_status: this.contract.contract_status,
-        change_user_id: this.contract.change_user_id,
+        change_user_id: this.user.id,
       };
     });
   },

@@ -2,7 +2,11 @@
 <template>
   <div class="card-container tile is-child box">
     <!-- fruit -->
-    <div class="cursor columns is-vcentered" v-if="product.Fruit !== undefined" @click="$router.push({ name: 'FruitView', params: { id: product.Fruit.id } })">
+    <div
+      class="cursor columns is-vcentered"
+      v-if="product.Fruit !== undefined"
+      @click="$router.push({ name: 'FruitView', params: { id: product.Fruit.id } })"
+    >
       <div class="column is-narrow" style="margin: 0">
         <div
           class="image-icon is-32x32 is-rounded"
@@ -33,14 +37,10 @@
         ></div>
       </div>
       <div class="column is-narrow">
-        <p class="sub-title"
-          v-if="product && product.User !== undefined"
-        >{{ product.User.name }}</p>
+        <p class="sub-title" v-if="product && product.User !== undefined">{{ product.User.name }}</p>
       </div>
       <div class="column is-narrow">
-        <p class="sub-title"
-          v-if="product && product.User !== undefined"
-        >★ {{ product.User.rate }}</p>
+        <p class="sub-title" v-if="product && product.User !== undefined">★ {{ product.User.rate }}</p>
       </div>
     </div>
 
@@ -69,6 +69,26 @@
       <!-- title -->
       <p class="title">📦 Thông tin sản phẩm</p>
       <!-- info -->
+      <!-- address -->
+      <div class="columns is-multiline is-mobile">
+        <div class="column is-full">
+          <p class="sub-title">ĐỊA CHỈ GIAO HÀNG</p>
+        </div>
+        <div class="column is-full">
+          <AddressCard :address="product.Address" :uneditable="true"></AddressCard>
+        </div>
+      </div>
+      <!-- warning -->
+      <div class="notification is-light is-warning">
+        <div class="columns is-mobile">
+          <div class="column is-narrow">
+            <p>⚠️</p>
+          </div>
+          <div class="column">
+            <p>Giá tiền chưa bao gồm phí vận chuyển.</p>
+          </div>
+        </div>
+      </div>
       <!-- current price -->
       <div class="columns is-mobile" v-if="product !== undefined">
         <div class="column">
@@ -122,7 +142,7 @@
           <p class="sub-title">NỒNG ĐỘ ĐƯỜNG</p>
         </div>
         <div class="column is-narrow">
-          <p class="title">{{ product.sugar_pct }}cm</p>
+          <p class="title">{{ product.sugar_pct }}%</p>
         </div>
       </div>
       <!-- fruit percentages -->
@@ -131,29 +151,7 @@
           <p class="sub-title">PHẦN TRĂM QUẢ</p>
         </div>
         <div class="column is-narrow">
-          <p class="title">{{ product.sugar_pct }}cm</p>
-        </div>
-      </div>
-      <!-- initial price -->
-      <div class="columns is-mobile" v-if="product !== undefined">
-        <div class="column">
-          <p class="sub-title">GIÁ KHỞI ĐIỂM</p>
-        </div>
-        <div class="column is-narrow">
-          <p
-            class="title"
-          >{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price_init) }}</p>
-        </div>
-      </div>
-      <!-- step price -->
-      <div class="columns is-mobile" v-if="product !== undefined">
-        <div class="column">
-          <p class="sub-title">BƯỚC GIÁ</p>
-        </div>
-        <div class="column is-narrow">
-          <p
-            class="title"
-          >{{ new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(product.price_step) }}</p>
+          <p class="title">{{ product.sugar_pct }}%</p>
         </div>
       </div>
       <!-- info -->
@@ -175,6 +173,9 @@ import moment from "moment";
 
 export default {
   props: ["affair", "product"],
+  components: {
+    AddressCard: () => import("@/components/User/Info/Address/AddressCard"),
+  },
   data() {
     return {};
   },

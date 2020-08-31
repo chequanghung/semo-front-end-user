@@ -84,6 +84,19 @@
               <!-- enterBid -->
             </div>
           </div>
+
+          <!-- warning -->
+
+          <div class="notification is-light is-warning">
+            <div class="columns is-mobile">
+              <div class="column is-narrow">
+                <p>⚠️</p>
+              </div>
+              <div class="column">
+                <p>Giá tiền chưa bao gồm phí vận chuyển.</p>
+              </div>
+            </div>
+          </div>
         </div>
         <!-- info -->
         <div class="highlights" style="margin-top: 40px;">
@@ -195,8 +208,7 @@
         </div>
       </div>
 
-    <hr />
-
+      <hr />
 
       <!-- bids -->
       <div class="column is-half">

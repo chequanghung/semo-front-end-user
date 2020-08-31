@@ -36,7 +36,7 @@ export default {
           searchable: true,
         },
         {
-          label: "SỐ TIỀN",
+          label: "SỐ TIỀN (đ)",
           field: "amount",
           searchable: true,
           numeric: true

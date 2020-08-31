@@ -195,6 +195,17 @@
               <option value="1" selected>đ</option>
             </b-select>
           </b-field>
+
+          <div class="notification is-light is-warning">
+            <div class="columns is-mobile">
+              <div class="column is-narrow">
+                <p>⚠️</p>
+              </div>
+              <div class="column">
+                <p>Giá tiền chưa bao gồm phí vận chuyển.</p>
+              </div>
+            </div>
+          </div>
         </div>
 
         <br />

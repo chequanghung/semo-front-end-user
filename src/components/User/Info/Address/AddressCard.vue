@@ -6,7 +6,7 @@
       <p class="card-content">{{ address.district }}</p>
       <p class="card-content">{{ address.province }}</p>
     </div>
-    <div class="columns is-vcentered is-mobile">
+    <div class="columns is-vcentered is-mobile" v-if="uneditable === undefined">
       <div class="column">
         <b-tag type="is-green" v-if="address.default_address === 1">Mặc định</b-tag>
       </div>
@@ -26,7 +26,7 @@
 
 <script>
 export default {
-  props: ["address"],
+  props: ["address", "uneditable"],
 };
 </script>
 
