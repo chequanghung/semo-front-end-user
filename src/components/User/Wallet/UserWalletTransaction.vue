@@ -39,6 +39,7 @@ export default {
           label: "SỐ TIỀN",
           field: "amount",
           searchable: true,
+          numeric: true
         },
         {
           label: "NGƯỜI GIAO DỊCH",
