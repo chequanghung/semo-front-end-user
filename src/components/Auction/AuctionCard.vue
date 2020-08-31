@@ -7,8 +7,8 @@
       :style="{backgroundImage: 'url(' + auction.Product.ProductMedia[0].media_url + ')'}"
     ></div>
     <!-- info -->
-    <div class="card-content">
-      <p style="font-weight: 700; font-size: 14px; color: #07d390;" v-if="auction.remain_time.split(':')[0] >= 24">ĐANG ĐẤU GIÁ</p>
+    <div class="card-content" v-if="auction !== undefined">
+      <p style="font-weight: 700; font-size: 14px; color: #07d390;" v-if="remain >= 24">ĐANG ĐẤU GIÁ</p>
       <p style="font-weight: 700; font-size: 14px; color: #FD5F54;" v-else>SẮP KẾT THÚC</p>
       <div class="card-title">{{ auction.Product.title }}</div>
       <!-- price -->
@@ -17,13 +17,17 @@
         <p class="card-info-content major">{{ auction.price_cur }}</p>
       </div>
       <!-- remaining time -->
-      <div class="card-info">
+      <div class="card-info" v-if="auction !== undefined">
         <p class="card-info-title">Thời gian còn lại</p>
         <p
           class="card-info-content"
-          v-if="auction.remain >= 1 && auction.remain_time.split(':')[0] >= 24"
+          v-if="auction.remain >= 1 && remain >= 24"
         >{{ auction.remain }} ngày</p>
-        <p class="card-info-content" style="color: #FD5F54;" v-else>{{ format_time(auction.remain_time) }}</p>
+        <p
+          class="card-info-content"
+          style="color: #FD5F54;"
+          v-else
+        >{{ format_time(auction.remain_time) }}</p>
       </div>
       <!-- footer info -->
       <div class="columns">
@@ -42,6 +46,14 @@
 export default {
   name: "AuctionCard",
   props: ["auction"],
+  async mounted() {
+    this.remain = this.auction.remain_time.split(":")[0];
+  },
+  data() {
+    return {
+      remain: "",
+    };
+  },
   methods: {
     intoAuction() {
       this.$router.push({

@@ -41,7 +41,7 @@ export default {
                 }
             });
 
-            state.chats.sort (function (a, b) {
+            state.chats.sort(function (a, b) {
                 let x = a.date_created
                 let y = b.date_created
 

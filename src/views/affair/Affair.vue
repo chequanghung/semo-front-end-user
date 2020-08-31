@@ -92,7 +92,7 @@ import moment from "moment";
 
 export default {
   beforeDestroy() {
-      this.close()
+    this.close();
   },
   components: {
     AffairProductCard: () => import("@/components/Affair/AffairProductCard"),
@@ -129,8 +129,6 @@ export default {
     ...mapActions("affair", ["populate", "getcs", "addcs", "close"]),
 
     intoContract() {
-      clearInterval(this.interval);
-
       this.$router.push({
         name: "Contract",
         params: { id: this.affair.AffairContract.id },
@@ -142,8 +140,10 @@ export default {
         affair_id: this.affair.id,
         sender_user_id: this.user.id,
         content: this.message,
+        date_created: moment(new Date()).format("YYYY-DD-MM HH:mm:ss"),
       }).then(() => {
         this.message = "";
+        this.getcs();
       });
     },
     back() {
@@ -153,14 +153,6 @@ export default {
   async mounted() {
     // console.log(this.affair);
     this.populate(this.$route.params.id).then(() => {
-      this.getcs(0);
-      this.affair_chats = this.chats;
-
-      // this.interval = setInterval(
-      // function () {
-      // }.bind(this),
-      // 5000
-      // );
     });
   },
   watch: {
