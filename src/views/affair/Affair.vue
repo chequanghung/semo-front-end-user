@@ -16,7 +16,7 @@
         </div>
       </div>
       <!-- status, contract entry, chats and functions -->
-      <div class="column">
+      <div class="column is-7">
         <div class="tile is-ancestor">
           <!-- seller to ship -->
           <div class="tile is-vertical is-parent">
@@ -48,15 +48,19 @@
               <!-- content -->
               <div class="chat-content" ref="chats">
                 <div class="columns is-mobile" v-for="(chat, i) in affair_chats" :key="i">
-                  <div class="column is-narrow" v-if="chat.sender_user_id !== user.id">
-                    <div class="bubble">
-                      <p>{{ chat.content }}</p>
+                  <div class="column is-half" v-if="chat.sender_user_id !== user.id">
+                    <div>
+                      <div class="bubble">
+                        <p style="word-break: break-all;">{{ chat.content }}</p>
+                      </div>
                     </div>
                   </div>
-                  <div class="column"></div>
-                  <div class="column is-narrow" v-if="chat.sender_user_id === user.id">
-                    <div class="bubble you">
-                      <p>{{ chat.content }}</p>
+                  <div class="column is-half"></div>
+                  <div class="column is-half" v-if="chat.sender_user_id === user.id">
+                    <div>
+                      <div class="bubble you">
+                        <p style="word-break: break-all;">{{ chat.content }}</p>
+                      </div>
                     </div>
                   </div>
                 </div>
