@@ -26,7 +26,7 @@
         <p class="home-section-title">➕ Nạp tiền vào ví</p>
         <br />
         <b-field label="Số tiền muốn nạp" label-position="on-border">
-          <b-numberinput min="150000" max="500000000" step="1000" v-model="amount"></b-numberinput>
+          <b-numberinput type="is-green" min="150000" max="500000000" step="1000" v-model="amount"></b-numberinput>
         </b-field>
 
         <div class="tile is-warning is-light notification">

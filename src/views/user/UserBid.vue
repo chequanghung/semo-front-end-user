@@ -100,7 +100,7 @@ export default {
     },
     keyword: function() {
       this.keyword !== '' ?
-      this.product_list = this.product_list.filter(item => item.title.toLowerCase().indexOf(this.keyword.toLowerCase()) >= 0)
+      this.product_list = this.product_list.filter(item => item.Product.title.toLowerCase().indexOf(this.keyword.toLowerCase()) >= 0)
       : this.product_list = this.products
     },
     products: function() {
@@ -132,5 +132,16 @@ export default {
 };
 </script>
 
-<style>
+<style scoped>
+.enlist-enter-to {
+  opacity: 0;
+  animation: zoomIn;
+  animation-duration: 0.35s;
+  animation-delay: 0.25s;
+}
+
+.enlist-leave-to {
+  animation: zoomOut;
+  animation-duration: 0.2s;
+}
 </style>

@@ -26,7 +26,7 @@
         <div class="user">
           <div class="columns">
             <div class="column">
-              <div class="columns is-mobile" style="margin: 0;">
+              <div class="columns" style="margin: 0;">
                 <div class="column">
                   <div class="columns is-mobile">
                     <div class="column is-narrow">
@@ -36,13 +36,14 @@
                         style="background-size: cover; background-position: center; border-radius: 50%;"
                       ></div>
                     </div>
-                    <div class="column is-narrow">
+                    <div class="column">
                       <a class="is-text">{{user.name}} ★ {{user.rate}}</a>
                     </div>
                   </div>
                 </div>
                 <div
-                  class="column is-narrow"
+                  class="column"
+                  style="overflow-wrap: break-word;"
                   v-if="auction !== undefined"
                 >Mở đấu giá từ {{format_date(auction.Auctions[0].date_created)}}</div>
               </div>
@@ -193,6 +194,9 @@
           </div>
         </div>
       </div>
+
+    <hr />
+
 
       <!-- bids -->
       <div class="column is-half">

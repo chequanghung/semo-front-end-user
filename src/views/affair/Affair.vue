@@ -93,7 +93,6 @@ import moment from "moment";
 export default {
   beforeDestroy() {
     clearInterval(this.interval);
-    this.close();
   },
   components: {
     AffairProductCard: () => import("@/components/Affair/AffairProductCard"),

@@ -57,12 +57,6 @@
       @changePercent="changePreservativeAmount"
       :class="{'edited' : preservative_amount !== contract.preservative_amount && preservative_amount}"
     ></ContractStatement>
-
-    {{ shipment_user }}
-    <br/>
-    {{ shipment_date }}
-    <br/>
-    {{ shipment_late_fee }}
   </div>
 </template>
 
@@ -118,7 +112,7 @@ export default {
       this.shipment_user = user;
       this.bindChange();
     },
-    setAtr() {
+    async setAtr() {
       this.shipment_user = this.contract.shipment_user;
       this.shipment_date = this.contract.shipment_date;
       this.shipment_late_fee = this.contract.shipment_late_fee;
@@ -128,10 +122,8 @@ export default {
       this.price_cur = this.product.price_cur;
     },
     bindChange() {
-      console.log(this.shipment_user.id)
       let contract_edit = {
-        shipment_user_id:
-          this.shipment_user ? this.shipment_user.id : null,
+        shipment_user_id: this.shipment_user ? this.shipment_user.id : null,
         shipment_date: this.shipment_date,
         shipment_late_fee: this.shipment_late_fee,
         payment_date: this.payment_date,
@@ -142,8 +134,13 @@ export default {
       this.$emit("change", contract_edit);
     },
   },
-  mounted() {
-    this.setAtr();
+  // async mounted() {},
+  watch: {
+    contract: function () {
+      if (this.contract !== undefined) {
+        this.setAtr();
+      }
+    },
   },
 };
 </script>

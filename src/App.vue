@@ -218,7 +218,7 @@ a {
 
 // Set your colors
 $primary: #07D390;
-$primary-invert: findColorInvert($primary);
+$primary-invert: $white;
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (

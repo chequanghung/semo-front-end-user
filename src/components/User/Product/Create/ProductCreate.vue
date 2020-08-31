@@ -132,9 +132,10 @@
             v-model="files"
             required
             accept="image/*"
+            type="is-green"
             @input="uploadImages"
           >
-            <a class="button is-primary">📷 Chụp hoặc chọn ảnh trong máy</a>
+            <a class="button is-green is-outlined">📷 Chụp hoặc chọn ảnh trong máy</a>
           </b-upload>
           <br />
           <br />
@@ -199,7 +200,7 @@
         <br />
 
         <!-- submit button -->
-        <div class="columns">
+        <div class="columns is-mobile">
           <div class="column"></div>
           <div class="column is-narrow">
             <b-button

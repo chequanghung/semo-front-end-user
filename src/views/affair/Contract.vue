@@ -31,8 +31,10 @@
       </div>
     </div>
     <div class="tile is-child box is-narrow">
-      <div class="columns is-mobile">
-        <div class="column">{{ cont }}</div>
+      <div class="columns is-mobile is-vcentered">
+        <div class="column">
+          <p style="font-size: 18px; font-weight: 900; color: #b88cd8">⚙️ Chức năng</p>
+        </div>
         <div class="column is-narrow">
           <b-button type="is-danger" @click="back">❌ Hủy hợp đồng</b-button>
         </div>
@@ -53,8 +55,6 @@ export default {
   computed: {
     ...mapState({
       contract: (state) => state.affair.contract,
-      product: (state) => state.affair.product,
-      affair: (state) => state.affair.affair,
     }),
     isDisabled: function () {
       if (this.compare() === true || this.isLoading === true) {
