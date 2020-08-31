@@ -14,7 +14,7 @@
           <div class="column">
             <div class="card-info">
               <p class="card-info-title">Giá hiện tại</p>
-              <p class="card-info-content major">{{ item.Product.price_cur }}</p>
+              <p class="card-info-content major">{{ format_currency(item.Product.price_cur) }}</p>
             </div>
           </div>
           <div class="column" v-if="item.Product.product_status === 3">
@@ -34,7 +34,7 @@
 
     <div class="columns is-vcentered is-mobile">
       <div class="column">
-        <p class="card-info-subtle">{{ item.Product.date_created }}</p>
+        <p class="card-info-subtle">{{ format_date(item.Product.date_created) }}</p>
       </div>
       <div class="column is-narrow">
         <div class="columns is-variable is-1 is-mobile">
@@ -53,7 +53,7 @@
 </template>
 
 <script>
-// import moment from "moment";
+import moment from "moment";
 
 export default {
   props: ["item"],
@@ -79,6 +79,15 @@ export default {
     intoAffair() {
       this.$emit("affair", this.item);
     },
+    format_currency(price_cur) {
+      return new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(price_cur);
+    },
+    format_date(date) {
+      return moment(date).format('HH:mm DD/MM/YYYY')
+    }
   },
 };
 </script>

@@ -35,7 +35,7 @@
               <div class="columns is-mobile">
                 <div class="column"></div>
                 <div class="column is-narrow">
-                  <b-button type="is-primary" @click="intoContract">👁️ Xem</b-button>
+                  <b-button type="is-green" @click="intoContract">👁️ Xem</b-button>
                 </div>
               </div>
             </div>
@@ -74,11 +74,12 @@
                   </div>
                   <div class="column is-narrow">
                     <b-button
-                      type="is-primary"
+                      type="is-green"
                       rounded
+                      icon-left="send"
                       :disabled="isDisabled"
                       @click="sendMsg"
-                    >✈️ Gửi</b-button>
+                    >Gửi</b-button>
                   </div>
                 </div>
               </form>
