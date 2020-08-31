@@ -8,6 +8,7 @@ export default {
         affair: {},
         product: {},
         contract: {},
+        // chats: new Set(),
         chats: [],
         update: {}
     },
@@ -34,12 +35,14 @@ export default {
             state.contract = contract
         },
         // add chat
-        addcs: (state, chats) => {
-            chats.forEach(item => {
-                if (state.chats.indexOf(item) < 0) {
-                    state.chats = [...state.chats, item]
+        addcs: (state, dialogues) => {
+            let ids = state.chats.map(item => item.id)
+
+            dialogues.forEach(item => {
+                if(ids.indexOf(item.id) === -1) {
+                    state.chats.push(item)
                 }
-            });
+            })
 
             state.chats.sort(function (a, b) {
                 let x = a.date_created
@@ -95,13 +98,14 @@ export default {
                 })
         },
         // add chat
-        addcs: async ({ state, commit }, chat) => {
+        addcs: async ({ state, dispatch }, chat) => {
             axios.post(`/affair/addChat`, {
                 affair_id: state.affair.id,
                 sender_user_id: chat.sender_user_id,
                 content: chat.content
-            }).then(() => {
-                commit('addcs', [chat])
+            }).then((result) => {
+                dispatch('getcs')
+                return result
             })
         },
         // edit contract

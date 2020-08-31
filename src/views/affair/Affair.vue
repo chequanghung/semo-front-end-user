@@ -46,7 +46,7 @@
             <div class="tile is-child box">
               <p class="home-section-title">💬 Trò chuyện</p>
               <!-- content -->
-              <div class="chat-content">
+              <div class="chat-content" ref="chats">
                 <div class="columns is-mobile" v-for="(chat, i) in affair_chats" :key="i">
                   <div class="column is-narrow" v-if="chat.sender_user_id !== user.id">
                     <div class="bubble">
@@ -92,6 +92,7 @@ import moment from "moment";
 
 export default {
   beforeDestroy() {
+    clearInterval(this.interval);
     this.close();
   },
   components: {
@@ -129,6 +130,7 @@ export default {
     ...mapActions("affair", ["populate", "getcs", "addcs", "close"]),
 
     intoContract() {
+      clearInterval(this.interval);
       this.$router.push({
         name: "Contract",
         params: { id: this.affair.AffairContract.id },
@@ -141,20 +143,54 @@ export default {
         sender_user_id: this.user.id,
         content: this.message,
         date_created: moment(new Date()).format("YYYY-DD-MM HH:mm:ss"),
-      }).then(() => {
-        this.message = "";
-        this.getcs();
-      });
+      })
+        .then(() => {
+          this.message = "";
+        })
+        .finally(() => {
+          let vm = this;
+          // scroll to bottom of the chat section
+          setTimeout(function () {
+            let chatWindow = vm.$refs.chats;
+            chatWindow.scrollTop = chatWindow.scrollHeight;
+          }, 500);
+        });
     },
     back() {
+      clearInterval(this.interval);
+
+      this.close();
       this.$router.go(-1);
     },
   },
   async mounted() {
     // console.log(this.affair);
-    this.populate(this.$route.params.id).then(() => {
+    this.populate(this.$route.params.id)
+      .then(() => {
         this.getcs();
-    });
+
+        let vm = this;
+        // scroll to bottom of the chat section
+        setTimeout(function () {
+          let chatWindow = vm.$refs.chats;
+          chatWindow.scrollTop = chatWindow.scrollHeight;
+        }, 500);
+
+        this.interval = setInterval(
+          function () {
+            this.getcs();
+          }.bind(this),
+          4000
+        );
+      })
+      .catch((error) => {
+        console.info(error);
+
+        this.$buefy.toast.open({
+          type: "is-danger",
+          message: "Oh no!",
+        });
+      });
   },
   watch: {
     chats: function () {
@@ -175,6 +211,7 @@ export default {
   height: 480px;
   overflow-y: scroll;
   padding: 0 12px;
+  scroll-behavior: smooth;
 }
 
 .bubble {
