@@ -14,11 +14,12 @@
           <p style="text-align: center;">Nhấp vào điều khoản để chỉnh sửa</p>
           <AffairContractStatementList
             @change="changeContractAttr"
+            @update="changeUpdateMode"
           ></AffairContractStatementList>
           <!-- submit -->
           <br />
 
-          {{ cont }}
+          {{ contract }}
           <div class="columns is-centered is-mobile">
             <div class="column is-narrow">
               <b-button
@@ -26,6 +27,7 @@
                 @click="editContract"
                 :disabled="isDisabled"
                 :loading="isLoading"
+                v-if="!updateMode"
               >✈️ Yêu cầu sửa hợp đồng</b-button>
             </div>
           </div>
@@ -71,6 +73,7 @@ export default {
     return {
       cont: {},
       isLoading: false,
+      updateMode: '',
     };
   },
   methods: {
@@ -79,6 +82,9 @@ export default {
     back() {
       this.clear();
       this.$router.go(-1);
+    },
+    changeUpdateMode(mode) {
+      this.updateMode = mode
     },
     editContract() {
       // submit to server

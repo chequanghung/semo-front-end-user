@@ -1,5 +1,5 @@
 <template>
-  <div class="cell-container" :class="{'editing': editMode}">
+  <div class="cell-container" :class="{'uneditable': uneditable, 'editing': editMode}">
     <div class="columns is-vcentered is-mobile">
       <div class="column" @click="edit">
         <p class="cell-content">{{ title }}</p>
@@ -188,6 +188,11 @@ export default {
 .edited {
   background-color: #fff7cc;
   box-shadow: 0 2px 4px #fff7cc59;
+}
+
+.uneditable {
+  background-color: #f2f2f2;
+  cursor: default;
 }
 
 .editing {

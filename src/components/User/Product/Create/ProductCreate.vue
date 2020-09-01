@@ -53,7 +53,7 @@
               expanded
               required
               min="1"
-              max="1000"
+              max="10000"
             ></b-input>
             <b-select value="1">
               <option value="1" selected>g</option>
@@ -246,15 +246,15 @@ export default {
     isDisabled: function () {
       if (
         this.title === "" ||
-        this.fruit === {} ||
-        this.weight === "" ||
+        this.fruit.id === undefined ||
+        (this.weight === "" || this.weight > 1000) ||
         this.address === "" ||
-        this.weight_avg === "" ||
-        this.diameter_avg === "" ||
+        (this.weight_avg === "" && this.weight_avg > 50000) ||
+        (this.diameter_avg === "" && this.diameter_avg > 1000) ||
         this.notes === "" ||
         this.media.length === 0 ||
-        this.price_init === "" ||
-        this.price_step === ""
+        (this.price_init === "" || this.price_init > 99999999999999999999) ||
+        (this.price_step === "" || this.price_step > 99999999999999999999)
       ) {
         return true;
       } else {

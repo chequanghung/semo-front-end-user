@@ -4,7 +4,7 @@
       :data="data"
       placeholder="Ví dụ: 🍎 Táo Tàu"
       maxlength="255"
-      :has-counter="false"
+      :has-counter="true"
       field="title"
       :loading="isFetching"
       required
