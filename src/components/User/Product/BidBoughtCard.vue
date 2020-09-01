@@ -109,6 +109,7 @@ export default {
   font-weight: 800;
   font-size: 18px;
   height: 60px;
+  overflow: hidden;
 }
 
 .product-thumbnail {
