@@ -24,7 +24,7 @@
           <div>
             <transition-group name="enlist" class="columns is-variable is-2 is-multiline">
               <div
-                class="product column is-full-mobile is-full-tablet is-half-desktop is-half-widescreen is-one-third-fullhd"
+                class="product column is-full-mobile is-full-tablet is-half-desktop is-half-widescreen is-half-fullhd"
                 v-for="product in product_list"
                 :key="product.id"
               >

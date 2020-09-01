@@ -1,5 +1,6 @@
 <template>
   <div class="page-container">
+    <b-notification type="is-warning" v-if="pendingUpdate"><strong>⌛ Bạn mới chỉnh sửa hợp đồng rồi. Hãy chờ đối tác chấp thuận những thay đổi dưới đây của bạn. Sẽ không lâu đâu!</strong></b-notification>
     <!-- transportation -->
     <p class="section-title">VẬN CHUYỂN</p>
     <!-- transportation responsibilities -->
@@ -8,7 +9,7 @@
       :user="shipment_user"
       :users="[affair.buyer, affair.seller]"
       :class="{'edited' : shipment_user !== contract.shipment_user && shipment_user}"
-      :uneditable="updateMode"
+      :uneditable="updateMode || pendingUpdate"
       @changeUser="changeShipmentUser"
     ></ContractStatement>
     <!-- update request of transportation responsibilities | done -->
@@ -46,7 +47,7 @@
       title="Ngày bắt đầu vận chuyển"
       :date="shipment_date"
       :class="{'edited' : shipment_date !== contract.shipment_date && shipment_date}"
-      :uneditable="updateMode"
+      :uneditable="updateMode || pendingUpdate"
       @changeDate="changeShipDate"
     ></ContractStatement>
     <!-- update request of transportation deadline | done -->
@@ -83,11 +84,14 @@
       :min="0"
       :max="product.price_cur"
       :class="{'edited' : shipment_late_fee !== contract.shipment_late_fee && shipment_late_fee}"
-      :uneditable="updateMode"
+      :uneditable="updateMode || pendingUpdate"
       @changeMoney="changeShipmentLateFee"
     ></ContractStatement>
     <!-- update request of transportation fee | done -->
-    <div class="change" v-if="update.shipment_late_fee !== shipment_late_fee && updateMode === true">
+    <div
+      class="change"
+      v-if="update.shipment_late_fee !== shipment_late_fee && updateMode === true"
+    >
       <div
         class="tile notification is-warning is-light"
         style="display: flex; justify-content: center; flex-flow: column;"
@@ -123,7 +127,7 @@
       title="Ngày thanh toán"
       :date="payment_date"
       :class="{'edited' : payment_date !== contract.payment_date && payment_date}"
-      :uneditable="updateMode"
+      :uneditable="updateMode || pendingUpdate"
       @changeDate="changePaymentDate"
     ></ContractStatement>
     <!-- update request of payment date | done -->
@@ -162,7 +166,7 @@
       :min="0"
       :max="product.price_cur"
       :class="{'edited' : payment_late_fee !== contract.payment_late_fee && payment_late_fee}"
-      :uneditable="updateMode"
+      :uneditable="updateMode || pendingUpdate"
       @changeMoney="changePaymentLateFee"
     ></ContractStatement>
     <!-- update request of late fee | done -->
@@ -201,11 +205,14 @@
       :min="0"
       :max="100"
       :class="{'edited' : preservative_amount !== contract.preservative_amount && preservative_amount}"
-      :uneditable="updateMode"
+      :uneditable="updateMode || pendingUpdate"
       @changePercent="changePreservativeAmount"
     ></ContractStatement>
     <!-- update request of preservation amount -->
-    <div class="change" v-if="update.preservative_amount !== preservative_amount && updateMode === true">
+    <div
+      class="change"
+      v-if="update.preservative_amount !== preservative_amount && updateMode === true"
+    >
       <div
         class="tile notification is-warning is-light"
         style="display: flex; justify-content: center; flex-flow: column;"
@@ -243,7 +250,7 @@
           :disabled="!compare(update)"
           type="is-green"
           @click="submitUpdateReview"
-          v-if="updateMode"
+          v-if="updateMode && !pendingUpdate"
         >✅ Thay đổi trạng thái</b-button>
       </div>
     </div>
@@ -259,7 +266,7 @@ export default {
   components: {
     ContractStatement: () => import("./AffairContractStatement"),
   },
-  props: ['updateMode'],
+  props: ["updateMode"],
   computed: {
     ...mapState({
       contract: (state) => state.affair.contract,
@@ -280,6 +287,7 @@ export default {
       price_cur: null,
       // updated: false,
       isLoading: false,
+      pendingUpdate: false,
     };
   },
   methods: {
@@ -291,16 +299,22 @@ export default {
         id: this.contract.id,
         shipment_user_id:
           this.shipment_user !== null ? this.shipment_user.id : null,
-        shipment_date: this.shipment_date !== null ? moment(this.shipment_date).format("YYYY-MM-DD HH:mm:ss") : null,
+        shipment_date:
+          this.shipment_date !== null
+            ? moment(this.shipment_date).format("YYYY-MM-DD HH:mm:ss")
+            : null,
         shipment_late_fee: this.shipment_late_fee,
-        payment_date: this.shipment_date !== null ? moment(this.payment_date).format("YYYY-MM-DD HH:mm:ss") : null,
+        payment_date:
+          this.shipment_date !== null
+            ? moment(this.payment_date).format("YYYY-MM-DD HH:mm:ss")
+            : null,
         payment_late_fee: this.payment_late_fee,
         preservative_amount: this.preservative_amount,
         change_user_id: this.user.id,
       })
         .then(() => {
           this.isLoading = false;
-          this.$emit('update')
+          this.$emit("update");
 
           this.$buefy.toast.open({
             type: "is-success",
@@ -342,13 +356,33 @@ export default {
       this.bindChange();
     },
     async setAtr() {
-      this.shipment_user = this.contract.shipment_user;
-      this.shipment_date = this.contract.shipment_date;
-      this.shipment_late_fee = this.contract.shipment_late_fee;
-      this.payment_date = this.contract.payment_date;
-      this.payment_late_fee = this.contract.payment_late_fee;
-      this.preservative_amount = this.contract.preservative_amount;
+      // price of the contract
       this.price_cur = this.product.price_cur;
+
+      // if (there are no updates) or (the contract is more recent than the latest update)
+      if (
+        Object.keys(this.update).length === 0 ||
+        (this.contract.date_updated > this.update.date_updated &&
+          this.update.change_user_id === this.user.id)
+      ) {
+        this.shipment_user = this.contract.shipment_user;
+        this.shipment_date = this.contract.shipment_date;
+        this.shipment_late_fee = this.contract.shipment_late_fee;
+        this.payment_date = this.contract.payment_date;
+        this.payment_late_fee = this.contract.payment_late_fee;
+        this.preservative_amount = this.contract.preservative_amount;
+        this.pendingUpdate = false;
+      }
+      // if your
+      else {
+        this.shipment_user = this.update.shipment_user;
+        this.shipment_date = this.update.shipment_date;
+        this.shipment_late_fee = this.update.shipment_late_fee;
+        this.payment_date = this.update.payment_date;
+        this.payment_late_fee = this.update.payment_late_fee;
+        this.preservative_amount = this.update.preservative_amount;
+        this.pendingUpdate = true;
+      }
     },
     bindChange() {
       let contract_edit = {
@@ -365,14 +399,18 @@ export default {
     // compare cont with contract in the db
     compare(object) {
       if (
-        (((this.shipment_user !== null &&
+        ((this.shipment_user !== null &&
           this.shipment_user.id === object.shipment_user_id) ||
-          this.shipment_user === object.shipment_user)) &&
-        ((this.shipment_date !== null && this.shipment_date ===
-          moment(object.shipment_date).format("YYYY-MM-DD HH:mm:ss")) || (this.shipment_date === object.shipment_date)) &&
+          this.shipment_user === object.shipment_user) &&
+        ((this.shipment_date !== null &&
+          this.shipment_date ===
+            moment(object.shipment_date).format("YYYY-MM-DD HH:mm:ss")) ||
+          this.shipment_date === object.shipment_date) &&
         this.shipment_late_fee === object.shipment_late_fee &&
-        ((this.payment_date !== null && this.payment_date ===
-          moment(object.payment_date).format("YYYY-MM-DD HH:mm:ss")) || (this.payment_date === object.shipment_date)) &&
+        ((this.payment_date !== null &&
+          this.payment_date ===
+            moment(object.payment_date).format("YYYY-MM-DD HH:mm:ss")) ||
+          this.payment_date === object.shipment_date) &&
         this.payment_late_fee === object.payment_late_fee &&
         this.preservative_amount === object.preservative_amount
       ) {

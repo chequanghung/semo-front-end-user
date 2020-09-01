@@ -7,7 +7,6 @@
       :has-counter="true"
       field="title"
       :loading="isFetching"
-      required
       @typing="getFruit"
       @select="option => {selected = option; $emit('select', option)}"
     >

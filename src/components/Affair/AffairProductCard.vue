@@ -92,7 +92,7 @@
       <!-- current price -->
       <div class="columns is-mobile" v-if="product !== undefined">
         <div class="column">
-          <p class="sub-title">GIÁ HIỆN TẠI</p>
+          <p class="sub-title">GIÁ BẠN ĐÃ TRẢ</p>
         </div>
         <div class="column is-narrow">
           <p

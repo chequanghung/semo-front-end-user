@@ -15,11 +15,13 @@
           <br />
           <b-notification
             type="is-warning"
-            has-icon
-            icon="lightbulb"
             v-if="updateMode"
-          >Đối tác của bạn vừa yêu cầu cập nhật hợp đồng. Cùng nhau trao đổi và chỉnh sửa hợp đồng nhé!</b-notification>
-          <AffairContractStatementList :updateMode="updateMode" @change="changeContractAttr" @update="changeUpdateMode"></AffairContractStatementList>
+          ><strong>💡 Đối tác của bạn vừa yêu cầu cập nhật hợp đồng. Cùng nhau trao đổi và chỉnh sửa hợp đồng nhé!</strong></b-notification>
+          <AffairContractStatementList
+            :updateMode="updateMode"
+            @change="changeContractAttr"
+            @update="changeUpdateMode"
+          ></AffairContractStatementList>
           <!-- submit -->
           <br />
           <div class="columns is-centered is-mobile">
@@ -61,7 +63,7 @@ export default {
   computed: {
     ...mapState({
       contract: (state) => state.affair.contract,
-      update: state => state.affair.update,
+      update: (state) => state.affair.update,
       user: (state) => state.user.user,
     }),
     isDisabled: function () {
@@ -113,7 +115,7 @@ export default {
       this.$router.go(-1);
     },
     changeUpdateMode() {
-      this.updateMode === true ? this.updateMode = false : '';
+      this.updateMode === true ? (this.updateMode = false) : "";
     },
     editContract() {
       // submit to server

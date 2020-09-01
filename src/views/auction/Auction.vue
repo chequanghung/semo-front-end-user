@@ -7,7 +7,7 @@
       <div class="column is-half">
         <div class="title">
           <!-- fruit -->
-          <b-button type="is-text" tag="router-link" :to="'/fruit/' + fruit.id">
+          <b-button type="is-success is-light" tag="router-link" :to="'/fruit/' + fruit.id">
             <div style="display: flex; align-items: center;">
               <div
                 :style="{backgroundImage: `url(${fruit.icon_url})`}"
@@ -308,7 +308,7 @@
           class="cell-title"
           style="text-align: center; margin-top: 24px; font-size: 17px;"
           v-if="auction !== undefined"
-        >{{auction.Auctions[0].remain}} | {{bids.length}} lượt đấu giá</p>
+        >{{ auction.Auctions[0].remain_days > 0 && auction.Auctions[0].remain_time.split(':')[0] >= 24 ? auction.Auctions[0].remain_days + ' ngày' : format_time(auction.Auctions[0].remain_time) }} | {{bids.length}} lượt đấu giá</p>
 
         <!-- break -->
         <hr />

@@ -51,7 +51,7 @@
           </div>
           <!-- delete product for status 0, 1, 2 -->
           <div class="column is-narrow" v-if="item.product_status <= 2">
-            <b-button type="is-danger" @click="deleteItem">🗑️ Xóa</b-button>
+            <b-button type="is-danger" @click="deleteItem">🗑️ Hủy sản phẩm</b-button>
           </div>
           <!-- view auction for status 3 -->
           <div class="column is-narrow" v-if="item.product_status === 3">

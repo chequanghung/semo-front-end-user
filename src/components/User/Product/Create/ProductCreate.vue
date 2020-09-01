@@ -2,6 +2,22 @@
   <div class="page-container">
     <div class="columns">
       <div class="column is-full">
+        <!-- notes -->
+          <div class="notification is-info" v-if="noti">
+            <div class="columns is-mobile is-vcentered">
+              <div class="column is-narrow">
+                <p style="font-size: 24px;">🤩</p>
+              </div>
+              <div class="column">
+                <p>
+                  <strong>Hãy để ý những mục có dấu sao (*) ở cuối tên trường. Bạn sẽ cần điền thông tin đầy đủ vào đó! Thông tin càng rõ ràng, người mua sẽ càng hiểu sản phẩm của bạn hơn!</strong>
+                </p>
+              </div>
+              <div class="column is-narrow">
+                <b-button rounded @click="noti = false">👍 Hiểu rồi!</b-button>
+              </div>
+            </div>
+          </div>
         <!-- basic info -->
         <div class="card-container" ref="card-container-basic">
           <p class="card-title">📦 Thông tin cơ bản</p>
@@ -252,14 +268,22 @@ export default {
       if (
         this.title === "" ||
         this.fruit.id === undefined ||
-        (this.weight === "" || this.weight > 1000) ||
-        this.address === "" ||
-        (this.weight_avg === "" && this.weight_avg > 50000) ||
-        (this.diameter_avg === "" && this.diameter_avg > 1000) ||
+        this.weight === "" ||
+        this.weight > 1000 ||
+        this.weight_avg === "" ||
+        this.weight_avg > 50000 ||
+        this.diameter_avg === "" ||
+        this.diameter_avg > 1000 ||
+        this.sugar_pct === "" ||
+        this.sugar_pct > 100 ||
+        this.fruit_pct === "" ||
+        this.fruit_pct > 100 ||
         this.notes === "" ||
         this.media.length === 0 ||
-        (this.price_init === "" || this.price_init > 99999999999999999999) ||
-        (this.price_step === "" || this.price_step > 99999999999999999999)
+        this.price_init === "" ||
+        this.price_init > 99999999999999999999 ||
+        this.price_step === "" ||
+        this.price_step > 99999999999999999999
       ) {
         return true;
       } else {
@@ -269,6 +293,9 @@ export default {
   },
   data() {
     return {
+      // notification
+      noti: true,
+      // data
       title: "",
       fruit: {},
       weight: "",
@@ -361,6 +388,5 @@ export default {
   color: #07d390;
   font-size: 20px;
 }
-.anchors {
-}
+
 </style>
