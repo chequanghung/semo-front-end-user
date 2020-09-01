@@ -85,7 +85,19 @@ export default {
                 password: account.password
             })
                 .then(response => {
-                    commit('gett', response.data.token)
+                    // save token
+                    localStorage.setItem('token', response.data.token)
+                    // get data from user
+                    commit('getu', response.data.user)
+                    commit('geta', response.data.user.Addresses)
+                    commit('wallet/getw', response.data.user.Wallet, { root: true })
+                })
+        },
+        // get user through token
+        getu: async ({ commit }) => {
+            return axios.get('/user/user', { headers: { token: localStorage.getItem('token') } })
+                .then(response => {
+                    // get data from user
                     commit('getu', response.data.user)
                     commit('geta', response.data.user.Addresses)
                     commit('wallet/getw', response.data.user.Wallet, { root: true })
@@ -167,7 +179,7 @@ export default {
             })
         },
         // logout: ({ state }) => {
-            
+
         // }
     }
 }

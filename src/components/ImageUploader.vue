@@ -8,7 +8,7 @@
       accept="image/*"
       @input="upload"
     >
-      <img :src="media_url.length > 0 ? media_url : require('@/assets/Placeholder-Icon.png')" />
+      <img :src="Object.keys(media_url).length > 0 ? media_url : require('@/assets/Placeholder-Icon.png')" />
     </b-upload>
     <transition name="slide-fade">
       <p v-if="isDisabled" style="text-align: center;">Đang tải lên ...</p>

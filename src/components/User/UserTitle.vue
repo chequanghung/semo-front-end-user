@@ -52,7 +52,8 @@ export default {
   },
   methods: {
     logOut() {
-      this.$router.go();
+      localStorage.clear()
+      this.$router.go()
     },
   },
 };

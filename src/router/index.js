@@ -1,7 +1,6 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
 import Home from '../views/Home.vue'
-import store from '@/store/index'
 
 Vue.use(VueRouter)
 
@@ -112,7 +111,7 @@ const router = new VueRouter({
 router.beforeEach((to, from, next) => {
   window.scrollTo(0,0)
   if (to.matched.some(record => record.meta.requiresAuth)) {
-    if (Object.keys(store.state.user.user).length === 0) {
+    if (localStorage.getItem('token') === null) {
       next({
         name: 'Login'
       })

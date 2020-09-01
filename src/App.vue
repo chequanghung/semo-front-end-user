@@ -68,10 +68,16 @@ export default {
     }),
   },
   mounted() {
+    // toggle Subtitle and Footer
     this.toggleSubTitle();
     this.toggleFooter();
+
+    // check token
+    this.getUserByToken()
   },
   methods: {
+    ...mapActions('user', ['getu']),
+
     toggleSubTitle() {
       if (
         this.$route.fullPath === "/" ||
@@ -95,6 +101,18 @@ export default {
         this.isFullpage = false;
       }
     },
+
+    getUserByToken() {
+      if (localStorage.getItem('token') !== null) {
+        this.getu()
+        .catch(error => {
+          this.$buefy.toast.open({
+            type: 'is-danger',
+            message: `${error.response.data.message}`
+          })
+        })
+      }
+    }
   },
 };
 </script>

@@ -30,7 +30,7 @@
         >{{ format_time(auction.remain_time) }}</p>
       </div>
       <!-- footer info -->
-      <div class="columns">
+      <div class="columns is-mobile">
         <div class="column">
           <p class="card-info-title">{{ auction.Product.weight }} tạ</p>
         </div>

@@ -76,6 +76,7 @@ export default {
     updateMode: function () {
       // if there is update
       if (Object.keys(this.update).length !== 0) {
+        // chưa check trường hợp contract null có update
         // if update is more recent than the contract
         if (this.contract.date_updated < this.update.date_updated) {
           // if update is requested by this user, let the user wait for his partner to review the changes
