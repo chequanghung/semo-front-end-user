@@ -291,7 +291,7 @@
         <div class="columns is-mobile">
           <div class="column">
             <!-- current price -->
-            <data-block v-if="auction !== undefined">
+            <data-block>
               <template v-slot:title>GIÁ HIỆN TẠI</template>
               <template v-slot:content>{{numberWithCommas(auction.Auctions[0].price_cur)}}đ</template>
             </data-block>
@@ -475,11 +475,27 @@ export default {
       });
     },
     enterBid() {
-      if (Object.keys(this.$store.state.user.user).length > 0) {
-        if (this.$store.state.user.first_bids) {
-          this.isFirstModal = true;
+      if (Object.keys(this.userInfo).length > 0) {
+        if (this.userInfo.bids === undefined) {
+          axios
+            .get(`/auction_bid/countBid/${this.userInfo.id}`)
+            .then(({ data }) => {
+              this.userInfo.bids = data.times
+
+              if (data.times === 0) {
+                this.isFirstModal = true;
+              } else {
+                this.isBiddingModal = true;
+              }
+            })
+            .catch(error => {
+              this.$buefy.toast.open({
+                type: 'is-danger',
+                message: `Hình như có gì đó sai sai. Mã lỗi: ${error.response.data} 😖`
+              })
+            })
         } else {
-          this.isBiddingModal = true;
+          this.userInfo.bids === 0 ? this.isFirstModal = true : this.isBiddingModal = true;
         }
       } else {
         this.$router.push({ path: "/login" });

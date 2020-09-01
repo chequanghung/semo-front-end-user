@@ -271,7 +271,7 @@ export default {
         this.weight === "" ||
         this.weight > 1000 ||
         this.weight_avg === "" ||
-        this.weight_avg > 50000 ||
+        this.weight_avg > 10000 ||
         this.diameter_avg === "" ||
         this.diameter_avg > 1000 ||
         this.sugar_pct === "" ||
