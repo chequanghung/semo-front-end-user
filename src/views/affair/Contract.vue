@@ -12,14 +12,16 @@
           <p class="home-section-title">🗃️ Điều khoản</p>
           <!-- statements -->
           <p style="text-align: center;">Nhấp vào điều khoản để chỉnh sửa</p>
-          <AffairContractStatementList
-            @change="changeContractAttr"
-            @update="changeUpdateMode"
-          ></AffairContractStatementList>
+          <br />
+          <b-notification
+            type="is-warning"
+            has-icon
+            icon="lightbulb"
+            v-if="updateMode"
+          >Đối tác của bạn vừa yêu cầu cập nhật hợp đồng. Cùng nhau trao đổi và chỉnh sửa hợp đồng nhé!</b-notification>
+          <AffairContractStatementList :updateMode="updateMode" @change="changeContractAttr" @update="changeUpdateMode"></AffairContractStatementList>
           <!-- submit -->
           <br />
-
-          {{ contract }}
           <div class="columns is-centered is-mobile">
             <div class="column is-narrow">
               <b-button
@@ -27,7 +29,7 @@
                 @click="editContract"
                 :disabled="isDisabled"
                 :loading="isLoading"
-                v-if="!updateMode"
+                v-if="updateMode === false"
               >✈️ Yêu cầu sửa hợp đồng</b-button>
             </div>
           </div>
@@ -59,11 +61,39 @@ export default {
   computed: {
     ...mapState({
       contract: (state) => state.affair.contract,
-      user: state => state.user.user,
+      update: state => state.affair.update,
+      user: (state) => state.user.user,
     }),
     isDisabled: function () {
-      if (this.compare() === true || this.isLoading === true) {
+      if (this.compare(this.contract) === true || this.isLoading === true) {
         return true;
+      } else {
+        return false;
+      }
+    },
+    updateMode: function () {
+      // if there is update
+      if (Object.keys(this.update).length !== 0) {
+        // if update is more recent than the contract
+        if (this.contract.date_updated < this.update.date_updated) {
+          // if update is requested by this user, let the user wait for his partner to review the changes
+          if (this.contract.change_user_id === this.update.change_user_id) {
+            return false;
+            // this user is reviewing the incoming change
+          } else {
+            // this user has submitted update review
+            if (this.updated) {
+              return false;
+              // this user has NOT submitted update review
+            } else {
+              return true;
+            }
+          }
+          // if update is older than the contract (contract is updated from the update request)
+        } else {
+          return false;
+        }
+        // if there isn't any update (contract is newly created)
       } else {
         return false;
       }
@@ -73,7 +103,6 @@ export default {
     return {
       cont: {},
       isLoading: false,
-      updateMode: '',
     };
   },
   methods: {
@@ -83,8 +112,8 @@ export default {
       this.clear();
       this.$router.go(-1);
     },
-    changeUpdateMode(mode) {
-      this.updateMode = mode
+    changeUpdateMode() {
+      this.updateMode === true ? this.updateMode = false : '';
     },
     editContract() {
       // submit to server
@@ -117,14 +146,14 @@ export default {
       this.cont.preservative_amount = contract_edit.preservative_amount;
     },
     // compare cont with contract in the db
-    compare() {
+    compare(object) {
       if (
-        this.cont.shipment_user_id === this.contract.shipment_user_id &&
-        this.cont.shipment_date === this.contract.shipment_date &&
-        this.cont.shipment_late_fee === this.contract.shipment_late_fee &&
-        this.cont.payment_date === this.contract.payment_date &&
-        this.cont.payment_late_fee === this.contract.payment_late_fee &&
-        this.cont.preservative_amount === this.contract.preservative_amount
+        this.cont.shipment_user_id === object.shipment_user_id &&
+        this.cont.shipment_date === object.shipment_date &&
+        this.cont.shipment_late_fee === object.shipment_late_fee &&
+        this.cont.payment_date === object.payment_date &&
+        this.cont.payment_late_fee === object.payment_late_fee &&
+        this.cont.preservative_amount === object.preservative_amount
       ) {
         return true;
       } else {

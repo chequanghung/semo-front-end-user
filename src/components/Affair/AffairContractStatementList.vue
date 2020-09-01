@@ -11,7 +11,11 @@
       :uneditable="updateMode"
       @changeUser="changeShipmentUser"
     ></ContractStatement>
-    <div class="change" v-if="update.shipment_user_id !== contract.shipment_user_id">
+    <!-- update request of transportation responsibilities | done -->
+    <div
+      class="change"
+      v-if="((shipment_user !== null && update.shipment_user_id !== shipment_user.id) || shipment_user !== update.shipment_user) && updateMode === true"
+    >
       <div
         class="tile notification is-warning is-light"
         style="display: flex; justify-content: center; flex-flow: column;"
@@ -22,17 +26,20 @@
           :user="update.shipment_user"
           :uneditable="true"
           class="edited"
-          v-if="update.shipment_user_id !== contract.shipment_user_id"
         ></ContractStatement>
         <div class="columns is-mobile is-vcentered is-centered">
           <div class="column is-narrow">
-            <b-button type="is-green">✅ Chấp thuận</b-button>
+            <b-button type="is-green" @click="changeShipmentUser(update.shipment_user)">✅ Chấp thuận</b-button>
           </div>
           <div class="column is-narrow">
-            <b-button type="is-danger">⛔ Từ chối</b-button>
+            <b-button
+              type="is-danger"
+              @click="update.shipment_user_id = shipment_user !== null ? shipment_user.id : null; update.shipment_user = shipment_user"
+            >⛔ Từ chối</b-button>
           </div>
         </div>
       </div>
+      <hr />
     </div>
     <!-- transportation deadline -->
     <ContractStatement
@@ -42,9 +49,36 @@
       :uneditable="updateMode"
       @changeDate="changeShipDate"
     ></ContractStatement>
+    <!-- update request of transportation deadline | done -->
+    <div
+      class="change"
+      v-if="(update.shipment_date !== null && formatDate(update.shipment_date) !== shipment_date) && updateMode === true"
+    >
+      <div
+        class="tile notification is-warning is-light"
+        style="display: flex; justify-content: center; flex-flow: column;"
+      >
+        <p class="change-notice-title">Có thay đối từ đối tác của bạn</p>
+        <ContractStatement
+          title="Ngày bắt đầu vận chuyển"
+          :date="update.shipment_date"
+          :uneditable="true"
+          class="edited"
+        ></ContractStatement>
+        <div class="columns is-mobile is-vcentered is-centered">
+          <div class="column is-narrow">
+            <b-button type="is-green" @click="changeShipDate(update.shipment_date)">✅ Chấp thuận</b-button>
+          </div>
+          <div class="column is-narrow">
+            <b-button type="is-danger" @click="update.shipment_date = shipment_date">⛔ Từ chối</b-button>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
     <!-- transportation fee -->
     <ContractStatement
-      title="Phí vận chuyển muộn"
+      title="Phí vận chuyển"
       :money="shipment_late_fee"
       :min="0"
       :max="product.price_cur"
@@ -52,6 +86,36 @@
       :uneditable="updateMode"
       @changeMoney="changeShipmentLateFee"
     ></ContractStatement>
+    <!-- update request of transportation fee | done -->
+    <div class="change" v-if="update.shipment_late_fee !== shipment_late_fee && updateMode === true">
+      <div
+        class="tile notification is-warning is-light"
+        style="display: flex; justify-content: center; flex-flow: column;"
+      >
+        <p class="change-notice-title">Có thay đối từ đối tác của bạn</p>
+        <ContractStatement
+          title="Phí vận chuyển"
+          :money="update.shipment_late_fee"
+          :uneditable="true"
+          class="edited"
+        ></ContractStatement>
+        <div class="columns is-mobile is-vcentered is-centered">
+          <div class="column is-narrow">
+            <b-button
+              type="is-green"
+              @click="changeShipmentLateFee(update.shipment_late_fee)"
+            >✅ Chấp thuận</b-button>
+          </div>
+          <div class="column is-narrow">
+            <b-button
+              type="is-danger"
+              @click="update.shipment_late_fee = shipment_late_fee"
+            >⛔ Từ chối</b-button>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
     <!-- transaction -->
     <p class="section-title">THANH TOÁN</p>
     <!-- payment date -->
@@ -62,6 +126,33 @@
       :uneditable="updateMode"
       @changeDate="changePaymentDate"
     ></ContractStatement>
+    <!-- update request of payment date | done -->
+    <div
+      class="change"
+      v-if="update.payment_date !== null && formatDate(update.payment_date) !== payment_date && updateMode === true"
+    >
+      <div
+        class="tile notification is-warning is-light"
+        style="display: flex; justify-content: center; flex-flow: column;"
+      >
+        <p class="change-notice-title">Có thay đối từ đối tác của bạn</p>
+        <ContractStatement
+          title="Ngày thanh toán"
+          :date="update.payment_date"
+          :uneditable="true"
+          class="edited"
+        ></ContractStatement>
+        <div class="columns is-mobile is-vcentered is-centered">
+          <div class="column is-narrow">
+            <b-button type="is-green" @click="changePaymentDate(update.payment_date)">✅ Chấp thuận</b-button>
+          </div>
+          <div class="column is-narrow">
+            <b-button type="is-danger" @click="update.payment_date = payment_date">⛔ Từ chối</b-button>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
     <!-- payment amount -->
     <ContractStatement title="Số tiền thanh toán" :money="price_cur" :uneditable="true"></ContractStatement>
     <!-- payment late fee -->
@@ -74,6 +165,33 @@
       :uneditable="updateMode"
       @changeMoney="changePaymentLateFee"
     ></ContractStatement>
+    <!-- update request of late fee | done -->
+    <div class="change" v-if="update.payment_late_fee !== payment_late_fee && updateMode === true">
+      <div
+        class="tile notification is-warning is-light"
+        style="display: flex; justify-content: center; flex-flow: column;"
+      >
+        <p class="change-notice-title">Có thay đối từ đối tác của bạn</p>
+        <ContractStatement
+          title="Phí thanh toán muộn"
+          :money="update.payment_late_fee"
+          :uneditable="true"
+          class="edited"
+        ></ContractStatement>
+        <div class="columns is-mobile is-vcentered is-centered">
+          <div class="column is-narrow">
+            <b-button
+              type="is-green"
+              @click="changePaymentLateFee(update.payment_late_fee)"
+            >✅ Chấp thuận</b-button>
+          </div>
+          <div class="column is-narrow">
+            <b-button type="is-danger" @click="update.payment_late_fee = payment_late_fee">⛔ Từ chối</b-button>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
     <!-- extra -->
     <p class="section-title">CHẤT LƯỢNG</p>
     <!-- preservation amount -->
@@ -86,31 +204,62 @@
       :uneditable="updateMode"
       @changePercent="changePreservativeAmount"
     ></ContractStatement>
-
+    <!-- update request of preservation amount -->
+    <div class="change" v-if="update.preservative_amount !== preservative_amount && updateMode === true">
+      <div
+        class="tile notification is-warning is-light"
+        style="display: flex; justify-content: center; flex-flow: column;"
+      >
+        <p class="change-notice-title">Có thay đối từ đối tác của bạn</p>
+        <ContractStatement
+          title="Nồng đồ chất bảo quản thực vật"
+          :percent="update.preservative_amount"
+          :uneditable="true"
+          class="edited"
+        ></ContractStatement>
+        <div class="columns is-mobile is-vcentered is-centered">
+          <div class="column is-narrow">
+            <b-button
+              type="is-green"
+              @click="changePreservativeAmount(update.preservative_amount)"
+            >✅ Chấp thuận</b-button>
+          </div>
+          <div class="column is-narrow">
+            <b-button
+              type="is-danger"
+              @click="update.preservative_amount = preservative_amount"
+            >⛔ Từ chối</b-button>
+          </div>
+        </div>
+      </div>
+      <hr />
+    </div>
     <br />
 
     <div class="columns is-mobile is-centered">
       <div class="column is-narrow">
         <!-- :disabled="updateMode"  -->
         <b-button
+          :disabled="!compare(update)"
           type="is-green"
           @click="submitUpdateReview"
           v-if="updateMode"
         >✅ Thay đổi trạng thái</b-button>
       </div>
     </div>
-    {{ update }}
+    <b-loading is-full-page v-model="isLoading" :can-cancel="false"></b-loading>
   </div>
 </template>
 
 <script>
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 import moment from "moment";
 
 export default {
   components: {
     ContractStatement: () => import("./AffairContractStatement"),
   },
+  props: ['updateMode'],
   computed: {
     ...mapState({
       contract: (state) => state.affair.contract,
@@ -119,33 +268,6 @@ export default {
       update: (state) => state.affair.update,
       user: (state) => state.user.user,
     }),
-    updateMode: function () {
-      // if there is update
-      if (Object.keys(this.update).length !== 0) {
-        // if update is more recent than the contract
-        if (this.contract.date_updated < this.update.date_updated) {
-          // if update is requested by this user, let the user wait for his partner to review the changes
-          if (this.contract.change_user_id === this.update.change_user_id) {
-            return false;
-            // this user is reviewing the incoming change
-          } else {
-            // this user has submitted update review
-            if (this.updated) {
-              return false;
-              // this user has NOT submitted update review
-            } else {
-              return true;
-            }
-          }
-          // if update is older than the contract (contract is updated from the update request)
-        } else {
-          return false;
-        }
-        // if there isn't any update (contract is newly created)
-      } else {
-        return false;
-      }
-    },
   },
   data() {
     return {
@@ -156,12 +278,44 @@ export default {
       payment_late_fee: null,
       preservative_amount: null,
       price_cur: null,
-      updated: false,
+      // updated: false,
+      isLoading: false,
     };
   },
   methods: {
+    ...mapActions("affair", ["mergec"]),
     submitUpdateReview() {
-      console.log(1);
+      this.isLoading = true;
+
+      this.mergec({
+        id: this.contract.id,
+        shipment_user_id:
+          this.shipment_user !== null ? this.shipment_user.id : null,
+        shipment_date: this.shipment_date !== null ? moment(this.shipment_date).format("YYYY-MM-DD HH:mm:ss") : null,
+        shipment_late_fee: this.shipment_late_fee,
+        payment_date: this.shipment_date !== null ? moment(this.payment_date).format("YYYY-MM-DD HH:mm:ss") : null,
+        payment_late_fee: this.payment_late_fee,
+        preservative_amount: this.preservative_amount,
+        change_user_id: this.user.id,
+      })
+        .then(() => {
+          this.isLoading = false;
+          this.$emit('update')
+
+          this.$buefy.toast.open({
+            type: "is-success",
+            message: "Tuyệt, bây giờ bạn có thể tiếp tục sửa hợp đồng rồi! 🤗",
+          });
+        })
+        .catch(() => {
+          this.isLoading = false;
+
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message:
+              "Ầu, có chút lỗi rồi, bạn chờ một chút rồi thử lại nhé. 😥",
+          });
+        });
     },
     changeShipDate(date) {
       this.shipment_date = moment(date).format("YYYY-MM-DD HH:mm:ss");
@@ -208,6 +362,28 @@ export default {
 
       this.$emit("change", contract_edit);
     },
+    // compare cont with contract in the db
+    compare(object) {
+      if (
+        (((this.shipment_user !== null &&
+          this.shipment_user.id === object.shipment_user_id) ||
+          this.shipment_user === object.shipment_user)) &&
+        ((this.shipment_date !== null && this.shipment_date ===
+          moment(object.shipment_date).format("YYYY-MM-DD HH:mm:ss")) || (this.shipment_date === object.shipment_date)) &&
+        this.shipment_late_fee === object.shipment_late_fee &&
+        ((this.payment_date !== null && this.payment_date ===
+          moment(object.payment_date).format("YYYY-MM-DD HH:mm:ss")) || (this.payment_date === object.shipment_date)) &&
+        this.payment_late_fee === object.payment_late_fee &&
+        this.preservative_amount === object.preservative_amount
+      ) {
+        return true;
+      } else {
+        return false;
+      }
+    },
+    formatDate(date) {
+      return moment(date).format("YYYY-MM-DD HH:mm:ss");
+    },
   },
   // async mounted() {},
   watch: {
@@ -215,9 +391,6 @@ export default {
       if (this.contract !== undefined) {
         this.setAtr();
       }
-    },
-    updateMode: function () {
-      this.$emit("update", this.updateMode);
     },
   },
 };

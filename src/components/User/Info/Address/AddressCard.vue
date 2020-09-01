@@ -1,6 +1,6 @@
 <template>
   <div class="card-container">
-    <div class="content">
+    <div class="content" v-if="address !== undefined">
       <p class="card-content"><strong>{{ address.address }}</strong></p>
       <p class="card-content">{{ address.ward }}</p>
       <p class="card-content">{{ address.district }}</p>

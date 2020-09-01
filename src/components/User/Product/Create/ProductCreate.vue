@@ -14,8 +14,8 @@
             <b-input
               v-model="title"
               placeholder="Ví dụ: Táo Tàu Ninh Bình, đi ngay trong ngày!"
-              expanded
               required
+              expanded
               maxlength="255"
             ></b-input>
           </b-field>
@@ -25,8 +25,8 @@
               type="number"
               v-model="weight"
               placeholder="Ví dụ: 54"
-              expanded
               required
+              expanded
               min="1"
               max="1000"
             ></b-input>
@@ -50,8 +50,8 @@
               type="number"
               v-model="weight_avg"
               placeholder="Cân nặng quả"
-              expanded
               required
+              expanded
               min="1"
               max="10000"
             ></b-input>
@@ -65,8 +65,8 @@
               type="number"
               v-model="diameter_avg"
               placeholder="Đường kính quả"
-              expanded
               required
+              expanded
               min="1"
               max="1000"
             ></b-input>
@@ -80,6 +80,7 @@
               type="number"
               v-model="sugar_pct"
               placeholder="Nồng độ đường"
+              required
               expanded
               min="1"
               max="100"
@@ -98,6 +99,7 @@
               type="number"
               v-model="fruit_pct"
               placeholder="Phần trăm quả trên tổng khối hàng"
+              required
               expanded
               min="1"
               max="100"
@@ -112,6 +114,7 @@
               type="textarea"
               v-model="notes"
               placeholder="Phần trăm quả trên tổng khối hàng"
+              required
               expanded
               maxlength="1000"
             ></b-input>
@@ -174,6 +177,7 @@
               v-model="price_init"
               placeholder="Ví dụ: 10,000,000"
               expanded
+              required
               min="0"
               max="99999999999999999999"
             ></b-input>
@@ -188,6 +192,7 @@
               v-model="price_step"
               placeholder="Ví dụ: 100,000"
               expanded
+              required
               min="0"
               max="99999999999999999999"
             ></b-input>

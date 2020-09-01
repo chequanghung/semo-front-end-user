@@ -59,6 +59,10 @@ export default {
         editc: (state, contract) => {
             state.contract = contract
         },
+        // clear update
+        clearu: (state) => {
+            state.update = {}
+        },
         clear: (state) => {
             state.contract = {}
             state.update = {}
@@ -114,6 +118,14 @@ export default {
                 .then(() => {
                     commit('getu', contract)
                 })
+        },
+        // merge update request with contract
+        mergec: async ({ commit, dispatch }, contract) => {
+            return axios.put(`/affair/contract`, contract)
+            .then(() => {
+                dispatch('getc', contract.id)
+                commit('clearu')
+            })
         },
         clear: ({ commit }) => {
             commit('clear')
