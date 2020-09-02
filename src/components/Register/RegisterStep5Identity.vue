@@ -101,6 +101,18 @@ export default {
         this.errorN = false;
         this.error_msgN = "";
       }
+    },
+    number: function() {
+      if (isNaN(this.number)) {
+        this.error = true
+        this.error_msg = 'Số chứng minh thư của bạn không thể có ký tự đặc biệt hoặc chữ cái được.'
+      } else if (this.number.length !== 9 || this.number.length !== 12) {
+        this.error = true
+        this.error_msg = 'Số chứng minh thư của bạn phải có độ dài 9 hoặc 12 chữ số.'
+      } else {
+        this.error = false
+        this.error_msg = ''
+      }
     }
   },
   computed: {
