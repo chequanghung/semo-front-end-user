@@ -1,6 +1,8 @@
 <template>
   <div class="page-container">
-    <b-notification type="is-warning" v-if="pendingUpdate"><strong>⌛ Bạn mới chỉnh sửa hợp đồng rồi. Hãy chờ đối tác chấp thuận những thay đổi dưới đây của bạn. Sẽ không lâu đâu!</strong></b-notification>
+    <b-notification type="is-warning" v-if="updateMode === 'PENDING'">
+      <strong>⌛ Bạn mới chỉnh sửa hợp đồng rồi. Hãy chờ đối tác chấp thuận những thay đổi dưới đây của bạn. Sẽ không lâu đâu!</strong>
+    </b-notification>
     <!-- transportation -->
     <p class="section-title">VẬN CHUYỂN</p>
     <!-- transportation responsibilities -->
@@ -9,14 +11,11 @@
       :user="shipment_user"
       :users="[affair.buyer, affair.seller]"
       :class="{'edited' : shipment_user !== contract.shipment_user && shipment_user}"
-      :uneditable="updateMode || pendingUpdate"
+      :uneditable="updateMode !== 'CREATE'"
       @changeUser="changeShipmentUser"
     ></ContractStatement>
     <!-- update request of transportation responsibilities | done -->
-    <div
-      class="change"
-      v-if="((shipment_user !== null && update.shipment_user_id !== shipment_user.id) || shipment_user !== update.shipment_user) && updateMode === true"
-    >
+    <div class="change" v-if="updateMode === 'MERGE' && ((shipment_user === null && update.shipment_user !== null) || shipment_user.id !== update.shipment_user_id)">
       <div
         class="tile notification is-warning is-light"
         style="display: flex; justify-content: center; flex-flow: column;"
@@ -33,10 +32,7 @@
             <b-button type="is-green" @click="changeShipmentUser(update.shipment_user)">✅ Chấp thuận</b-button>
           </div>
           <div class="column is-narrow">
-            <b-button
-              type="is-danger"
-              @click="update.shipment_user_id = shipment_user !== null ? shipment_user.id : null; update.shipment_user = shipment_user"
-            >⛔ Từ chối</b-button>
+            <b-button type="is-danger" @click="refuseShipmentUser">⛔ Từ chối</b-button>
           </div>
         </div>
       </div>
@@ -47,19 +43,21 @@
       title="Ngày bắt đầu vận chuyển"
       :date="shipment_date"
       :class="{'edited' : shipment_date !== contract.shipment_date && shipment_date}"
-      :uneditable="updateMode || pendingUpdate"
+      :uneditable="updateMode !== 'CREATE'"
       @changeDate="changeShipDate"
     ></ContractStatement>
     <!-- update request of transportation deadline | done -->
     <div
       class="change"
-      v-if="(update.shipment_date !== null && formatDate(update.shipment_date) !== shipment_date) && updateMode === true"
+      v-if="updateMode === 'MERGE' && update.shipment_date !== shipment_date"
     >
       <div
         class="tile notification is-warning is-light"
         style="display: flex; justify-content: center; flex-flow: column;"
       >
         <p class="change-notice-title">Có thay đối từ đối tác của bạn</p>
+        {{shipment_date}}
+        {{update.shipment_date}}
         <ContractStatement
           title="Ngày bắt đầu vận chuyển"
           :date="update.shipment_date"
@@ -84,13 +82,13 @@
       :min="0"
       :max="product.price_cur"
       :class="{'edited' : shipment_late_fee !== contract.shipment_late_fee && shipment_late_fee}"
-      :uneditable="updateMode || pendingUpdate"
+      :uneditable="updateMode !== 'CREATE'"
       @changeMoney="changeShipmentLateFee"
     ></ContractStatement>
     <!-- update request of transportation fee | done -->
     <div
       class="change"
-      v-if="update.shipment_late_fee !== shipment_late_fee && updateMode === true"
+      v-if="updateMode === 'MERGE' && update.shipment_late_fee !== shipment_late_fee"
     >
       <div
         class="tile notification is-warning is-light"
@@ -127,13 +125,13 @@
       title="Ngày thanh toán"
       :date="payment_date"
       :class="{'edited' : payment_date !== contract.payment_date && payment_date}"
-      :uneditable="updateMode || pendingUpdate"
+      :uneditable="updateMode !== 'CREATE'"
       @changeDate="changePaymentDate"
     ></ContractStatement>
     <!-- update request of payment date | done -->
     <div
       class="change"
-      v-if="update.payment_date !== null && formatDate(update.payment_date) !== payment_date && updateMode === true"
+      v-if="updateMode === 'MERGE' && update.payment_date !== payment_date"
     >
       <div
         class="tile notification is-warning is-light"
@@ -166,11 +164,14 @@
       :min="0"
       :max="product.price_cur"
       :class="{'edited' : payment_late_fee !== contract.payment_late_fee && payment_late_fee}"
-      :uneditable="updateMode || pendingUpdate"
+      :uneditable="updateMode !== 'CREATE'"
       @changeMoney="changePaymentLateFee"
     ></ContractStatement>
     <!-- update request of late fee | done -->
-    <div class="change" v-if="update.payment_late_fee !== payment_late_fee && updateMode === true">
+    <div
+      class="change"
+      v-if="updateMode === 'MERGE' && update.payment_late_fee !== payment_late_fee"
+    >
       <div
         class="tile notification is-warning is-light"
         style="display: flex; justify-content: center; flex-flow: column;"
@@ -205,13 +206,13 @@
       :min="0"
       :max="100"
       :class="{'edited' : preservative_amount !== contract.preservative_amount && preservative_amount}"
-      :uneditable="updateMode || pendingUpdate"
+      :uneditable="updateMode !== 'CREATE'"
       @changePercent="changePreservativeAmount"
     ></ContractStatement>
     <!-- update request of preservation amount -->
     <div
       class="change"
-      v-if="update.preservative_amount !== preservative_amount && updateMode === true"
+      v-if="updateMode === 'MERGE' && update.preservative_amount !== preservative_amount"
     >
       <div
         class="tile notification is-warning is-light"
@@ -250,7 +251,7 @@
           :disabled="!compare(update)"
           type="is-green"
           @click="submitUpdateReview"
-          v-if="updateMode && !pendingUpdate"
+          v-if="updateMode === 'MERGE'"
         >✅ Thay đổi trạng thái</b-button>
       </div>
     </div>
@@ -355,23 +356,23 @@ export default {
       this.shipment_user = user;
       this.bindChange();
     },
+    refuseShipmentUser() {
+      this.update.shipment_user = this.shipment_user;
+      this.update.shipment_user_id =
+        this.shipment_user !== null ? this.shipment_user.id : null;
+    },
     async setAtr() {
       // price of the contract
       this.price_cur = this.product.price_cur;
 
-      // if (there are no updates) or (the contract is more recent than the latest update)
-      if (
-        Object.keys(this.update).length === 0 ||
-        (this.contract.date_updated > this.update.date_updated &&
-          this.update.change_user_id === this.user.id)
-      ) {
+      // if (there are no updates) or (the contract is more recent than the latest update and this is your update) or ()
+      if (this.updateMode !== "PENDING") {
         this.shipment_user = this.contract.shipment_user;
         this.shipment_date = this.contract.shipment_date;
         this.shipment_late_fee = this.contract.shipment_late_fee;
         this.payment_date = this.contract.payment_date;
         this.payment_late_fee = this.contract.payment_late_fee;
         this.preservative_amount = this.contract.preservative_amount;
-        this.pendingUpdate = false;
       }
       // if your
       else {
@@ -381,7 +382,6 @@ export default {
         this.payment_date = this.update.payment_date;
         this.payment_late_fee = this.update.payment_late_fee;
         this.preservative_amount = this.update.preservative_amount;
-        this.pendingUpdate = true;
       }
     },
     bindChange() {
@@ -398,6 +398,12 @@ export default {
     },
     // compare cont with contract in the db
     compare(object) {
+      console.log(
+        this.shipment_user !== null &&
+          this.shipment_user.id === object.shipment_user_id
+      );
+      console.log(this.shipment_user === object.shipment_user)
+      console.log(this.payment_date)
       if (
         ((this.shipment_user !== null &&
           this.shipment_user.id === object.shipment_user_id) ||
@@ -420,7 +426,7 @@ export default {
       }
     },
     formatDate(date) {
-      return moment(date).format("YYYY-MM-DD HH:mm:ss");
+      return date !== null ? moment(date).format("YYYY-MM-DD HH:mm:ss") : null
     },
   },
   // async mounted() {},

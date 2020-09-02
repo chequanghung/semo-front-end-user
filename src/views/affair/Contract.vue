@@ -13,16 +13,16 @@
           <!-- statements -->
           <p style="text-align: center;">Nhấp vào điều khoản để chỉnh sửa</p>
           <br />
-          <b-notification
-            type="is-warning"
-            v-if="updateMode"
-          ><strong>💡 Đối tác của bạn vừa yêu cầu cập nhật hợp đồng. Cùng nhau trao đổi và chỉnh sửa hợp đồng nhé!</strong></b-notification>
+          <b-notification type="is-warning" v-if="updateMode === 'MERGE'">
+            <strong>💡 Đối tác của bạn vừa yêu cầu cập nhật hợp đồng. Cùng nhau trao đổi và chỉnh sửa hợp đồng nhé!</strong>
+          </b-notification>
           <AffairContractStatementList
             :updateMode="updateMode"
             @change="changeContractAttr"
             @update="changeUpdateMode"
           ></AffairContractStatementList>
           <!-- submit -->
+          {{ updateMode }}
           <br />
           <div class="columns is-centered is-mobile">
             <div class="column is-narrow">
@@ -31,7 +31,7 @@
                 @click="editContract"
                 :disabled="isDisabled"
                 :loading="isLoading"
-                v-if="updateMode === false"
+                v-if="updateMode === 'CREATE'"
               >✈️ Yêu cầu sửa hợp đồng</b-button>
             </div>
           </div>
@@ -44,7 +44,7 @@
           <p style="font-size: 18px; font-weight: 900; color: #b88cd8">⚙️ Chức năng</p>
         </div>
         <div class="column is-narrow">
-          <b-button type="is-danger" @click="back">❌ Hủy hợp đồng</b-button>
+          <b-button type="is-danger" @click="cancel">❌ Hủy hợp đồng</b-button>
         </div>
       </div>
     </div>
@@ -74,31 +74,29 @@ export default {
       }
     },
     updateMode: function () {
+      // console.log(Object.keys(this.update).length === 0)
+      // if there is no update for this contract yet
+      if (Object.keys(this.update).length === 0) {
+        // create mode
+        return "CREATE";
+      }
       // if there is update
-      if (Object.keys(this.update).length !== 0) {
-        // chưa check trường hợp contract null có update
-        // if update is more recent than the contract
+      else {
+        // if there is a later update
         if (this.contract.date_updated < this.update.date_updated) {
-          // if update is requested by this user, let the user wait for his partner to review the changes
-          if (this.contract.change_user_id === this.update.change_user_id) {
-            return false;
-            // this user is reviewing the incoming change
-          } else {
-            // this user has submitted update review
-            if (this.updated) {
-              return false;
-              // this user has NOT submitted update review
-            } else {
-              return true;
-            }
+          // if the update is yours
+          if (this.update.change_user_id === this.user.id) {
+            return "PENDING";
           }
-          // if update is older than the contract (contract is updated from the update request)
-        } else {
-          return false;
+          // if it is not yours
+          else {
+            return "MERGE";
+          }
         }
-        // if there isn't any update (contract is newly created)
-      } else {
-        return false;
+        // if the contract is ahead of the update
+        else {
+          return "CREATE";
+        }
       }
     },
   },
@@ -109,14 +107,50 @@ export default {
     };
   },
   methods: {
-    ...mapActions("affair", ["getc", "editc", "clear"]),
+    ...mapActions("affair", ["getc", "editc", "clear", "close", "deletea"]),
 
     back() {
+      this.clear()
+      this.$router.go(-1)
+    },
+    cancel() {
+      let vm = this
+      let cont = this.contract
+
+      this.$buefy.dialog.confirm({
+        type: "is-danger",
+        message:
+          `Giao kèo này bị hủy và bạn sẽ không lấy lại được tiền cọc. Bạn chắc chắn chứ? 😨`,
+        onConfirm: () => {
+          vm.isLoading = true
+          
+          vm.deletea(cont)
+          .then(() => {
+            vm.isLoading = false
+            
+            vm.$buefy.toast.open({
+              type: 'is-success',
+              message: 'Bạn đã rời khỏi giao kèo. 👋'
+            })
+            
+            vm.$router.push({ path: '/user/product' })
+          })
+          .catch((error) => {
+            vm.isLoading = false
+
+vm.$buefy.toast.open({
+              type: 'is-danger',
+              message: `Lỗi rồi, bạn thử lại sau nhé. 😓 ${error.response.data.message}`
+            })
+          })
+        },
+      });
+
       this.clear();
-      this.$router.go(-1);
+      this.close();
     },
     changeUpdateMode() {
-      this.updateMode === true ? (this.updateMode = false) : "";
+      this.updateMode = "CREATE";
     },
     editContract() {
       // submit to server
@@ -126,7 +160,7 @@ export default {
         .then(() => {
           this.$buefy.toast.open({
             type: "is-success",
-            message: "Xong rồi!",
+            message: "Xong rồi! Hãy chờ đối tác của bạn chấp thuận nhé. 😋",
           });
 
           this.$router.go(-1);
@@ -135,7 +169,7 @@ export default {
           this.isLoading = false;
           this.$buefy.toast.open({
             type: "is-danger",
-            message: "Lỗi rồi!",
+            message: "Lỗi rồi! Bạn thử lại sau nhé. 😥",
           });
         });
     },

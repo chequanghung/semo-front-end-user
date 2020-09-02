@@ -84,6 +84,7 @@ export default {
 
                     commit('geta', affair)
                     commit('getp', affair.Product)
+                    commit('')
                 })
         },
         // get contract
@@ -125,6 +126,17 @@ export default {
             .then(() => {
                 dispatch('getc', contract.id)
                 commit('clearu')
+            })
+        },
+        // delete affair
+        deletea: async ({ dispatch }, contract) => {
+            return axios.put(`/affair/cancel`, {
+                id: contract.affair_id,
+                affair_status: 9
+            })
+            .then(() => {
+                dispatch('clear')
+                dispatch('close')
             })
         },
         clear: ({ commit }) => {

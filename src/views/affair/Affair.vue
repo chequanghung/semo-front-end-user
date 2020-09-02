@@ -22,9 +22,10 @@
           <div class="tile is-vertical is-parent">
             <div class="tile is-child box">
               <!-- status -->
-              <p class="home-section-title"></p>
+              <p class="home-section-title">📋 Hợp đồng</p>
             </div>
           </div>
+          <!-- contract -->
           <div class="tile is-vertical is-parent">
             <div class="tile is-child box">
               <!-- status -->

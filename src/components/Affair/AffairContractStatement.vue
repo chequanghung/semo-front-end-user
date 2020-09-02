@@ -129,7 +129,7 @@ export default {
   },
   methods: {
     edit() {
-      this.editMode || this.uneditable ? "" : (this.editMode = !this.editMode);
+      this.uneditable ? "" : (this.editMode = !this.editMode);
     },
     submit() {
       // check type
