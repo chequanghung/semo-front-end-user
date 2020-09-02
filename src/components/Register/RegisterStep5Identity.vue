@@ -17,7 +17,13 @@
         </div>
       </div>
 
-      <b-field :type="errorN ? 'is-danger' : ''" :message="error_msgN"  label="Họ và tên trên thẻ*" label-position="on-border">
+      <b-field
+        :type="errorN ? 'is-danger' : ''"
+        :message="error_msgN"
+        label="Họ và tên trên thẻ*"
+        label-position="on-border"
+        required
+      >
         <b-input v-model="name" placeholder="Họ tên" maxlength="255"></b-input>
       </b-field>
       <b-field
@@ -25,14 +31,15 @@
         :message="err_msg"
         label="Số chứng minh nhân dân/căn cước*"
         label-position="on-border"
+        required
       >
         <b-input v-model="number" placeholder="Số chứng minh/căn cước" required maxlength="12"></b-input>
       </b-field>
-      <b-field label="Ngày cấp*" label-position="on-border">
+      <b-field label="Ngày cấp*" label-position="on-border" required>
         <b-datepicker v-model="date" locale="en-GB" placeholder="Ngày cấp" required trap-focus></b-datepicker>
       </b-field>
       <br />
-      <b-field label="Nơi cấp*" label-position="on-border">
+      <b-field label="Nơi cấp*" label-position="on-border" required>
         <!-- province -->
         <b-autocomplete
           placeholder="Tỉnh/Thành phố"
@@ -90,49 +97,55 @@ export default {
     ImageUploader: () => import("@/components/ImageUploader"),
   },
   watch: {
-    name: function() {
+    name: function () {
       if (this.name === "") {
         this.errorN = true;
         this.error_msgN = "Hãy điền tên đầy đủ của bạn nhé.";
       } else if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name)) {
         this.errorN = true;
-        this.error_msgN = "Tên của bạn không thể có ký tự đặc biệt hoặc chữ số.";
+        this.error_msgN =
+          "Tên của bạn không thể có ký tự đặc biệt hoặc chữ số.";
       } else {
         this.errorN = false;
         this.error_msgN = "";
       }
     },
-    number: function() {
+    number: function () {
       if (isNaN(this.number)) {
-        this.error = true
-        this.error_msg = 'Số chứng minh thư của bạn không thể có ký tự đặc biệt hoặc chữ cái được.'
+        this.error = true;
+        this.error_msg =
+          "Số chứng minh thư của bạn không thể có ký tự đặc biệt hoặc chữ cái được.";
       } else if (this.number.length !== 9 || this.number.length !== 12) {
-        this.error = true
-        this.error_msg = 'Số chứng minh thư của bạn phải có độ dài 9 hoặc 12 chữ số.'
+        this.error = true;
+        this.error_msg =
+          "Số chứng minh thư của bạn phải có độ dài 9 hoặc 12 chữ số.";
       } else {
-        this.error = false
-        this.error_msg = ''
+        this.error = false;
+        this.error_msg = "";
       }
-    }
+    },
   },
   computed: {
     ...mapState({
       user: (state) => state.user.user,
     }),
-    
+
     isDisabled: function () {
       let cur_date = new Date();
-      if ((this.front === "" ||
-        this.back === "" ||
-        this.name === "" || /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name) ||
-        this.number === "" ||
-        cur_date.getTime() < this.date.getTime() ||
-        Object.keys(this.province).length === 0) &&
-        this.isLoading === false) {
-          return true
-        } else {
-          return false
-        }
+      if (
+        (this.front === "" ||
+          this.back === "" ||
+          this.name === "" ||
+          /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name) ||
+          this.number === "" ||
+          cur_date.getTime() < this.date.getTime() ||
+          Object.keys(this.province).length === 0) &&
+        this.isLoading === false
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     },
     error: function () {
       if (isNaN(this.number)) {
@@ -157,8 +170,8 @@ export default {
       province: {},
       isLoading: false,
       err_msg: "",
-      errorN: '',
-      err_msgN: ''
+      errorN: "",
+      err_msgN: "",
     };
   },
   methods: {
@@ -196,7 +209,7 @@ export default {
     }),
     submitIdentity() {
       this.isLoading = true;
-      console.log(this.user.id)
+      console.log(this.user.id);
       this.addi({
         user_id: this.user.id,
         front_img_url: this.front,
