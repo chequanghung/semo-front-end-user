@@ -164,7 +164,7 @@ export default {
     name: function () {
       if (this.name.trim() === "") {
         this.error = true;
-        this.error_msg = "Hãy điền tên đầy đủ của bạn nhé.";
+        this.error_msg = "Đừng để trống trường này nhé.";
       } else if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name)) {
         this.error = true;
         this.error_msg = "Tên của bạn không thể có ký tự đặc biệt hoặc chữ số.";

@@ -100,7 +100,7 @@ export default {
     name: function () {
       if (this.name.trim().length === 0) {
         this.errorN = true;
-        this.error_msgN = "Hãy điền tên đầy đủ của bạn nhé.";
+        this.error_msgN = "Đừng để trống trường này nhé.";
       } else if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name.trim())) {
         this.errorN = true;
         this.error_msgN =
@@ -135,9 +135,9 @@ export default {
       if (
         (this.front === "" ||
           this.back === "" ||
-          this.name === "" ||
+          this.name.trim() === "" ||
           /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name) ||
-          this.number === "" ||
+          this.number === "" || (this.number.trim().length !== 9 || this.number.trim().length !== 12) ||
           cur_date.getTime() < this.date.getTime() ||
           Object.keys(this.province).length === 0) &&
         this.isLoading === false
