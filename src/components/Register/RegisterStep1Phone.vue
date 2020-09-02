@@ -31,6 +31,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { mapActions } from "vuex";
 import { fb } from "@/firebase";
 import * as firebase from "firebase/app";

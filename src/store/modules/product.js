@@ -105,6 +105,7 @@ export default {
             })
                 .then((response) => {
                     commit('deletep', product.product)
+                    console.log(product.date)
                     return response
                 })
                 .catch((error) => {

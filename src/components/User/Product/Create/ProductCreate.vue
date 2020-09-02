@@ -334,6 +334,7 @@ export default {
         price_init: this.price_init,
         price_step: this.price_step,
         media: this.media.map((item) => item.media_url),
+        dir: this.dir
       });
     },
     uploadImages() {

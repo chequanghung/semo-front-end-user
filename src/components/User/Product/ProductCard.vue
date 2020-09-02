@@ -38,10 +38,6 @@
       </div>
       <div class="column is-narrow">
         <div class="columns is-variable is-1 is-mobile">
-          <!-- edit for status 0, 1, 2 -->
-          <div class="column is-narrow" v-if="item.product_status < 2">
-            <b-button type="is-green" @click="editItem">🖊️ Chỉnh sửa</b-button>
-          </div>
           <!-- create auction for status 2 -->
           <div class="column is-narrow" v-if="item.product_status === 2">
             <b-button

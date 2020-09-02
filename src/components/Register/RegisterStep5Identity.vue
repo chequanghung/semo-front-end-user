@@ -17,7 +17,7 @@
         </div>
       </div>
 
-      <b-field label="Họ và tên trên thẻ*" label-position="on-border">
+      <b-field :type="errorN ? 'is-danger' : ''" :message="error_msgN"  label="Họ và tên trên thẻ*" label-position="on-border">
         <b-input v-model="name" placeholder="Họ tên" maxlength="255"></b-input>
       </b-field>
       <b-field
@@ -90,8 +90,17 @@ export default {
     ImageUploader: () => import("@/components/ImageUploader"),
   },
   watch: {
-    isDisabled: function() {
-      console.log(this.isDisabled)
+    name: function() {
+      if (this.name === "") {
+        this.errorN = true;
+        this.error_msgN = "Hãy điền tên đầy đủ của bạn nhé.";
+      } else if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name)) {
+        this.errorN = true;
+        this.error_msgN = "Tên của bạn không thể có ký tự đặc biệt hoặc chữ số.";
+      } else {
+        this.errorN = false;
+        this.error_msgN = "";
+      }
     }
   },
   computed: {
@@ -103,7 +112,7 @@ export default {
       let cur_date = new Date();
       if ((this.front === "" ||
         this.back === "" ||
-        this.name === "" ||
+        this.name === "" || /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name) ||
         this.number === "" ||
         cur_date.getTime() < this.date.getTime() ||
         Object.keys(this.province).length === 0) &&
@@ -136,6 +145,8 @@ export default {
       province: {},
       isLoading: false,
       err_msg: "",
+      errorN: '',
+      err_msgN: ''
     };
   },
   methods: {
@@ -184,7 +195,7 @@ export default {
         province_dist: this.province.title,
       })
         .then(() => {
-          this.$emit("home");
+          this.$emit("next");
 
           this.$buefy.toast.open({
             type: "is-success",

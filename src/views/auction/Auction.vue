@@ -254,18 +254,19 @@
                   <section>
                     <div style="display: flex; flex-flow: column; align-items: center;">
                       <p
-                        class="list-title"
+                        class="home-section-title"
                         style="text-align: center; margin-top: 40px; margin-bottom: 40px;"
                       >{{step.title}}</p>
                       <p style="font-size: 80px;">{{step.icon}}</p>
                       <p
                         class="cell-title"
-                        style="text-align: center; margin-top: 40px; word-wrap: break-word; padding-left: 40px; padding-right: 40px; font-weight: 700;"
+                        style="text-align: center; margin-top: 40px; word-wrap: break-word; padding-left: 40px; padding-right: 40px; font-weight: 700; margin-bottom: 40px;"
                       >{{step.description}}</p>
                       <b-button
+                        v-if="i === steps.length - 1"
                         rounded
                         type="is-green"
-                        style="margin: 40px 0;"
+                        style="margin-bottom: 40px;"
                         @click="next"
                       >{{step.button}}</b-button>
                     </div>
@@ -393,9 +394,6 @@
 import axios from "axios";
 import moment from "moment";
 import { mapState } from "vuex";
-// import AuctionCarouselList from "../components/AuctionCarouselList";
-// import DataBlock from "../components/DataBlock";
-// import DataCell from "../components/DataCell";
 
 export default {
   components: {
@@ -517,6 +515,7 @@ export default {
           this.isBiddingModal = false;
           this.amount = "";
 
+          this.userInfo.bids++
           //
           this.isBiddingModal = false;
           this.isSuccessModal = true;
@@ -545,7 +544,7 @@ export default {
         this.isFirstModal = false;
         this.isBiddingModal = true;
       } else {
-        ++this.index;
+        // this.index++;
       }
     },
     format_date(value) {

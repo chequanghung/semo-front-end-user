@@ -11,7 +11,7 @@
           </div>
           <div class="column is-narrow">
             <p class="title">{{ user.name }}</p>
-            <p class="subtitle">{{ address[0].province }}</p>
+            <p class="subtitle" v-if="address !== undefined">{{ address[0].province }}</p>
           </div>
         </div>
       </div>

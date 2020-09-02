@@ -10,7 +10,7 @@
             <b-input :value="phone" disabled></b-input>
           </b-field>
           <br />
-          <b-field label="Tên đầy đủ" label-position="on-border">
+          <b-field :type="error ? 'is-danger' : ''" :message="error_msg" label="Tên đầy đủ" label-position="on-border">
             <b-input :value="name" v-model="name"></b-input>
           </b-field>
           <br />
@@ -51,6 +51,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { mapState, mapActions } from "vuex";
 
 export default {
@@ -64,7 +65,7 @@ export default {
 
     isDisabled: function () {
       let cur_date = new Date();
-      return this.name === "" || cur_date.getYear() - this.dob.getYear() < 15
+      return this.name === "" || cur_date.getYear() - this.dob.getYear() < 15 || /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name)
         ? true
         : false;
     },
@@ -83,7 +84,23 @@ export default {
       name: String,
       // isDisabled: false,
       isLoading: false,
+      error: false,
+      error_msg: '',
     };
+  },
+  watch: {
+    name: function () {
+      if (this.name === "") {
+        this.error = true;
+        this.error_msg = "Hãy điền tên đầy đủ của bạn nhé.";
+      } else if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name)) {
+        this.error = true;
+        this.error_msg = "Tên của bạn không thể có ký tự đặc biệt hoặc chữ số.";
+      } else {
+        this.error = false;
+        this.error_msg = "";
+      }
+    },
   },
   methods: {
     ...mapActions("user", ["editua", "editui"]),

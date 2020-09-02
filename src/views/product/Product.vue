@@ -85,6 +85,7 @@ export default {
           price_step: product.price_step,
           notes: product.notes,
           product_type: this.productMorph.product_type,
+          img_dir: product.dir
         })
         // added successfully
         .then((response) => {

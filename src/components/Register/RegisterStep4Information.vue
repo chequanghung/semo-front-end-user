@@ -5,7 +5,7 @@
       <br />
       <!-- form -->
       <!-- name -->
-      <b-field label="Họ và tên" label-position="on-border">
+      <b-field :type="error ? 'is-danger' : ''" :message="error_msg" label="Họ và tên" label-position="on-border">
         <b-input v-model="name" maxlength="255"></b-input>
       </b-field>
       <!-- dob and gender -->
@@ -133,6 +133,7 @@
 </template>
 
 <script>
+/* eslint-disable */
 import { mapState, mapActions } from "vuex";
 import debounce from "debounce";
 import axios from "axios";
@@ -146,7 +147,7 @@ export default {
       let cur_date = new Date();
 
       if (
-        (this.name === "" ||
+        (this.name.length === 0 || /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name) ||
         cur_date.getYear() - this.dob.getYear() < 15 ||
         this.address === "" ||
         Object.keys(this.province).length === 0 ||
@@ -159,8 +160,25 @@ export default {
       }
     },
   },
+  watch: {
+    name: function () {
+      if (this.name === "") {
+        this.error = true;
+        this.error_msg = "Hãy điền tên đầy đủ của bạn nhé.";
+      } else if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name)) {
+        this.error = true;
+        this.error_msg = "Tên của bạn không thể có ký tự đặc biệt hoặc chữ số.";
+      } else {
+        this.error = false;
+        this.error_msg = "";
+      }
+    },
+  },
   data() {
     return {
+      // error message
+      error: false,
+      error_msg: "",
       // fetching for inputs
       isFetchingP: false,
       isFetchingD: false,

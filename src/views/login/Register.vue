@@ -26,7 +26,9 @@
               <!-- step 4 -->
               <RegisterStep4Information v-if="step === 4" @next="next"></RegisterStep4Information>
               <!-- step 5 -->
-              <RegisterStep5Identity v-if="step === 5" @home="home"></RegisterStep5Identity>
+              <RegisterStep5Identity v-if="step === 5" @next="next"></RegisterStep5Identity>
+              <!-- step 6 -->
+              <RegisterStep6Avatar v-if="step === 6" @next="next"></RegisterStep6Avatar>
             </transition>
           </div>
         </div>
@@ -46,7 +48,8 @@ export default {
     RegisterStep2OTP: () => import("@/components/Register/RegisterStep2OTP"),
     RegisterStep3Password: () => import('@/components/Register/RegisterStep3Password'),
     RegisterStep4Information: () => import('@/components/Register/RegisterStep4Information'),
-    RegisterStep5Identity: () => import('@/components/Register/RegisterStep5Identity')
+    RegisterStep5Identity: () => import('@/components/Register/RegisterStep5Identity'),
+    RegisterStep6Avatar: () => import('@/components/Register/RegisterStep6Avatar'),
   },
   data() {
     return {
