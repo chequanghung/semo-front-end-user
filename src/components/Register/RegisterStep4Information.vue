@@ -147,7 +147,7 @@ export default {
       let cur_date = new Date();
 
       if (
-        (this.name.length === 0 || /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name) ||
+        (this.name.trim().length === 0 || /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name) ||
         cur_date.getYear() - this.dob.getYear() < 15 ||
         this.address === "" ||
         Object.keys(this.province).length === 0 ||
@@ -162,7 +162,7 @@ export default {
   },
   watch: {
     name: function () {
-      if (this.name === "") {
+      if (this.name.trim() === "") {
         this.error = true;
         this.error_msg = "Hãy điền tên đầy đủ của bạn nhé.";
       } else if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name)) {

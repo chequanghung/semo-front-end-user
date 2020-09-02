@@ -27,8 +27,8 @@
         <b-input v-model="name" placeholder="Họ tên" maxlength="255"></b-input>
       </b-field>
       <b-field
-        :type="error ? 'is-danger' : ''"
-        :message="err_msg"
+        :type="errorNo ? 'is-danger' : ''"
+        :message="err_msgNo"
         label="Số chứng minh nhân dân/căn cước*"
         label-position="on-border"
         required
@@ -98,10 +98,10 @@ export default {
   },
   watch: {
     name: function () {
-      if (this.name === "") {
+      if (this.name.trim().length === 0) {
         this.errorN = true;
         this.error_msgN = "Hãy điền tên đầy đủ của bạn nhé.";
-      } else if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name)) {
+      } else if (/[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name.trim())) {
         this.errorN = true;
         this.error_msgN =
           "Tên của bạn không thể có ký tự đặc biệt hoặc chữ số.";
@@ -111,17 +111,17 @@ export default {
       }
     },
     number: function () {
-      if (isNaN(this.number)) {
-        this.error = true;
-        this.error_msg =
-          "Số chứng minh thư của bạn không thể có ký tự đặc biệt hoặc chữ cái được.";
-      } else if (this.number.length !== 9 || this.number.length !== 12) {
-        this.error = true;
-        this.error_msg =
+      if (this.number.trim().length !== 9 || this.number.trim().length !== 12) {
+        this.errorNo = true;
+        this.err_msgNo =
           "Số chứng minh thư của bạn phải có độ dài 9 hoặc 12 chữ số.";
+      } else if (isNaN(this.number.trim())) {
+        this.errorNo = true;
+        this.err_msgNo =
+          "Số chứng minh thư của bạn không thể có ký tự đặc biệt hoặc chữ cái được.";
       } else {
-        this.error = false;
-        this.error_msg = "";
+        this.errorNo = false;
+        this.err_msgNo = "";
       }
     },
   },
@@ -170,6 +170,8 @@ export default {
       province: {},
       isLoading: false,
       err_msg: "",
+      errorNo: false,
+      err_msgNo: '',
       errorN: "",
       err_msgN: "",
     };

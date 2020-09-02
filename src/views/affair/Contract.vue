@@ -22,7 +22,6 @@
             @update="changeUpdateMode"
           ></AffairContractStatementList>
           <!-- submit -->
-          {{ updateMode }}
           <br />
           <div class="columns is-centered is-mobile">
             <div class="column is-narrow">

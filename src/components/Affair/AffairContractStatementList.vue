@@ -56,7 +56,7 @@
         style="display: flex; justify-content: center; flex-flow: column;"
       >
         <p class="change-notice-title">Có thay đối từ đối tác của bạn</p>
-        {{shipment_date}}
+        {{shipment_date}} | 
         {{update.shipment_date}}
         <ContractStatement
           title="Ngày bắt đầu vận chuyển"
@@ -302,12 +302,12 @@ export default {
           this.shipment_user !== null ? this.shipment_user.id : null,
         shipment_date:
           this.shipment_date !== null
-            ? moment(this.shipment_date).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.shipment_date).format("YYYY-MM-DD")
             : null,
         shipment_late_fee: this.shipment_late_fee,
         payment_date:
           this.shipment_date !== null
-            ? moment(this.payment_date).format("YYYY-MM-DD HH:mm:ss")
+            ? moment(this.payment_date).format("YYYY-MM-DD")
             : null,
         payment_late_fee: this.payment_late_fee,
         preservative_amount: this.preservative_amount,
@@ -333,7 +333,7 @@ export default {
         });
     },
     changeShipDate(date) {
-      this.shipment_date = moment(date).format("YYYY-MM-DD HH:mm:ss");
+      this.shipment_date = moment(date).format("YYYY-MM-DD");
       this.bindChange();
     },
     changeShipmentLateFee(content) {
@@ -345,7 +345,7 @@ export default {
       this.bindChange();
     },
     changePaymentDate(date) {
-      this.payment_date = moment(date).format("YYYY-MM-DD HH:mm:ss");
+      this.payment_date = moment(date).format("YYYY-MM-DD");
       this.bindChange();
     },
     changePreservativeAmount(percent) {
@@ -398,24 +398,18 @@ export default {
     },
     // compare cont with contract in the db
     compare(object) {
-      console.log(
-        this.shipment_user !== null &&
-          this.shipment_user.id === object.shipment_user_id
-      );
-      console.log(this.shipment_user === object.shipment_user)
-      console.log(this.payment_date)
       if (
         ((this.shipment_user !== null &&
           this.shipment_user.id === object.shipment_user_id) ||
           this.shipment_user === object.shipment_user) &&
         ((this.shipment_date !== null &&
           this.shipment_date ===
-            moment(object.shipment_date).format("YYYY-MM-DD HH:mm:ss")) ||
+            moment(object.shipment_date).format("YYYY-MM-DD")) ||
           this.shipment_date === object.shipment_date) &&
         this.shipment_late_fee === object.shipment_late_fee &&
         ((this.payment_date !== null &&
           this.payment_date ===
-            moment(object.payment_date).format("YYYY-MM-DD HH:mm:ss")) ||
+            moment(object.payment_date).format("YYYY-MM-DD")) ||
           this.payment_date === object.shipment_date) &&
         this.payment_late_fee === object.payment_late_fee &&
         this.preservative_amount === object.preservative_amount
@@ -426,7 +420,7 @@ export default {
       }
     },
     formatDate(date) {
-      return date !== null ? moment(date).format("YYYY-MM-DD HH:mm:ss") : null
+      return date !== null ? moment(date).format("YYYY-MM-DD") : null
     },
   },
   // async mounted() {},

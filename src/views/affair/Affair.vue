@@ -10,6 +10,24 @@
       <!-- product -->
       <div class="column is-5 is-mobile">
         <div class="tile is-ancestor">
+          <div class="tile is-vertical is-parent">
+            <div class="tile is-child box">
+              <p class="home-section-title">🛒 Người mua</p>
+              <div class="columns is-mobile is-vcentered">
+                <div class="column is-narrow">
+                  <div
+                    :style="{backgroundImage: 'url(' + affair.buyer.img_url + ')'}"
+                    style="border-radius: 50%; width: 48px; height: 48px; background-size: cover; background-position: center"
+                  ></div>
+                </div>
+                <div class="column">
+                  <p class='home-section-title' style='margin-bottom: 0'>{{ affair.buyer.name }}</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+        <div class="tile is-ancestor">
           <div class="tile is-parent">
             <AffairProductCard :affair="affair" :product="product"></AffairProductCard>
           </div>
@@ -57,10 +75,16 @@
                     </div>
                   </div>
                   <div class="column"></div>
-                  <div class="column is-two-thirds" style="float: right;" v-if="chat.sender_user_id === user.id">
+                  <div
+                    class="column is-two-thirds"
+                    style="float: right;"
+                    v-if="chat.sender_user_id === user.id"
+                  >
                     <div style="float: right;">
                       <div class="bubble you" style="width: fit-content">
-                        <p style="word-break: break-all; width: fit-content; text-align: right;">{{ chat.content }}</p>
+                        <p
+                          style="word-break: break-all; width: fit-content; text-align: right;"
+                        >{{ chat.content }}</p>
                       </div>
                     </div>
                   </div>
