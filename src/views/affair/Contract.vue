@@ -110,39 +110,38 @@ export default {
     ...mapActions("affair", ["getc", "editc", "clear", "close", "deletea"]),
 
     back() {
-      this.clear()
-      this.$router.go(-1)
+      this.clear();
+      this.$router.go(-1);
     },
     cancel() {
-      let vm = this
-      let cont = this.contract
+      let vm = this;
+      let cont = this.contract;
 
       this.$buefy.dialog.confirm({
         type: "is-danger",
-        message:
-          `Giao kèo này bị hủy và bạn sẽ không lấy lại được tiền cọc. Bạn chắc chắn chứ? 😨`,
+        message: `Giao kèo này bị hủy và bạn sẽ không lấy lại được tiền cọc. Bạn chắc chắn chứ? 😨`,
         onConfirm: () => {
-          vm.isLoading = true
-          
-          vm.deletea(cont)
-          .then(() => {
-            vm.isLoading = false
-            
-            vm.$buefy.toast.open({
-              type: 'is-success',
-              message: 'Bạn đã rời khỏi giao kèo. 👋'
-            })
-            
-            vm.$router.push({ path: '/user/product' })
-          })
-          .catch((error) => {
-            vm.isLoading = false
+          vm.isLoading = true;
 
-vm.$buefy.toast.open({
-              type: 'is-danger',
-              message: `Lỗi rồi, bạn thử lại sau nhé. 😓 ${error.response.data.message}`
+          vm.deletea(cont)
+            .then(() => {
+              vm.isLoading = false;
+
+              vm.$buefy.toast.open({
+                type: "is-success",
+                message: "Bạn đã rời khỏi giao kèo. 👋",
+              });
+
+              vm.$router.push({ path: "/user/product" });
             })
-          })
+            .catch((error) => {
+              vm.isLoading = false;
+
+              vm.$buefy.toast.open({
+                type: "is-danger",
+                message: `Lỗi rồi, bạn thử lại sau nhé. 😓 ${error.response.data.message}`,
+              });
+            });
         },
       });
 

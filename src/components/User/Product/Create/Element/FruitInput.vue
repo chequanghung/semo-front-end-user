@@ -52,6 +52,7 @@ export default {
       // String cleared
       if (!name.length) {
         this.data = [];
+        console.log(this.selected)
         return;
       }
       this.isFetching = true;

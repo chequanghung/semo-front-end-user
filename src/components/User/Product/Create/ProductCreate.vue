@@ -230,7 +230,6 @@
         </div>
 
         <br />
-
         <!-- submit button -->
         <div class="columns is-mobile">
           <div class="column"></div>
@@ -267,7 +266,7 @@ export default {
     isDisabled: function () {
       if (
         this.title === "" ||
-        this.fruit.id === undefined ||
+        (Object.keys(this.fruit).length === 0 || this.fruit === null) ||
         this.weight === "" ||
         this.weight > 1000 ||
         this.weight_avg === "" ||
