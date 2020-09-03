@@ -111,7 +111,7 @@ export default {
       }
     },
     number: function () {
-      if (this.number.trim().length !== 9 || this.number.trim().length !== 12) {
+      if (this.number.trim().length !== 9 && this.number.trim().length !== 12) {
         this.errorNo = true;
         this.err_msgNo =
           "Số chứng minh thư của bạn phải có độ dài 9 hoặc 12 chữ số.";
@@ -137,7 +137,7 @@ export default {
           this.back === "" ||
           this.name.trim() === "" ||
           /[!@#$%^&*()_+\-=\[\]{};':"\\|,.<>\/?0-9]+/.test(this.name) ||
-          this.number === "" || (this.number.trim().length !== 9 || this.number.trim().length !== 12) ||
+          this.number === "" || (this.number.trim().length !== 9 && this.number.trim().length !== 12) ||
           cur_date.getTime() < this.date.getTime() ||
           Object.keys(this.province).length === 0) &&
         this.isLoading === false
