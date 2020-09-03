@@ -14,7 +14,7 @@
             <div class="tile is-child box">
               <p class="home-section-title">🛒 Người mua</p>
               <div class="columns is-mobile is-vcentered">
-                <div class="column is-narrow">
+                <div class="column is-narrow" v-if="affair !== undefined">
                   <div
                     :style="{backgroundImage: 'url(' + affair.buyer.img_url + ')'}"
                     style="border-radius: 50%; width: 48px; height: 48px; background-size: cover; background-position: center"
@@ -70,7 +70,7 @@
                   <div class="column is-two-thirds" v-if="chat.sender_user_id !== user.id">
                     <div>
                       <div class="bubble" style="width: fit-content">
-                        <p style="word-break: break-all; width: fit-content;">{{ chat.content }}</p>
+                        <p style="width: fit-content;">{{ chat.content }}</p>
                       </div>
                     </div>
                   </div>
