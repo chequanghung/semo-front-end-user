@@ -8,7 +8,7 @@
         </div>
         <div class="column">
           <p>Chúng tôi đang xem xét giấy tờ xác thực của bạn. Nếu được xác nhận, chiếc ví này sẽ toàn quyền là của bạn.</p>
-      </div>
+        </div>
       </div>
     </div>
     <!-- balance -->
@@ -19,23 +19,41 @@
     <!-- button -->
     <div class="columns is-centered is-mobile">
       <div class="column is-narrow">
-        <b-button type="is-green" @click="topUp" :disabled='wallet.wallet_status === 0'>➕ Nạp tiền vào ví</b-button>
+        <b-button
+          type="is-green"
+          @click="topUp"
+          :disabled="wallet.wallet_status === 0"
+        >➕ Nạp tiền vào ví</b-button>
       </div>
     </div>
-    <br/>
+    <br />
     <!-- deposits and stats -->
     <div class="columns">
       <div class="column">
         <!-- deposit -->
-          <div class="tile box">
-              <p class="home-section-title">🧾 Cần thanh toán</p>
+        <div class="tile is-child box">
+          <p class="home-section-title">🧾 Cần thanh toán</p>
+          <br />
+          <div class="tile is-ancestor" v-for="(depo, i) in deps.slice(index * 3, (index + 1) * 3)" :key="i">
+            <div class="tile is-parent">
+              <DepositCard :deposit="depo"></DepositCard>
+            </div>
           </div>
+          <div class="columns is-mobile is-vcentered is-centered">
+            <div class="column">
+              <b-button v-if="index > 0" @click="back" expanded>👈 Trang trước</b-button>
+            </div>
+            <div class="column">
+              <b-button v-if="index < totalPages - 1" @click="next" expanded>Trang sau 👉</b-button>
+            </div>
+          </div>
+        </div>
       </div>
       <div class="column">
         <!-- stats -->
-        <div class="tile box">
-              <p class="home-section-title">📈 Thống kê</p>
-          </div>
+        <div class="tile is-child box">
+          <p class="home-section-title">📈 Thống kê</p>
+        </div>
       </div>
     </div>
   </div>
@@ -45,12 +63,28 @@
 import { mapState, mapActions } from "vuex";
 
 export default {
+  components: {
+    DepositCard: () => import("./DepositCard"),
+  },
   computed: {
     ...mapState({
       user: (state) => state.user.user,
       wallet: (state) => state.wallet.wallet,
       deposit: (state) => state.wallet.deposit,
     }),
+    totalPages: function() {
+      if (this.deposit.length % 3 > 0) {
+        return Math.ceil(this.deposit.length / 3)
+      } else {
+        return this.deposit.length / 3
+      }
+    }
+  },
+  data() {
+    return {
+      index: 0,
+      deps: [],
+    }
   },
   async mounted() {
     this.getw(this.user.id).then(() => {
@@ -67,15 +101,36 @@ export default {
       }).format(amount);
     },
     topUp() {
-        this.$emit('topup')
+      this.$emit("topup");
+    },
+    back() {
+      --this.index;
+      window.scrollTo(0, 400)
+    },
+    next() {
+      ++this.index;
+      window.scrollTo(0, 400)
     }
   },
+  watch: {
+    deposit: function() {
+      this.deps = this.deposit
+    }
+  }
 };
 </script>
 
 <style scoped>
 .balance {
-    width: 100%;
-    text-align: center !important;
+  width: 100%;
+  text-align: center !important;
+}
+
+.unpaid {
+  background-color: red;
+}
+
+.paid {
+  background-color: green;
 }
 </style>

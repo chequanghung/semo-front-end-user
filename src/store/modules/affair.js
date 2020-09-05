@@ -34,6 +34,10 @@ export default {
         getc: (state, contract) => {
             state.contract = contract
         },
+        // change contract status
+        changec: (state, status) => {
+            state.contract.contract_status = status
+        },
         // add chat
         addcs: (state, dialogues) => {
             let ids = state.chats.map(item => item.id)
@@ -84,7 +88,8 @@ export default {
 
                     commit('geta', affair)
                     commit('getp', affair.Product)
-                    commit('')
+                    commit('getc', affair.AffairContract)
+                    commit('getu', affair.AffairContract.AffairContractUpdates.length > 0 ? affair.AffairContract.AffairContractUpdates[0] : {})
                 })
         },
         // get contract
@@ -119,6 +124,17 @@ export default {
                 .then(() => {
                     commit('getu', contract)
                 })
+        },
+        // change status of contract
+        changec: async ({ commit }, status) => {
+            return axios.put(`/affair/contract/status`, {
+                // id: id of the contract
+                id: status.id,
+                status: status.status
+            })
+            .then(({ data }) => {
+                commit('changec', data.contract_status)
+            })
         },
         // merge update request with contract
         mergec: async ({ commit, dispatch }, contract) => {

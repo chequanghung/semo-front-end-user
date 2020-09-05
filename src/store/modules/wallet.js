@@ -30,8 +30,14 @@ export default {
         gett: (state, transaction) => {
             state.transaction = transaction
         },
+        deleted: (state, deposit) => {
+            state.deposit = state.deposit.map(item => item.id === deposit.id ? {...item, user_status: 1} : item)
+        },
         addm: (state, amount) => {
             state.wallet.amount += amount
+        },
+        subm: (state, amount) => {
+            state.wallet.amount -= amount
         }
     },
 
@@ -40,23 +46,23 @@ export default {
         // get wallet
         getw: async ({ commit }, id) => {
             return axios.get(`/wallet/user/${id}`)
-            .then (({ data }) => {
-                commit('getw', data)
-            })
+                .then(({ data }) => {
+                    commit('getw', data)
+                })
         },
         // get deposits
         getd: async ({ state, commit }) => {
             return axios.get(`/wallet/deposit/wallet/id/${state.wallet.id}`)
-            .then (({ data }) => {
-                commit('getd', data)
-            })
+                .then(({ data }) => {
+                    commit('getd', data)
+                })
         },
         // transaction
         gett: async ({ state, commit }) => {
             return axios.get(`/wallet/transaction/wallet/id/${state.wallet.id}`)
-            .then (({ data }) => {
-                commit('gett', data)
-            })
+                .then(({ data }) => {
+                    commit('gett', data)
+                })
         },
         // add money
         addm: async ({ state, commit }, amount) => {
@@ -64,10 +70,23 @@ export default {
                 id: state.wallet.id,
                 amount: amount
             })
-            .then ((response) => {
-                commit('addm', amount)
-                return response
+                .then((response) => {
+                    commit('addm', amount)
+                    return response
+                })
+        },
+        // pay for deposit
+        payd: async ({ state, commit }, deposit) => {
+            return axios.put(`/wallet/deposit/pay`, {
+                id: deposit.id,
+                src_wallet_id: state.wallet.id,
+                amount: deposit.amount,
             })
+                .then((response) => {
+                    commit('subm', deposit.amount)
+                    commit('deleted', deposit)
+                    return response
+                })
         }
     }
 }

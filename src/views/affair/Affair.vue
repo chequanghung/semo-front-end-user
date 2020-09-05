@@ -21,7 +21,7 @@
                   ></div>
                 </div>
                 <div class="column">
-                  <p class='home-section-title' style='margin-bottom: 0'>{{ affair.buyer.name }}</p>
+                  <p class="home-section-title" style="margin-bottom: 0">{{ affair.buyer.name }}</p>
                 </div>
               </div>
             </div>
@@ -36,11 +36,129 @@
       <!-- status, contract entry, chats and functions -->
       <div class="column is-7">
         <div class="tile is-ancestor">
-          <!-- seller to ship -->
+          <!-- SELLER POPS -->
           <div class="tile is-vertical is-parent">
             <div class="tile is-child box">
-              <!-- status -->
-              <p class="home-section-title">📋 Hợp đồng</p>
+              <b-carousel
+                has-drag
+                animated="slide"
+                :autoplay="false"
+                style="overflow: visible !important;"
+              >
+                <!-- highlighting info -->
+                <b-carousel-item style="overflow: visible !important;">
+                  <!-- status -->
+                  <p class="home-section-title">🧾 Thông tin</p>
+                  <!-- buyer deposit -->
+                  <div class="columns is-mobile" v-if="product">
+                    <div class="column">
+                      <p class="sub-title">TIỀN CỌC NGƯỜI MUA</p>
+                    </div>
+                    <div class="column is-narrow">
+                      <p class="title">{{ buyer_deposit }}</p>
+                    </div>
+                  </div>
+                  <!-- transportation -->
+                  <div class="columns is-mobile" v-if="product">
+                    <div class="column">
+                      <p class="sub-title">NGÀY VẬN CHUYỂN</p>
+                    </div>
+                    <div class="column is-narrow">
+                      <p class="title">{{ date_shipment }}</p>
+                    </div>
+                  </div>
+                  <!-- buyer transaction -->
+                  <div class="columns is-mobile" v-if="product">
+                    <div class="column">
+                      <p class="sub-title">NGÀY THANH TOÁN</p>
+                    </div>
+                    <div class="column is-narrow">
+                      <p class="title">{{ date_payment }}</p>
+                    </div>
+                  </div>
+                </b-carousel-item>
+                <!-- buyer deposit popup -->
+                <b-carousel-item
+                  style="overflow: visible !important;"
+                  v-if="user.id === affair.buyer_user_id"
+                >
+                  <!-- status -->
+                  <p
+                    class="home-section-title"
+                    v-if="deposit.user_status === 0"
+                  >🤝 Trả tiền cọc cho giao kèo</p>
+                  <p class="home-section-title" v-else>💚 Tuyệt! Bạn đã hoàn thành tiền cọc rồi!</p>
+                  <br />
+                  <!-- content -->
+                  <div class="columns is-centered" v-if="deposit.user_status === 0">
+                    <div class="column is-narrow">
+                      <p
+                        class="card-title"
+                        style="margin-top: 12px; font-weight: 700;"
+                      >Còn: {{ elapsed }} phút</p>
+                    </div>
+                  </div>
+                  <!-- price -->
+                  <div class="columns is-mobile">
+                    <div class="column">
+                      <p>SỐ TIỀN CỌC</p>
+                      <p class="deposit-content">{{ money }}</p>
+                    </div>
+                    <div class="column is-narrow">
+                      <p>NGÀY THANH TOÁN</p>
+                      <p class="deposit-content">{{ date }}</p>
+                    </div>
+                  </div>
+                  <!-- button -->
+                  <div class="columns is-mobile">
+                    <div class="column">
+                      <p
+                        style="font-weight: 700;"
+                        v-if="deposit.user_status === 1"
+                      >✅ Đã nộp tiền cọc</p>
+                    </div>
+                    <div class="column is-narrow">
+                      <b-button
+                        type="is-warning"
+                        v-if="deposit.user_status === 0"
+                        @click="payDep"
+                      >💵 Thanh toán</b-button>
+                    </div>
+                  </div>
+                </b-carousel-item>
+                <!-- shipment -->
+                <b-carousel-item
+                  style="overflow: visible !important;"
+                  v-if="user.id === contract.shipment_user_id && (contract.contract_status === 1 || contract.contract_status === 3)"
+                >
+                  <!-- status -->
+                  <p class="home-section-title">🚚 Đến ngày vận chuyển</p>
+                  <p>Hãy sẵn sàng đưa xe hàng của bạn tới địa chỉ giao hàng nhé!</p>
+                  <br />
+                  <div class="columns is-mobile">
+                    <div class="column"></div>
+                    <div class="column is-narrow">
+                      <b-button type="is-green" @click="ship">✅ Tôi đã giao hàng!</b-button>
+                    </div>
+                  </div>
+                </b-carousel-item>
+                <!-- payment -->
+                <b-carousel-item
+                  style="overflow: visible !important;"
+                  v-if="user.id === affair.buyer_user_id && (contract.contract_status === 1 || contract.contract_status === 2)"
+                >
+                  <!-- status -->
+                  <p class="home-section-title">💵 Đến ngày thanh toán</p>
+                  <p>Nhớ chuyển tiền cho người bán thật sớm nhé!</p>
+                  <br />
+                  <div class="columns is-mobile">
+                    <div class="column"></div>
+                    <div class="column is-narrow">
+                      <b-button type="is-green" @click="pay">✅ Tôi đã thanh toán!</b-button>
+                    </div>
+                  </div>
+                </b-carousel-item>
+              </b-carousel>
             </div>
           </div>
           <!-- contract -->
@@ -51,10 +169,15 @@
               <p>CHỈNH SỬA CUỐI CÙNG</p>
               <p class="home-section-content">{{ date }}</p>
               <br />
-              <div class="columns is-mobile">
-                <div class="column"></div>
+              <div class="columns is-mobile is-vcentered">
+                <div class="column">
+                  <p v-if="isUpdatePending">⚠️ Có cập nhật</p>
+                </div>
                 <div class="column is-narrow">
-                  <b-button type="is-green" @click="intoContract">👁️ Xem</b-button>
+                  <b-button
+                    :type="isUpdatePending === true ? 'is-warning' : 'is-green'"
+                    @click="intoContract"
+                  >👁️ Xem</b-button>
                 </div>
               </div>
             </div>
@@ -111,6 +234,22 @@
             </div>
           </div>
         </div>
+
+        <!-- function -->
+        <div class="tile is-ancestor" v-if="contract.contract_status === 4">
+          <div class="tile is-vertical is-parent">
+            <div class="tile is-child box">
+              <p class="home-section-title">⚙️ Chức năng</p>
+              <!-- complete affair -->
+              <div class="columns is-mobile">
+                <div class="column"></div>
+                <div class="column is-narrow">
+                  <b-button type="is-green" @click="finish">✅ Hoàn thành giao kèo</b-button>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   </div>
@@ -131,20 +270,92 @@ export default {
     ...mapState({
       affair: (state) => state.affair.affair,
       product: (state) => state.affair.product,
+      contract: (state) => state.affair.contract,
+      update: (state) => state.affair.update,
       chats: (state) => state.affair.chats,
       user: (state) => state.user.user,
     }),
 
+    deposit: function () {
+      return this.affair.Deposit;
+    },
+
+    money: function () {
+      return new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(this.affair.Deposit.amount);
+    },
+    deadline: function () {
+      return Date.parse(this.affair.Deposit.date_created) + 1000 * 60 * 60 * 48;
+    },
+    elapsed: function () {
+      let deadline = moment(this.deadline);
+      let now = moment(new Date());
+      let diff = now.diff(deadline);
+
+      return moment.utc(diff).format("HH giờ mm");
+    },
+    warning: function () {
+      return this.deadline - new Date().getTime() <= 1000 * 60 * 60 * 24
+        ? true
+        : false;
+    },
+    deadlineDate: function () {
+      return moment(this.deadline + 1000 * 60 * 60 * 48).format("DD-MM-YYYY");
+    },
+
     date: function () {
       if (this.affair !== undefined && this.affair.AffairContract !== undefined)
-        return moment(this.affair.AffairContract.date_updated).format(
-          "hh:mm DD/MM/YYYY"
-        );
+        return moment(this.contract.date_updated)
+          .tz("Asia/Ho_Chi_Minh")
+          .format("HH:mm DD/MM/YYYY");
       else return null;
+    },
+
+    buyer_deposit: function () {
+      return this.deposit.user_status === 0
+        ? "Chưa hoàn thành"
+        : "Đã hoàn thành";
+    },
+
+    date_shipment: function () {
+      return this.contract.shipment_date !== null
+        ? this.contract.contract_status === 2 ||
+          (this.contract.contract_status === 4 &&
+            this.contract.contract_status !== 9)
+          ? "Hoàn thành"
+          : moment(this.contract.shipment_date)
+              .tz("Asia/Ho_Chi_Minh")
+              .format("DD-MM-YYYY")
+        : "Chưa thỏa thuận";
+    },
+
+    date_payment: function () {
+      return this.contract.payment_date !== null
+        ? this.contract.contract_status === 3 ||
+          (this.contract.contract_status === 4 &&
+            this.contract.contract_status !== 9)
+          ? "Hoàn thành"
+          : moment(this.contract.payment_date)
+              .tz("Asia/Ho_Chi_Minh")
+              .format("DD-MM-YYYY")
+        : "Chưa thỏa thuận";
     },
 
     isDisabled: function () {
       return this.message.length === 0 ? true : false;
+    },
+
+    isUpdatePending: function () {
+      if (
+        Object.keys(this.update).length > 0 &&
+        this.contract.date_updated < this.update.date_updated
+      ) {
+        return true;
+      } else {
+        return false;
+      }
     },
   },
   data() {
@@ -156,7 +367,8 @@ export default {
     };
   },
   methods: {
-    ...mapActions("affair", ["populate", "getcs", "addcs", "close"]),
+    ...mapActions("affair", ["populate", "getcs", "addcs", "close", "changec"]),
+    ...mapActions("wallet", ["payd"]),
 
     intoContract() {
       clearInterval(this.interval);
@@ -191,6 +403,69 @@ export default {
       this.close();
       this.$router.go(-1);
     },
+    // ship
+    ship() {
+      this.changec({
+        id: this.contract.id,
+        status: "SHIP",
+      })
+        .then(() => {
+          this.$buefy.toast.open({
+            type: "is-success",
+            message: "Tuyệt! 😍",
+          });
+        })
+        .catch((error) => {
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message: `${error.data.message}`,
+          });
+        });
+    },
+    // pay
+    pay() {
+      this.changec({
+        id: this.contract.id,
+        status: "PAY",
+      })
+        .then(() => {
+          this.$buefy.toast.open({
+            type: "is-success",
+            message: "Tuyệt! 😍",
+          });
+        })
+        .catch((error) => {
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message: `${error.data.message}`,
+          });
+        });
+    },
+    // pay deposit
+    payDep() {
+      this.payd({
+        id: this.affair.Deposit.id,
+        amount: this.affair.Deposit.amount,
+      })
+        .then((response) => {
+          this.$buefy.toast.open({
+            type: "is-success",
+            message: `${response.data.message}`,
+          });
+
+          this.deposit.user_status = 1;
+        })
+        .catch((error) => {
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message: `${error.message}`,
+          });
+        });
+    },
+    // finish
+    finish() {
+      
+    }
   },
   async mounted() {
     // console.log(this.affair);
@@ -253,5 +528,33 @@ export default {
 .you {
   color: white;
   background-color: #01d28e;
+}
+
+.title {
+  font-family: "Roboto";
+  color: #01d28e;
+  font-weight: 700;
+  font-size: 18px;
+}
+
+.sub-title {
+  font-family: "Roboto";
+  color: #707070;
+  font-weight: 500;
+}
+
+.deposit-section-title {
+  color: #b88cd8;
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.not {
+  color: #07d390;
+}
+
+.deposit-content {
+  font-weight: 900;
+  font-size: 24px;
 }
 </style>

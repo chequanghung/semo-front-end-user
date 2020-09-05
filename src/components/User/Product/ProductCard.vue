@@ -147,7 +147,7 @@ export default {
     createAuction() {
       this.$emit("create", {
         product: this.item,
-        date: moment(this.date).format("YYYY-MM-DD HH:mm:ss"),
+        date: moment(this.date.toUTCString()).format("YYYY-MM-DD HH:mm:ss"),
       });
     },
     intoAuction() {

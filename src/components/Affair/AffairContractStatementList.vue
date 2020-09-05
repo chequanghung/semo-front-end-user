@@ -333,7 +333,7 @@ export default {
         });
     },
     changeShipDate(date) {
-      this.shipment_date = moment(date).format("YYYY-MM-DD");
+      this.shipment_date = moment(date).tz('Asia/Ho_Chi_Minh').format("YYYY-MM-DD");
       this.bindChange();
     },
     changeShipmentLateFee(content) {
@@ -345,7 +345,7 @@ export default {
       this.bindChange();
     },
     changePaymentDate(date) {
-      this.payment_date = moment(date).format("YYYY-MM-DD");
+      this.payment_date = moment(date).tz('Asia/Ho_Chi_Minh').format("YYYY-MM-DD");
       this.bindChange();
     },
     changePreservativeAmount(percent) {
@@ -404,12 +404,12 @@ export default {
           this.shipment_user === object.shipment_user) &&
         ((this.shipment_date !== null &&
           this.shipment_date ===
-            moment(object.shipment_date).format("YYYY-MM-DD")) ||
+            moment(object.shipment_date).tz('Asia/Ho_Chi_Minh').format("YYYY-MM-DD")) ||
           this.shipment_date === object.shipment_date) &&
         this.shipment_late_fee === object.shipment_late_fee &&
         ((this.payment_date !== null &&
           this.payment_date ===
-            moment(object.payment_date).format("YYYY-MM-DD")) ||
+            moment(object.payment_date).tz('Asia/Ho_Chi_Minh').format("YYYY-MM-DD")) ||
           this.payment_date === object.shipment_date) &&
         this.payment_late_fee === object.payment_late_fee &&
         this.preservative_amount === object.preservative_amount
@@ -420,7 +420,7 @@ export default {
       }
     },
     formatDate(date) {
-      return date !== null ? moment(date).format("YYYY-MM-DD") : null
+      return date !== null ? moment(date).tz('Asia/Ho_Chi_Minh').format("YYYY-MM-DD") : null
     },
   },
   // async mounted() {},
