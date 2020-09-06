@@ -22,6 +22,10 @@ export default {
         },
         geta: (state, auctions) => {
             state.auctions = auctions
+        },
+        clear: (state) => {
+            state.fruit = {}
+            state.auctions = []
         }
     },
 
@@ -38,6 +42,9 @@ export default {
             .then(({ data }) => {
                 commit('geta', data)
             })
+        },
+        clear: ({ commit }) => {
+            commit('clear')
         }
     }
 }

@@ -10,6 +10,9 @@
       <router-view :key="$route.fullPath" />
     </transition>
 
+    <br/>
+    <br/>
+    
     <!-- footer -->
     <div class="columns footer" v-if="!isFullpage">
       <div class="container">

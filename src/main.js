@@ -19,7 +19,7 @@ import moment from 'moment-timezone'
 moment.tz.setDefault('America/Scoresbysund')
 
 Vue.use(VueAxios, axios)
-axios.defaults.baseURL = "http://localhost:3003/"
+axios.defaults.baseURL = "https://project-zero-on-air.herokuapp.com/"
 
 Vue.config.productionTip = false
 

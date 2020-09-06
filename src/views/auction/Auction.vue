@@ -1,5 +1,6 @@
 <template>
   <div class="container">
+    <b-loading v-model="isLoadingPage" is-full-page></b-loading>
     <br />
     <div
       class="notification is-light"
@@ -448,6 +449,7 @@ export default {
   props: ["id"],
   async mounted() {
     // set
+    this.isLoadingPage = true
     this.refreshData();
 
     this.interval = setInterval(
@@ -469,10 +471,14 @@ export default {
       this.isComponentModalActive = false;
     },
     async refreshData() {
-      axios.put(`/auction/view/${this.id}`).then(() => {
+      axios.put(`/auction/view/${this.id}`)
+      .then(() => {
         this.getAuctionInfo();
         this.getAuctionBids();
         this.getAuctionSimilar();
+      })
+      .finally(() => {
+        this.isLoadingPage = false
       });
     },
     getAuctionInfo() {
@@ -709,6 +715,7 @@ export default {
       isFirstModal: false,
       isBiddingModal: false,
       isSuccessModal: false,
+      isLoadingPage: false,
       amount: "",
       // error
       error: false,

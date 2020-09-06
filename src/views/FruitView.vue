@@ -1,5 +1,6 @@
 <template>
   <div class="home">
+    <b-loading v-model="isLoading"></b-loading>
     <div class="welcome">
       <div
         class="is-64x64"
@@ -25,6 +26,9 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   props: ["id"],
+  beforeDestroy() {
+    this.clear()
+  },
   components: {
     AuctionGridList: () => import("@/components/Auction/AuctionGridList"),
   },
@@ -43,10 +47,11 @@ export default {
   data() {
     return {
       index: 0,
+      isLoading: true,
     };
   },
   methods: {
-    ...mapActions("fruit", ["getf", "geta"]),
+    ...mapActions("fruit", ["getf", "geta", "clear"]),
     prev() {
       --this.index;
       window.scrollTo(0, 0);
@@ -60,6 +65,13 @@ export default {
     this.getf(this.id);
     this.geta(this.id);
   },
+  watch: {
+    auctions: function() {
+      if (this.auctions !== undefined) {
+        this.isLoading = false
+      }
+    }
+  }
 };
 </script>
 
