@@ -215,7 +215,7 @@
               </div>
               <!-- input -->
               <br />
-              <form @submit.prevent="sendMsg">
+              <form @submit.prevent="sendMsg" v-if="contract.contract_status !== 5">
                 <div class="columns is-mobile is-vcentered">
                   <div class="column">
                     <b-input v-model="message" placeholder="Nhắn cho đối tác của bạn gì đó ..."></b-input>
@@ -250,8 +250,28 @@
             </div>
           </div>
         </div>
+
+        <div class="tile is-ancestor" v-if="contract.contract_status === 5">
+          <div class="tile is-vertical is-parent">
+            <div class="tile is-child box">
+              <p class="home-section-title" style="margin: 0; text-align: center;">🎉 Giao kèo đã hoàn thành!</p>
+            </div>
+          </div>
+        </div>
+
       </div>
     </div>
+
+    <b-modal
+      :active.sync="isPay"
+      trap-focus
+      aria-role="dialog"
+      aria-modal
+      destroy-on-hide
+      style="width: auto;"
+    >
+      <AffairTransactionModal style="margin: auto;" @close="payDone"></AffairTransactionModal>
+    </b-modal>
   </div>
 </template>
 
@@ -265,6 +285,8 @@ export default {
   },
   components: {
     AffairProductCard: () => import("@/components/Affair/AffairProductCard"),
+    AffairTransactionModal: () =>
+      import("@/components/Affair/AffairTransactionModal"),
   },
   computed: {
     ...mapState({
@@ -363,11 +385,19 @@ export default {
       message: "",
       affair_chats: [],
       interval: null,
+      isPay: false,
       // isDisabled: true
     };
   },
   methods: {
-    ...mapActions("affair", ["populate", "getcs", "addcs", "close", "changec"]),
+    ...mapActions("affair", [
+      "populate",
+      "getcs",
+      "addcs",
+      "close",
+      "changec",
+      "completea",
+    ]),
     ...mapActions("wallet", ["payd"]),
 
     intoContract() {
@@ -424,22 +454,10 @@ export default {
     },
     // pay
     pay() {
-      this.changec({
-        id: this.contract.id,
-        status: "PAY",
-      })
-        .then(() => {
-          this.$buefy.toast.open({
-            type: "is-success",
-            message: "Tuyệt! 😍",
-          });
-        })
-        .catch((error) => {
-          this.$buefy.toast.open({
-            type: "is-danger",
-            message: `${error.data.message}`,
-          });
-        });
+      this.isPay = true;
+    },
+    payDone() {
+      this.isPay = false;
     },
     // pay deposit
     payDep() {
@@ -464,8 +482,14 @@ export default {
     },
     // finish
     finish() {
-      
-    }
+      this.completea()
+      .then(() => {
+        this.$buefy.toast.open({
+          type: 'is-success',
+          message: 'Chúc mừng bạn đã hoàn thành giao kèo! 😍'
+        })
+      })
+    },
   },
   async mounted() {
     // console.log(this.affair);

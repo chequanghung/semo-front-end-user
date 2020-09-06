@@ -67,9 +67,8 @@ export default {
         return {
           ...item,
           date_created: moment(item.date_created).format("hh:mm DD-MM-YYYY"),
-          amount: new Intl.NumberFormat("vi-VN", {
+          amount: new Intl.NumberFormat({
             style: "currency",
-            currency: "VND",
           }).format(item.amount),
         };
       });

@@ -37,7 +37,7 @@
         </div>
       </div>
     </div>
-    <div class="tile is-child box is-narrow">
+    <div class="tile is-child box is-narrow" v-if="contract.contract_status < 2">
       <div class="columns is-mobile is-vcentered">
         <div class="column">
           <p style="font-size: 18px; font-weight: 900; color: #b88cd8">⚙️ Chức năng</p>
@@ -81,8 +81,12 @@ export default {
       }
       // if there is update
       else {
+        // contract is out of modification time
+        if (this.contract.contract_status > 1) {
+          return "LOCKED";
+        }
         // if there is a later update
-        if (this.contract.date_updated < this.update.date_updated) {
+        else if (this.contract.date_updated < this.update.date_updated) {
           // if the update is yours
           if (this.update.change_user_id === this.user.id) {
             return "PENDING";

@@ -34,17 +34,15 @@
         <div class="tile is-child box">
           <p class="home-section-title">🧾 Cần thanh toán</p>
           <br />
-          <div class="tile is-ancestor" v-for="(depo, i) in deps.slice(index * 3, (index + 1) * 3)" :key="i">
-            <div class="tile is-parent">
+          <div class="tile is-parent" v-for="(depo, i) in deps.slice(index * 3, (index + 1) * 3)" :key="i">
               <DepositCard :deposit="depo"></DepositCard>
-            </div>
           </div>
           <div class="columns is-mobile is-vcentered is-centered">
             <div class="column">
               <b-button v-if="index > 0" @click="back" expanded>👈 Trang trước</b-button>
             </div>
             <div class="column">
-              <b-button v-if="index < totalPages - 1" @click="next" expanded>Trang sau 👉</b-button>
+              <b-button v-if="index < totalPages - 1 && totalPages > 1" @click="next" expanded>Trang sau 👉</b-button>
             </div>
           </div>
         </div>

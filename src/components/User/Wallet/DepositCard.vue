@@ -1,6 +1,7 @@
 <template>
   <div
     class="tile notification is-child is-light"
+    style="padding-right: 24px;"
     :class="{'is-primary': deposit.user_status === 0 && warning === false, 'is-success': deposit.user_status === 1, 'is-danger': deposit.user_status === 0 && warning === true}"
   >
     <!-- title -->
@@ -50,7 +51,7 @@
       <div class="column">
         <p style="font-weight: 700;" v-if="deposit.user_status === 1">✅ Đã nộp tiền cọc</p>
       </div>
-      <div class="column">
+      <div class="column is-narrow">
         <b-button type="is-warning" v-if="deposit.user_status === 0" @click="pay">💵 Thanh toán</b-button>
       </div>
     </div>

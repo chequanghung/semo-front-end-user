@@ -1,3 +1,4 @@
+/* eslint-disable */
 import axios from "axios"
 
 export default {
@@ -37,6 +38,10 @@ export default {
         // change contract status
         changec: (state, status) => {
             state.contract.contract_status = status
+        },
+        // change affair status
+        changea: (state, status) => {
+            state.affair.affair_status = status
         },
         // add chat
         addcs: (state, dialogues) => {
@@ -125,6 +130,10 @@ export default {
                     commit('getu', contract)
                 })
         },
+        // pay for contract
+        payc: async ({ commit }, data) => {
+            return axios.post(`/affair/transact`, data)
+        },
         // change status of contract
         changec: async ({ commit }, status) => {
             return axios.put(`/affair/contract/status`, {
@@ -144,11 +153,20 @@ export default {
                 commit('clearu')
             })
         },
+        // complete affair
+        completea: async ({ state, commit }) => {
+            return axios.put('/affair/complete', {
+                id: state.affair.id
+            })
+            .then(() => {
+                commit('changea', 2)
+                commit('changec', 5)
+            })
+        },
         // delete affair
         deletea: async ({ dispatch }, contract) => {
             return axios.put(`/affair/cancel`, {
                 id: contract.affair_id,
-                affair_status: 9
             })
             .then(() => {
                 dispatch('clear')

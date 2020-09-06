@@ -1,6 +1,21 @@
 <template>
   <div class="container">
     <br />
+    <div
+      class="notification is-light"
+      v-if="userInfo.id === user.id"
+      :class="{'is-primary': deposit.user_status === 0, 'is-success': deposit.user_status === 1}"
+    >
+      <!-- title -->
+      <p
+        class="deposit-section-title"
+        v-if="deposit.notes === 'Tien coc cho dau gia' && deposit.user_status === 0"
+      >⛏️ Trả tiền cọc cho đấu giá</p>
+      <p
+        class="deposit-section-title"
+        v-if="deposit.notes === 'Tien coc cho dau gia' && deposit.user_status === 1"
+      >🤗 Cảm ơn bạn! Đấu giá sẽ được tiếp diễn.</p>
+    </div>
     <!-- title -->
     <div class="columns is-variable is-3 is-vcentered">
       <!-- product title -->
@@ -451,6 +466,9 @@ export default {
 
         // media config
         this.media = this.auction.ProductMedia;
+
+        // deposit
+        this.deposit = this.auction.Auctions[0].Deposit;
       });
     },
     getAuctionBids() {
@@ -478,7 +496,7 @@ export default {
           axios
             .get(`/auction_bid/countBid/${this.userInfo.id}`)
             .then(({ data }) => {
-              this.userInfo.bids = data.times
+              this.userInfo.bids = data.times;
 
               if (data.times === 0) {
                 this.isFirstModal = true;
@@ -486,14 +504,16 @@ export default {
                 this.isBiddingModal = true;
               }
             })
-            .catch(error => {
+            .catch((error) => {
               this.$buefy.toast.open({
-                type: 'is-danger',
-                message: `Hình như có gì đó sai sai. Mã lỗi: ${error.response.data} 😖`
-              })
-            })
+                type: "is-danger",
+                message: `Hình như có gì đó sai sai. Mã lỗi: ${error.response.data} 😖`,
+              });
+            });
         } else {
-          this.userInfo.bids === 0 ? this.isFirstModal = true : this.isBiddingModal = true;
+          this.userInfo.bids === 0
+            ? (this.isFirstModal = true)
+            : (this.isBiddingModal = true);
         }
       } else {
         this.$router.push({ path: "/login" });
@@ -515,7 +535,7 @@ export default {
           this.isBiddingModal = false;
           this.amount = "";
 
-          this.userInfo.bids++
+          this.userInfo.bids++;
           //
           this.isBiddingModal = false;
           this.isSuccessModal = true;
@@ -653,6 +673,8 @@ export default {
       bids: [],
       // similar products
       similar: [],
+      // deposit
+      deposit: {},
     };
   },
 };

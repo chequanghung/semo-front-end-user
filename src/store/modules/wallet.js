@@ -87,6 +87,6 @@ export default {
                     commit('deleted', deposit)
                     return response
                 })
-        }
+        },
     }
 }
