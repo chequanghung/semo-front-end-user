@@ -24,7 +24,7 @@
 
     <!-- content -->
     <div class="columns is-vcentered">
-      <div class="column">
+      <div class="column is-7">
         <p
           class="card-title"
           style="margin-top: 12px; font-weight: 700; wprd-break: break-word;"

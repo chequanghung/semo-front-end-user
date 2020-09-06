@@ -14,13 +14,16 @@
             <div class="tile is-child box">
               <p class="home-section-title">🛒 Người mua</p>
               <div class="columns is-mobile is-vcentered">
-                <div class="column is-narrow" v-if="affair !== undefined">
+                <div
+                  class="column is-narrow"
+                  v-if="affair !== undefined && affair.buyer !== undefined"
+                >
                   <div
                     :style="{backgroundImage: 'url(' + affair.buyer.img_url + ')'}"
                     style="border-radius: 50%; width: 48px; height: 48px; background-size: cover; background-position: center"
                   ></div>
                 </div>
-                <div class="column">
+                <div class="column" v-if="affair !== undefined && affair.buyer !== undefined">
                   <p class="home-section-title" style="margin-bottom: 0">{{ affair.buyer.name }}</p>
                 </div>
               </div>
@@ -85,12 +88,15 @@
                   <!-- status -->
                   <p
                     class="home-section-title"
-                    v-if="deposit.user_status === 0"
+                    v-if="deposit !== undefined && deposit.user_status === 0"
                   >🤝 Trả tiền cọc cho giao kèo</p>
                   <p class="home-section-title" v-else>💚 Tuyệt! Bạn đã hoàn thành tiền cọc rồi!</p>
                   <br />
                   <!-- content -->
-                  <div class="columns is-centered" v-if="deposit.user_status === 0">
+                  <div
+                    class="columns is-centered"
+                    v-if="deposit !== undefined && deposit.user_status === 0"
+                  >
                     <div class="column is-narrow">
                       <p
                         class="card-title"
@@ -114,13 +120,13 @@
                     <div class="column">
                       <p
                         style="font-weight: 700;"
-                        v-if="deposit.user_status === 1"
+                        v-if="deposit !== undefined && deposit.user_status === 1"
                       >✅ Đã nộp tiền cọc</p>
                     </div>
                     <div class="column is-narrow">
                       <b-button
                         type="is-warning"
-                        v-if="deposit.user_status === 0"
+                        v-if="deposit !== undefined && deposit.user_status === 0"
                         @click="payDep"
                       >💵 Thanh toán</b-button>
                     </div>
@@ -254,11 +260,13 @@
         <div class="tile is-ancestor" v-if="contract.contract_status === 5">
           <div class="tile is-vertical is-parent">
             <div class="tile is-child box">
-              <p class="home-section-title" style="margin: 0; text-align: center;">🎉 Giao kèo đã hoàn thành!</p>
+              <p
+                class="home-section-title"
+                style="margin: 0; text-align: center;"
+              >🎉 Giao kèo đã hoàn thành!</p>
             </div>
           </div>
         </div>
-
       </div>
     </div>
 
@@ -336,9 +344,13 @@ export default {
     },
 
     buyer_deposit: function () {
-      return this.deposit.user_status === 0
-        ? "Chưa hoàn thành"
-        : "Đã hoàn thành";
+      if (this.deposit !== undefined) {
+        return this.deposit.user_status === 0
+          ? "Chưa hoàn thành"
+          : "Đã hoàn thành";
+      } else {
+        return "Chưa hoàn thành"
+      }
     },
 
     date_shipment: function () {
@@ -482,13 +494,12 @@ export default {
     },
     // finish
     finish() {
-      this.completea()
-      .then(() => {
+      this.completea().then(() => {
         this.$buefy.toast.open({
-          type: 'is-success',
-          message: 'Chúc mừng bạn đã hoàn thành giao kèo! 😍'
-        })
-      })
+          type: "is-success",
+          message: "Chúc mừng bạn đã hoàn thành giao kèo! 😍",
+        });
+      });
     },
   },
   async mounted() {

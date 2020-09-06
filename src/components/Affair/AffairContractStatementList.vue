@@ -5,6 +5,8 @@
     </b-notification>
     <!-- transportation -->
     <p class="section-title">VẬN CHUYỂN</p>
+    {{ shipment_user === null }}
+    {{ update.shipment_user === null }}
     <!-- transportation responsibilities -->
     <ContractStatement
       title="Bên vận chuyển"
@@ -15,7 +17,7 @@
       @changeUser="changeShipmentUser"
     ></ContractStatement>
     <!-- update request of transportation responsibilities | done -->
-    <div class="change" v-if="updateMode === 'MERGE' && ((shipment_user === null && update.shipment_user !== null) || shipment_user.id !== update.shipment_user_id)">
+    <div class="change" v-if="updateMode === 'MERGE' && ((shipment_user === null && update.shipment_user !== null) || (shipment_user !== null && shipment_user.id !== update.shipment_user_id)) && update.shipmemt_user !== null">
       <div
         class="tile notification is-warning is-light"
         style="display: flex; justify-content: center; flex-flow: column;"
@@ -357,9 +359,12 @@ export default {
       this.bindChange();
     },
     refuseShipmentUser() {
-      this.update.shipment_user = this.shipment_user;
-      this.update.shipment_user_id =
-        this.shipment_user !== null ? this.shipment_user.id : null;
+      this.update.shipment_user = this.shipment_user !== null ? this.shipment_user : null;
+      if (this.shipment_user === null) {
+        this.update.shipment_user_id = null
+      } else {
+        this.update.shipment_user_id = this.shipment_user.id
+      }
     },
     async setAtr() {
       // price of the contract

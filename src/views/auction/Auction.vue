@@ -5,6 +5,7 @@
       class="notification is-light"
       v-if="userInfo.id === user.id"
       :class="{'is-primary': deposit.user_status === 0, 'is-success': deposit.user_status === 1}"
+      style="padding-right: 24px;"
     >
       <!-- title -->
       <p
@@ -15,6 +16,33 @@
         class="deposit-section-title"
         v-if="deposit.notes === 'Tien coc cho dau gia' && deposit.user_status === 1"
       >🤗 Cảm ơn bạn! Đấu giá sẽ được tiếp diễn.</p>
+
+      <!-- content -->
+      <div class="columns is-vcentered">
+        <div class="column is-5">
+          <p class="card-title" style="margin-top: 12px; font-weight: 700;">Còn: {{ elapsed }} phút</p>
+        </div>
+      </div>
+      <!-- price -->
+      <div class="columns is-mobile">
+        <div class="column">
+          <p>SỐ TIỀN CỌC</p>
+          <p class="deposit-content">{{ money }}</p>
+        </div>
+        <div class="column">
+          <p>NGÀY THANH TOÁN</p>
+          <p class="deposit-content">{{ date }}</p>
+        </div>
+      </div>
+      <!-- button -->
+      <div class="columns is-mobile">
+        <div class="column">
+          <p style="font-weight: 700;" v-if="deposit.user_status === 1">✅ Đã nộp tiền cọc</p>
+        </div>
+        <div class="column is-narrow">
+          <b-button type="is-warning" v-if="deposit.user_status === 0" @click="pay">💵 Thanh toán</b-button>
+        </div>
+      </div>
     </div>
     <!-- title -->
     <div class="columns is-variable is-3 is-vcentered">
@@ -408,7 +436,7 @@
 <script>
 import axios from "axios";
 import moment from "moment";
-import { mapState } from "vuex";
+import { mapState, mapActions } from "vuex";
 
 export default {
   components: {
@@ -433,6 +461,7 @@ export default {
     clearInterval(this.interval);
   },
   methods: {
+    ...mapActions ('wallet', ['payd']),
     getImgUrl(value) {
       return `https://picsum.photos/id/43${value}/1230/500`;
     },
@@ -567,6 +596,24 @@ export default {
         // this.index++;
       }
     },
+    pay() {
+      this.payd({
+        id: this.deposit.id,
+        amount: this.deposit.amount,
+      })
+        .then((response) => {
+          this.$buefy.toast.open({
+            type: "is-success",
+            message: `${response.data.message}`,
+          });
+        })
+        .catch((error) => {
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message: `${error.message}`,
+          });
+        });
+    },
     format_date(value) {
       return moment(String(value)).format("DD/MM/YYYY, HH:MM:SS");
     },
@@ -583,6 +630,32 @@ export default {
       userInfo: (state) => state.user.user,
       wallet: (state) => state.wallet.wallet,
     }),
+
+    money: function () {
+      return new Intl.NumberFormat("vi-VN", {
+        style: "currency",
+        currency: "VND",
+      }).format(this.deposit.amount);
+    },
+
+    deadline: function () {
+      return Date.parse(this.deposit.date_created) + 1000 * 60 * 60 * 48;
+    },
+    elapsed: function () {
+      let deadline = moment(this.deadline);
+      let now = moment(new Date());
+      let diff = now.diff(deadline);
+
+      return moment.utc(diff).format("HH giờ mm");
+    },
+    warning: function () {
+      return this.deadline - new Date().getTime() <= 1000 * 60 * 60 * 24
+        ? true
+        : false;
+    },
+    date: function () {
+      return moment(this.deadline + 1000 * 60 * 60 * 48).format("DD-MM-YYYY");
+    },
 
     balance: function () {
       return new Intl.NumberFormat("vi-VN", {
@@ -705,6 +778,21 @@ export default {
 .carousel {
   height: 100%;
   width: 100%;
+}
+
+.deposit-section-title {
+  color: #b88cd8;
+  font-weight: 900;
+  font-size: 18px;
+}
+
+.not {
+  color: #07d390;
+}
+
+.deposit-content {
+  font-weight: 900;
+  font-size: 24px;
 }
 
 /* .cell-title {
