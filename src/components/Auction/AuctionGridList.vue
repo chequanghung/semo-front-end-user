@@ -30,18 +30,18 @@
 <script>
 export default {
   name: "AuctionGridList",
-  props: ["auctions", 'index', 'totalPage'],
+  props: ["auctions", "index", "totalPage"],
   components: {
     AuctionCard: () => import("@/components/Auction/AuctionCard"),
   },
   methods: {
-      prev() {
-        this.$emit('prev', this.index)
-      },
-      next() {
-        this.$emit('next', this.index)
-      }
-  }
+    prev() {
+      this.$emit("prev", this.index);
+    },
+    next() {
+      this.$emit("next", this.index);
+    },
+  },
 };
 </script>
 

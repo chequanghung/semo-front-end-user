@@ -3,9 +3,9 @@
   <div class="card-container tile is-child box">
     <!-- fruit -->
     <div
-      class="cursor columns is-vcentered"
+      class="cursor columns is-vcentered is-mobile"
       v-if="product.Fruit !== undefined"
-      @click="$router.push({ name: 'FruitView', params: { id: product.Fruit.id } })"
+      @click="$router.push({ name: 'UserView', params: { id: product.Fruit.id } })"
     >
       <div class="column is-narrow" style="margin: 0">
         <div

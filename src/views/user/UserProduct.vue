@@ -23,6 +23,19 @@
             </div>
           </div>
 
+          <!-- 404 -->
+          <div class="container" v-if="product_list.length === 0">
+            <div class="columns is-centered">
+              <div class="column is-narrow">
+                <p style="font-size: 70px; text-align: center;">🤷‍♂️</p>
+                <br />
+                <p
+                  style="font-size: 20px; text-align: center;"
+                >Úi, ở đây chưa có gì cả.</p>
+              </div>
+            </div>
+          </div>
+
           <!-- products -->
           <div>
             <transition-group name="enlist" class="columns is-variable is-2 is-multiline">
@@ -70,14 +83,17 @@ export default {
     index: function () {
       this.populate();
     },
-    keyword: function() {
-      this.keyword !== '' ?
-      this.product_list = this.product_list.filter(item => item.title.toLowerCase().indexOf(this.keyword.toLowerCase()) >= 0)
-      : this.product_list = this.products
+    keyword: function () {
+      this.keyword !== ""
+        ? (this.product_list = this.product_list.filter(
+            (item) =>
+              item.title.toLowerCase().indexOf(this.keyword.toLowerCase()) >= 0
+          ))
+        : (this.product_list = this.products);
     },
-    products: function() {
-      this.product_list = this.products
-    }
+    products: function () {
+      this.product_list = this.products;
+    },
   },
   async mounted() {
     this.populate();
@@ -136,7 +152,7 @@ export default {
       // product
       product_list: [],
       // search
-      keyword: ''
+      keyword: "",
     };
   },
   methods: {
@@ -152,10 +168,9 @@ export default {
       this.index = index;
     },
     populate() {
-      this.gets(this.index)
-      .then(() => {
-        this.keyword = ''
-        this.product_list = this.products
+      this.gets(this.index).then(() => {
+        this.keyword = "";
+        this.product_list = this.products;
       });
     },
     // for product
@@ -202,14 +217,14 @@ export default {
                 position: "is-top",
               });
 
-              this.populate()
+              this.populate();
             })
             .catch((error) => {
-              let prompt = error.response.data.message
+              let prompt = error.response.data.message;
 
-              if (prompt.startsWith('Unknown column')) {
-                prompt = prompt.substr(prompt.indexOf(`'`) + 1)
-                prompt = prompt.substr(0, prompt.indexOf(`'`) - 1)
+              if (prompt.startsWith("Unknown column")) {
+                prompt = prompt.substr(prompt.indexOf(`'`) + 1);
+                prompt = prompt.substr(0, prompt.indexOf(`'`) - 1);
               }
               this.$buefy.toast.open({
                 message: `${prompt} 😪`,
@@ -219,17 +234,17 @@ export default {
             });
         })
         .catch((error) => {
-          let prompt = error.response.data.message
-              
-              if (prompt.startsWith('Unknown column')) {
-                prompt = prompt.substr(prompt.indexOf(`'`) + 1)
-                prompt = prompt.substr(0, prompt.indexOf(`'`) - 1)
-              }
-              this.$buefy.toast.open({
-                message: `${prompt} 😪`,
-                type: "is-danger",
-                position: "is-top",
-              });
+          let prompt = error.response.data.message;
+
+          if (prompt.startsWith("Unknown column")) {
+            prompt = prompt.substr(prompt.indexOf(`'`) + 1);
+            prompt = prompt.substr(0, prompt.indexOf(`'`) - 1);
+          }
+          this.$buefy.toast.open({
+            message: `${prompt} 😪`,
+            type: "is-danger",
+            position: "is-top",
+          });
         });
     },
     intoAuction(item) {

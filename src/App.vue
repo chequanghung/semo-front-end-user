@@ -14,12 +14,51 @@
     <div class="columns footer" v-if="!isFullpage">
       <div class="container">
         <div class="columns">
-          <div class="column">Thông tin</div>
-          <div class="column">Hỏi đáp</div>
-          <div class="column">Theo dõi</div>
+          <div class="column">
+            <p><strong>THÔNG TIN</strong></p>
+            <br/>
+            <p class="footer-link" @click="isInstruction = true">Hướng dẫn đấu giá</p>
+            <br/>
+            <p class="footer-link" @click="isPolicyAuction = true">Nguyên tắc đấu giá</p>
+            <br/>
+            <p class="footer-link" @click="$router.push({ path: '/policy/affair' })">Nguyên tắc giao kèo</p>
+          </div>
+          <hr />
+          <div class="column">
+            <p><strong>LIÊN HỆ</strong></p>
+            <br/>
+            <p><strong>The SEMO Company</strong></p>
+            <p>KM29, Khu Công nghệ cao Hòa Lạc</p>
+            <p>Thạch Hòa, Thạch Thất</p>
+            <p>Hà Nội</p>
+            <br/>
+            <p>📧 thacmac@semo.vn</p>
+            <p>📞 024 315 678 90</p>
+          </div>
         </div>
       </div>
     </div>
+
+    
+  <b-modal
+    :active.sync="isInstruction"
+    trap-focus
+    :destroy-on-hide="false"
+    aria-role="dialog"
+    aria-modal
+  >
+  <InstructionModal @close="isInstruction = false"></InstructionModal>
+  </b-modal>
+
+  <b-modal
+    :active.sync="isPolicyAuction"
+    trap-focus
+    :destroy-on-hide="false"
+    aria-role="dialog"
+    aria-modal
+  >
+    <PolicyAuctionModal></PolicyAuctionModal>
+  </b-modal>
   </div>
 </template>
 
@@ -32,6 +71,8 @@ export default {
   components: {
     PageTitle: () => import("@/components/PageTitle"),
     PageSubtitle: () => import("@/components/PageSubtitle"),
+    InstructionModal: () => import('@/components/InstructionModal'),
+    PolicyAuctionModal: () => import('@/components/PolicyAuctionModal')
   },
   watch: {
     $route: function (to, from) {
@@ -54,13 +95,11 @@ export default {
           title: "🍑 Loại quả",
           url: "/fruit",
         },
-        {
-          title: "📘 Bộ sưu tập",
-          url: "/collection",
-        },
       ],
       isSubBar: true,
       isFullpage: false,
+      isInstruction: false,
+      isPolicyAuction: false,
     };
   },
   computed: {
@@ -176,7 +215,16 @@ a {
 }
 
 .footer {
-  background-color: #fefefe;
+  background-color: #f2f2f2 !important;
+}
+
+.footer-link {
+  cursor: pointer;
+  transition: .25s;
+}
+
+.footer-link:hover {
+  color: #01d28e;
 }
 
 /* // scrollbar */

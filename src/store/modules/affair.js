@@ -11,7 +11,7 @@ export default {
         contract: {},
         // chats: new Set(),
         chats: [],
-        update: {}
+        update: {},
     },
 
 
@@ -20,7 +20,7 @@ export default {
         product: state => state.product,
         contract: state => state.contract,
         chats: state => state.chats,
-        update: state => state.update
+        update: state => state.update,
     },
 
 
@@ -172,6 +172,10 @@ export default {
                 dispatch('clear')
                 dispatch('close')
             })
+        },
+        // feedback
+        createf: async ({ commit }, feedback) => {
+            return axios.post(`/user/feedback`, feedback)
         },
         clear: ({ commit }) => {
             commit('clear')

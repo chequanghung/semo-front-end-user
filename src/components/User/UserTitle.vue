@@ -11,11 +11,11 @@
           </div>
           <div class="column is-narrow">
             <p class="title">{{ user.name }}</p>
-            <p class="subtitle" v-if="address !== undefined">{{ address[0].province }}</p>
+            <p class="subtitle">{{ province }}</p>
           </div>
         </div>
       </div>
-      <hr/>
+      <hr />
       <div class="column">
         <div class="columns is-vcentered is-centered is-mobile">
           <div class="column is-narrow">
@@ -23,12 +23,8 @@
             <p class="section-content">★ {{ user.rate }}</p>
           </div>
           <div class="column is-narrow">
-            <p class="section-title">SẢN LƯỢNG</p>
-            <p class="section-content">{{ user.rate }}</p>
-          </div>
-          <div class="column is-narrow">
             <p class="section-title">THAM GIA</p>
-            <p class="section-content">{{ user.rate }} tháng</p>
+            <p class="section-content">{{ user.membership }} tháng</p>
           </div>
           <div class="column is-narrow">
             <b-button type="is-danger" @click="logOut">🚪 Đăng xuất</b-button>
@@ -49,11 +45,18 @@ export default {
       user: (state) => state.user.user,
       address: (state) => state.user.address,
     }),
+    province: function () {
+      if (this.address.length > 0) {
+        return this.address[0].province
+      } else {
+        return null
+      }
+    },
   },
   methods: {
     logOut() {
-      localStorage.clear()
-      this.$router.go()
+      localStorage.clear();
+      this.$router.go();
     },
   },
 };

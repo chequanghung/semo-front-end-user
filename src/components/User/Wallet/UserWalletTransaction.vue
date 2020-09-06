@@ -3,6 +3,7 @@
     <div>
       <p class="home-section-title">🧾 Lịch sử giao dịch</p>
     </div>
+    <b-loading :is-full-page="false" v-model="isLoading"></b-loading>
     <!-- table -->
     <b-table
       :data="trans"
@@ -39,7 +40,7 @@ export default {
           label: "SỐ TIỀN (đ)",
           field: "amount",
           searchable: true,
-          numeric: true
+          numeric: true,
         },
         {
           label: "NGƯỜI GIAO DỊCH",
@@ -53,14 +54,19 @@ export default {
         },
       ],
       current: 1,
+      isLoading: false,
     };
   },
   methods: {
     ...mapActions("wallet", ["gett"]),
     populate() {
-      this.gett().then(() => {
-        this.format_array();
-      });
+      this.gett()
+        .then(() => {
+          this.format_array();
+        })
+        .finally(() => {
+          this.isLoading = false;
+        });
     },
     format_array() {
       this.trans = this.transactions.map((item) => {
@@ -75,11 +81,12 @@ export default {
     },
   },
   async mounted() {
+    this.isLoading = true;
     this.populate();
   },
   watch: {
     transactions: function () {
-      this.format_array()
+      this.format_array();
     },
   },
 };

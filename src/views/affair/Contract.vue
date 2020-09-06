@@ -123,6 +123,8 @@ export default {
       this.$buefy.dialog.confirm({
         type: "is-danger",
         message: `Giao kèo này bị hủy và bạn sẽ không lấy lại được tiền cọc. Bạn chắc chắn chứ? 😨`,
+        confirmText: '🤜 Chắc chắn!',
+        cancelText: 'Không, tôi đổi ý rồi.',
         onConfirm: function() {
           this.isLoading = true;
 

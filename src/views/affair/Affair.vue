@@ -135,7 +135,7 @@
                 <!-- shipment -->
                 <b-carousel-item
                   style="overflow: visible !important;"
-                  v-if="user.id === contract.shipment_user_id && (contract.contract_status === 1 || contract.contract_status === 3)"
+                  v-if="user.id === contract.shipment_user_id && (contract.contract_status === 1 || contract.contract_status === 3) && contract.shipment_date !== null"
                 >
                   <!-- status -->
                   <p class="home-section-title">🚚 Đến ngày vận chuyển</p>
@@ -151,7 +151,7 @@
                 <!-- payment -->
                 <b-carousel-item
                   style="overflow: visible !important;"
-                  v-if="user.id === affair.buyer_user_id && (contract.contract_status === 1 || contract.contract_status === 2)"
+                  v-if="user.id === affair.buyer_user_id && (contract.contract_status === 1 || contract.contract_status === 2) && contract.payment_date !== null"
                 >
                   <!-- status -->
                   <p class="home-section-title">💵 Đến ngày thanh toán</p>
@@ -242,7 +242,10 @@
         </div>
 
         <!-- function -->
-        <div class="tile is-ancestor" v-if="contract.contract_status === 4">
+        <div
+          class="tile is-ancestor"
+          v-if="contract.contract_status === 4 && user.id === affair.buyer_user_id"
+        >
           <div class="tile is-vertical is-parent">
             <div class="tile is-child box">
               <p class="home-section-title">⚙️ Chức năng</p>
@@ -280,6 +283,17 @@
     >
       <AffairTransactionModal style="margin: auto;" @close="payDone"></AffairTransactionModal>
     </b-modal>
+
+    <b-modal
+      :active.sync="isRate"
+      trap-focus
+      aria-role="dialog"
+      aria-modal
+      destroy-on-hide
+      style="width: auto;"
+    >
+      <AffairRatingModal style="margin: auto;" @close="isRate = false"></AffairRatingModal>
+    </b-modal>
   </div>
 </template>
 
@@ -295,6 +309,7 @@ export default {
     AffairProductCard: () => import("@/components/Affair/AffairProductCard"),
     AffairTransactionModal: () =>
       import("@/components/Affair/AffairTransactionModal"),
+    AffairRatingModal: () => import("@/components/Affair/AffairRatingModal"),
   },
   computed: {
     ...mapState({
@@ -311,10 +326,14 @@ export default {
     },
 
     money: function () {
-      return new Intl.NumberFormat("vi-VN", {
-        style: "currency",
-        currency: "VND",
-      }).format(this.affair.Deposit.amount);
+      if (this.affair !== undefined && this.affair.Deposit !== undefined) {
+        return new Intl.NumberFormat("vi-VN", {
+          style: "currency",
+          currency: "VND",
+        }).format(this.affair.Deposit.amount);
+      } else {
+        return null;
+      }
     },
     deadline: function () {
       return Date.parse(this.affair.Deposit.date_created) + 1000 * 60 * 60 * 48;
@@ -349,7 +368,7 @@ export default {
           ? "Chưa hoàn thành"
           : "Đã hoàn thành";
       } else {
-        return "Chưa hoàn thành"
+        return "Chưa hoàn thành";
       }
     },
 
@@ -398,6 +417,7 @@ export default {
       affair_chats: [],
       interval: null,
       isPay: false,
+      isRate: false,
       // isDisabled: true
     };
   },
@@ -494,6 +514,8 @@ export default {
     },
     // finish
     finish() {
+      this.isRate = true;
+
       this.completea().then(() => {
         this.$buefy.toast.open({
           type: "is-success",
@@ -534,6 +556,11 @@ export default {
   watch: {
     chats: function () {
       this.affair_chats = this.chats;
+    },
+    affair: function () {
+      if (this.affair.affair_status === 2) {
+        clearInterval(this.interval);
+      }
     },
   },
 };

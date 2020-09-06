@@ -71,7 +71,7 @@
             <div class="column">
               <div class="columns" style="margin: 0;">
                 <div class="column">
-                  <div class="columns is-mobile">
+                  <div class="columns is-mobile" @click="$router.push({ name: 'UserView', params: { id: user.id }})">
                     <div class="column is-narrow">
                       <div
                         class="image is-24x24"
@@ -101,7 +101,7 @@
                 <template v-slot:title>THỜI GIAN CÒN LẠI</template>
                 <template v-slot:content>
                   <p
-                    v-if="auction.Auctions[0].remain_days > 0 && auction.Auctions[0].remain_time.split(':')[0] >= 24"
+                    v-if="auction !== undefined && auction.Auctions !== undefined && auction.Auctions[0].remain_days > 0 && auction.Auctions[0].remain_time.split(':')[0] >= 24"
                   >{{auction.Auctions[0].remain_days}} ngày</p>
                   <p
                     v-else
@@ -116,7 +116,7 @@
         <div
           class="bid"
           style="margin-top: 40px;"
-          v-if="auction.user_id !== userInfo.id && auction.Auctions[0].auction_status === 1"
+          v-if="auction !== undefined && auction.Auctions !== undefined && auction.user_id !== userInfo.id && auction.Auctions[0].auction_status === 1"
         >
           <div class="columns is-centered is-vcentered is-mobile">
             <div class="column is-narrow">
@@ -351,7 +351,7 @@
         <p
           class="cell-title"
           style="text-align: center; margin-top: 24px; font-size: 17px;"
-          v-if="auction !== undefined"
+          v-if="auction !== undefined && auction.Auctions !== undefined"
         >{{ auction.Auctions[0].remain_days > 0 && auction.Auctions[0].remain_time.split(':')[0] >= 24 ? auction.Auctions[0].remain_days + ' ngày' : format_time(auction.Auctions[0].remain_time) }} | {{bids.length}} lượt đấu giá</p>
 
         <!-- break -->

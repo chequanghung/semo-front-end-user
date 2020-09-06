@@ -27,34 +27,13 @@ export default {
             state.collections = collections
         },
         getm: (state, mostviewed) => {
-            state.mostviewed = mostviewed.map(item => {
-                return {
-                    ...item, price_cur: new Intl.NumberFormat('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                    }).format(item.price_cur)
-                }
-            })
+            state.mostviewed = mostviewed
         },
         getn: (state, newest) => {
-            state.newest = newest.map(item => {
-                return {
-                    ...item, price_cur: new Intl.NumberFormat('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                    }).format(item.price_cur)
-                }
-            })
+            state.newest = newest
         },
         gete: (state, ending) => {
-            state.ending = ending.map(item => {
-                return {
-                    ...item, price_cur: new Intl.NumberFormat('vi-VN', {
-                        style: 'currency',
-                        currency: 'VND',
-                    }).format(item.price_cur)
-                }
-            })
+            state.ending = ending
         },
         // also for fruits
         getf: (state, fruits) => {

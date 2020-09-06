@@ -32,10 +32,13 @@
       <div class="column">
         <!-- deposit -->
         <div class="tile is-child box">
+          <b-loading :is-full-page="false" v-model="isLoading"></b-loading>
           <p class="home-section-title">🧾 Cần thanh toán</p>
           <br />
-          <div class="tile is-parent" v-for="(depo, i) in deps.slice(index * 3, (index + 1) * 3)" :key="i">
+          <div class="columns is-multiline">
+          <div class="column is-half tile is-parent" v-for="(depo, i) in deps.slice(index * 6, (index + 1) * 6)" :key="i">
               <DepositCard :deposit="depo"></DepositCard>
+          </div>
           </div>
           <div class="columns is-mobile is-vcentered is-centered">
             <div class="column">
@@ -45,12 +48,6 @@
               <b-button v-if="index < totalPages - 1 && totalPages > 1" @click="next" expanded>Trang sau 👉</b-button>
             </div>
           </div>
-        </div>
-      </div>
-      <div class="column">
-        <!-- stats -->
-        <div class="tile is-child box">
-          <p class="home-section-title">📈 Thống kê</p>
         </div>
       </div>
     </div>
@@ -71,10 +68,10 @@ export default {
       deposit: (state) => state.wallet.deposit,
     }),
     totalPages: function() {
-      if (this.deposit.length % 3 > 0) {
-        return Math.ceil(this.deposit.length / 3)
+      if (this.deposit.length % 6 > 0) {
+        return Math.ceil(this.deposit.length / 6)
       } else {
-        return this.deposit.length / 3
+        return this.deposit.length / 6
       }
     }
   },
@@ -82,12 +79,18 @@ export default {
     return {
       index: 0,
       deps: [],
+      isLoading: false,
     }
   },
   async mounted() {
+    this.isLoading = true
+
     this.getw(this.user.id).then(() => {
-      this.getd();
-    });
+      this.getd()
+      .then(() => {
+        this.isLoading = false
+      })
+    })
   },
   methods: {
     ...mapActions("wallet", ["getw", "getd"]),

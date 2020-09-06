@@ -37,6 +37,12 @@ const routes = [
     component: () => import('@/views/auction/Auction')
   },
   {
+    path: '/user/id/:id',
+    name: 'UserView',
+    props: true,
+    component: () => import('@/views/user/User')
+  },
+  {
     path: '/user/info',
     component: () => import('@/views/user/UserInfo'),
     meta: {

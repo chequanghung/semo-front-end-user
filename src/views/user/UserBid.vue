@@ -20,6 +20,17 @@
             </div>
           </div>
 
+          <!-- 404 -->
+          <div class="container" v-if="product_list.length === 0">
+            <div class="columns is-centered">
+              <div class="column is-narrow">
+                <p style="font-size: 70px; text-align: center;">🤷‍♂️</p>
+                <br />
+                <p style="font-size: 20px; text-align: center;">Úi, ở đây chưa có gì cả.</p>
+              </div>
+            </div>
+          </div>
+
           <!-- products -->
           <div>
             <transition-group name="enlist" class="columns is-variable is-2 is-multiline">
@@ -98,14 +109,19 @@ export default {
     index: function () {
       this.populate();
     },
-    keyword: function() {
-      this.keyword !== '' ?
-      this.product_list = this.product_list.filter(item => item.Product.title.toLowerCase().indexOf(this.keyword.toLowerCase()) >= 0)
-      : this.product_list = this.products
+    keyword: function () {
+      this.keyword !== ""
+        ? (this.product_list = this.product_list.filter(
+            (item) =>
+              item.Product.title
+                .toLowerCase()
+                .indexOf(this.keyword.toLowerCase()) >= 0
+          ))
+        : (this.product_list = this.products);
     },
-    products: function() {
-      this.product_list = this.products
-    }
+    products: function () {
+      this.product_list = this.products;
+    },
   },
   async mounted() {
     this.populate();
@@ -123,10 +139,10 @@ export default {
       this.index = index;
     },
     intoAuction(info) {
-      this.$router.push({ name: 'Auction', params: { id: info.id } })
+      this.$router.push({ name: "Auction", params: { id: info.id } });
     },
     intoAffair(info) {
-      this.$router.push({ name: 'Affair', params: { id: info.id } })
+      this.$router.push({ name: "Affair", params: { id: info.id } });
     },
   },
 };

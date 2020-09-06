@@ -10,21 +10,42 @@
       </p>
     </div>
 
+    <!-- 404 -->
+    <div class="container" v-if="auctions.length === 0">
+      <div class="columns is-centered">
+        <div class="column is-narrow">
+          <p style="font-size: 70px; text-align: center;">🤷‍♂️</p>
+          <br/>
+          <p style="font-size: 20px; text-align: center;">Chúng tôi không có thứ bạn đang tìm rồi.</p>
+        </div>
+      </div>
+    </div>
+
     <!-- tabs -->
     <div class="container">
-      <b-tabs v-model="index" expanded type="is-toggle">
-        <b-tab-item label="🍎 Sản phẩm">
-          <AuctionGridList
-            :auctions="auctions.slice(pageIndex * 20, (pageIndex + 1) * 20)"
-            :index="pageIndex"
-            :totalPage="pageTotal"
-            @prev="prev"
-            @next="next"
-          ></AuctionGridList>
-        </b-tab-item>
-        <b-tab-item label="📘 Bộ sưu tập"></b-tab-item>
-      </b-tabs>
+      <!-- filter -->
+      <div class="filters columns is-multiline" v-if="auctions.length > 0">
+        <div class="column">
+          <p style="font-weight: 700">Sắp xếp theo:</p>
+        </div>
+        <div class="column">
+          <b-switch v-model="closing" type="is-green">Sắp kết thúc</b-switch>
+        </div>
+        <div class="column">
+          <b-switch v-model="hottest" type="is-green">Được xem nhiều</b-switch>
+        </div>
+      </div>
     </div>
+    <!-- grid list -->
+    <AuctionGridList
+      :auctions="auctions.slice(pageIndex * 20, (pageIndex + 1) * 20)"
+      :index="pageIndex"
+      :totalPage="pageTotal"
+      @prev="prev"
+      @next="next"
+    ></AuctionGridList>
+
+    <b-loading is-full-page v-model="isLoading"></b-loading>
   </div>
 </template>
 
@@ -44,14 +65,47 @@ export default {
   },
   data() {
     return {
-      index: "ab",
       pageIndex: 0,
       pageTotal: 0,
+      closing: false,
+      hottest: false,
+      isLoading: true,
     };
   },
   watch: {
-    index: function () {
-      this.changeIndex()
+    closing: function () {
+      if (this.closing === true) {
+        this.hottest = false;
+
+        this.auctions.sort(function (a, b) {
+          if (a.remain_time < b.remain_time) {
+            return -1;
+          } else if (a.remain_time > b.remain_time) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+      } else {
+        this.hottest = true;
+      }
+    },
+    hottest: function () {
+      if (this.hottest === true) {
+        this.closing = false;
+
+        this.auctions.sort(function (a, b) {
+          if (a.views < b.views) {
+            return -1;
+          } else if (a.views > b.views) {
+            return 1;
+          } else {
+            return 0;
+          }
+        });
+      } else {
+        this.closing = true;
+      }
     },
   },
   methods: {
@@ -76,11 +130,16 @@ export default {
         alert("ok");
       }
     },
+    searchItem() {
+      this.isLoading = true;
+
+      this.geta(this.search).finally(() => {
+        this.isLoading = false;
+      });
+    },
   },
   async mounted() {
-    this.geta(this.search);
-    this.index = 0;
-    this.changeIndex()
+    this.searchItem();
   },
 };
 </script>

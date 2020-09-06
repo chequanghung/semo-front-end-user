@@ -14,7 +14,7 @@
       <!-- price -->
       <div class="card-info">
         <p class="card-info-title">Giá hiện tại</p>
-        <p class="card-info-content major">{{ auction.price_cur }}</p>
+        <p class="card-info-content major">{{ format_currency(auction.price_cur) }}</p>
       </div>
       <!-- remaining time -->
       <div class="card-info" v-if="auction !== undefined">
@@ -65,6 +65,9 @@ export default {
       let times = time.split(":");
       return `${times[0]} giờ ${times[1]} phút`;
     },
+    format_currency(price) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(price)
+    }
   },
 };
 </script>
