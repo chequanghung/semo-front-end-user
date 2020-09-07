@@ -20,10 +20,12 @@
         rounded
         type="is-green"
         expanded
+        @click="next"
       ></b-button>
       <b-button
         label="Bỏ qua"
-        type="is-light"
+        type="is-text"
+        expanded
         @click="next"
       ></b-button>
     </form>
@@ -54,7 +56,7 @@ export default {
       user: (state) => state.user.user,
     }),
     isDisabled: function() {
-      return this.avatar === '' ? true : false
+      return this.avatar.length === 0 || this.avatar === '' ? true : false
     }
   },
   data() {

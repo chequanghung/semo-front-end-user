@@ -10,31 +10,42 @@
       <router-view :key="$route.fullPath" />
     </transition>
 
-    <br/>
-    <br/>
-    
+    <br />
+    <br />
+
+    <b-loading is-full-page v-model="isLoading"></b-loading>
+
     <!-- footer -->
     <div class="columns footer" v-if="!isFullpage">
       <div class="container">
         <div class="columns">
           <div class="column">
-            <p><strong>THÔNG TIN</strong></p>
-            <br/>
+            <p>
+              <strong>THÔNG TIN</strong>
+            </p>
+            <br />
             <p class="footer-link" @click="isInstruction = true">Hướng dẫn đấu giá</p>
-            <br/>
+            <br />
             <p class="footer-link" @click="isPolicyAuction = true">Nguyên tắc đấu giá</p>
-            <br/>
-            <p class="footer-link" @click="$router.push({ path: '/policy/affair' })">Nguyên tắc giao kèo</p>
+            <br />
+            <p
+              class="footer-link"
+              @click="$router.push({ path: '/policy/affair' })"
+            >Nguyên tắc giao kèo</p>
           </div>
           <hr />
           <div class="column">
-            <p><strong>LIÊN HỆ</strong></p>
-            <br/>
-            <p><strong>The SEMO Company</strong></p>
+            <p>
+              <strong>LIÊN HỆ</strong>
+            </p>
+            <br />
+            <p>
+              <strong>The SEMO Company</strong>
+            </p>
             <p>KM29, Khu Công nghệ cao Hòa Lạc</p>
             <p>Thạch Hòa, Thạch Thất</p>
             <p>Hà Nội</p>
-            <br/>
+            <br />
             <p>📧 thacmac@semo.vn</p>
             <p>📞 024 315 678 90</p>
           </div>
@@ -42,40 +53,39 @@
       </div>
     </div>
 
-    
-  <b-modal
-    :active.sync="isInstruction"
-    trap-focus
-    :destroy-on-hide="false"
-    aria-role="dialog"
-    aria-modal
-  >
-  <InstructionModal @close="isInstruction = false"></InstructionModal>
-  </b-modal>
+    <b-modal
+      :active.sync="isInstruction"
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    >
+      <InstructionModal @close="isInstruction = false"></InstructionModal>
+    </b-modal>
 
-  <b-modal
-    :active.sync="isPolicyAuction"
-    trap-focus
-    :destroy-on-hide="false"
-    aria-role="dialog"
-    aria-modal
-  >
-    <PolicyAuctionModal></PolicyAuctionModal>
-  </b-modal>
+    <b-modal
+      :active.sync="isPolicyAuction"
+      trap-focus
+      :destroy-on-hide="false"
+      aria-role="dialog"
+      aria-modal
+    >
+      <PolicyAuctionModal></PolicyAuctionModal>
+    </b-modal>
   </div>
 </template>
 
 <script>
 /* eslint-disable */
 import { mapState, mapActions } from "vuex";
-import moment from 'moment'
+import moment from "moment";
 
 export default {
   components: {
     PageTitle: () => import("@/components/PageTitle"),
     PageSubtitle: () => import("@/components/PageSubtitle"),
-    InstructionModal: () => import('@/components/InstructionModal'),
-    PolicyAuctionModal: () => import('@/components/PolicyAuctionModal')
+    InstructionModal: () => import("@/components/InstructionModal"),
+    PolicyAuctionModal: () => import("@/components/PolicyAuctionModal"),
   },
   watch: {
     $route: function (to, from) {
@@ -103,6 +113,7 @@ export default {
       isFullpage: false,
       isInstruction: false,
       isPolicyAuction: false,
+      isLoading: false
     };
   },
   computed: {
@@ -116,10 +127,10 @@ export default {
     this.toggleFooter();
 
     // check token
-    this.getUserByToken()
+    this.getUserByToken();
   },
   methods: {
-    ...mapActions('user', ['getu']),
+    ...mapActions("user", ["getu"]),
 
     toggleSubTitle() {
       if (
@@ -137,6 +148,7 @@ export default {
       if (
         this.$route.fullPath.indexOf("/register") >= 0 ||
         this.$route.fullPath.indexOf("/login") >= 0 ||
+        this.$route.fullPath.indexOf("/reset") >= 0 ||
         this.$route.fullPath.indexOf("/create") >= 0
       ) {
         this.isFullpage = true;
@@ -146,16 +158,27 @@ export default {
     },
 
     getUserByToken() {
-      if (localStorage.getItem('token') !== null) {
+      if (localStorage.getItem("token") !== null) {
+        this.isLoading = true
+
         this.getu()
-        .catch(error => {
+        .then(() => {
           this.$buefy.toast.open({
-            type: 'is-danger',
-            message: `${error.response.data.message}`
-          })
+            type: "is-success",
+            message: `Chào mừng bạn đã trở lại. 👋`,
+          });
+        })
+        .catch((error) => {
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message: `Phiên đăng nhập của bạn đã hết hạn, đăng nhập lại nha. 🥺`,
+          });
+        })
+        .finally(() => {
+          this.isLoading = false
         })
       }
-    }
+    },
   },
 };
 </script>
@@ -223,7 +246,7 @@ a {
 
 .footer-link {
   cursor: pointer;
-  transition: .25s;
+  transition: 0.25s;
 }
 
 .footer-link:hover {
@@ -287,21 +310,51 @@ a {
 @import "~bulma/sass/utilities/_all";
 
 // Set your colors
-$primary: #07D390;
+$primary: #07d390;
 $primary-invert: $white;
 
 // Setup $colors to use as bulma classes (e.g. 'is-twitter')
 $colors: (
-    "green": (#07D390, $white),
-    "white": ($white, $black),
-    "black": ($black, $white),
-    "light": ($light, $light-invert),
-    "dark": ($dark, $dark-invert),
-    "primary": ($primary, $primary-invert),
-    "info": ($info, $info-invert),
-    "success": ($success, $success-invert),
-    "warning": ($warning, $warning-invert),
-    "danger": ($danger, $danger-invert),
+  "green": (
+    #07d390,
+    $white,
+  ),
+  "white": (
+    $white,
+    $black,
+  ),
+  "black": (
+    $black,
+    $white,
+  ),
+  "light": (
+    $light,
+    $light-invert,
+  ),
+  "dark": (
+    $dark,
+    $dark-invert,
+  ),
+  "primary": (
+    $primary,
+    $primary-invert,
+  ),
+  "info": (
+    $info,
+    $info-invert,
+  ),
+  "success": (
+    $success,
+    $success-invert,
+  ),
+  "warning": (
+    $warning,
+    $warning-invert,
+  ),
+  "danger": (
+    $danger,
+    $danger-invert,
+  ),
 );
 
 // Links

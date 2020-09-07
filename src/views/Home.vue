@@ -47,6 +47,8 @@
         <b-button outlined rounded @click="$router.push({ path: '/latest' })">📰 Xem thêm</b-button>
       </div>
     </div>
+
+    <b-loading is-full-page v-model="isLoading"></b-loading>
   </div>
 </template>
 
@@ -65,6 +67,7 @@ export default {
   data() {
     return {
       auctionMenuIndex: 1,
+      isLoading: false
     };
   },
   computed: {
@@ -77,7 +80,12 @@ export default {
     }),
   },
   async mounted() {
-    this.populateh();
+    this.isLoading = true
+
+    this.populateh()
+    .finally(() => {
+      this.isLoading = false
+    })
   },
   methods: {
     ...mapActions("home", ["populateh"]),

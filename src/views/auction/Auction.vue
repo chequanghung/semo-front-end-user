@@ -1,6 +1,5 @@
 <template>
   <div class="container">
-    <b-loading v-model="isLoadingPage" is-full-page></b-loading>
     <br />
     <div
       class="notification is-light"
@@ -72,7 +71,10 @@
             <div class="column">
               <div class="columns" style="margin: 0;">
                 <div class="column">
-                  <div class="columns is-mobile" @click="$router.push({ name: 'UserView', params: { id: user.id }})">
+                  <div
+                    class="columns is-mobile"
+                    @click="$router.push({ name: 'UserView', params: { id: user.id }})"
+                  >
                     <div class="column is-narrow">
                       <div
                         class="image is-24x24"
@@ -431,6 +433,8 @@
         </div>
       </div>
     </b-modal>
+
+        <b-loading v-model="isLoadingPage" is-full-page></b-loading>
   </div>
 </template>
 
@@ -450,7 +454,15 @@ export default {
   async mounted() {
     // set
     this.isLoadingPage = true
-    this.refreshData();
+
+    axios
+      .put(`/auction/view/${this.id}`)
+      .then(() => {
+        this.refreshData();
+      })
+      .finally(() => {
+        this.isLoadingPage = false
+      })
 
     this.interval = setInterval(
       function () {
@@ -463,7 +475,7 @@ export default {
     clearInterval(this.interval);
   },
   methods: {
-    ...mapActions ('wallet', ['payd']),
+    ...mapActions("wallet", ["payd"]),
     getImgUrl(value) {
       return `https://picsum.photos/id/43${value}/1230/500`;
     },
@@ -471,15 +483,9 @@ export default {
       this.isComponentModalActive = false;
     },
     async refreshData() {
-      axios.put(`/auction/view/${this.id}`)
-      .then(() => {
-        this.getAuctionInfo();
-        this.getAuctionBids();
-        this.getAuctionSimilar();
-      })
-      .finally(() => {
-        this.isLoadingPage = false
-      });
+      this.getAuctionInfo();
+      this.getAuctionBids();
+      this.getAuctionSimilar();
     },
     getAuctionInfo() {
       axios.get(`/auction/id/${this.id}`).then((response) => {
@@ -715,7 +721,7 @@ export default {
       isFirstModal: false,
       isBiddingModal: false,
       isSuccessModal: false,
-      isLoadingPage: false,
+      isLoadingPage: true,
       amount: "",
       // error
       error: false,

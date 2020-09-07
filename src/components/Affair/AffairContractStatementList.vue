@@ -5,8 +5,6 @@
     </b-notification>
     <!-- transportation -->
     <p class="section-title">VẬN CHUYỂN</p>
-    {{ shipment_user === null }}
-    {{ update.shipment_user === null }}
     <!-- transportation responsibilities -->
     <ContractStatement
       title="Bên vận chuyển"
@@ -58,8 +56,6 @@
         style="display: flex; justify-content: center; flex-flow: column;"
       >
         <p class="change-notice-title">Có thay đối từ đối tác của bạn</p>
-        {{shipment_date}} | 
-        {{update.shipment_date}}
         <ContractStatement
           title="Ngày bắt đầu vận chuyển"
           :date="update.shipment_date"

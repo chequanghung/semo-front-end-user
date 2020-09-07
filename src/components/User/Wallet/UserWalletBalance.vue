@@ -85,12 +85,13 @@ export default {
   async mounted() {
     this.isLoading = true
 
-    this.getw(this.user.id).then(() => {
+    this.getw(this.user.id)
+    .then(() => {
       this.getd()
-      .then(() => {
+    })
+    .finally(() => {
         this.isLoading = false
       })
-    })
   },
   methods: {
     ...mapActions("wallet", ["getw", "getd"]),

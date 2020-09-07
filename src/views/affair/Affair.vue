@@ -135,32 +135,72 @@
                 <!-- shipment -->
                 <b-carousel-item
                   style="overflow: visible !important;"
-                  v-if="user.id === contract.shipment_user_id && (contract.contract_status === 1 || contract.contract_status === 3) && contract.shipment_date !== null"
+                  v-if="user.id !== contract.shipment_user_id && (contract.contract_status === 1 || contract.contract_status === 3) && contract.shipment_date !== null"
                 >
                   <!-- status -->
-                  <p class="home-section-title">🚚 Đến ngày vận chuyển</p>
-                  <p>Hãy sẵn sàng đưa xe hàng của bạn tới địa chỉ giao hàng nhé!</p>
+                  <p class="home-section-title">🚚 Xác nhận đã vận chuyển</p>
+                  <p>Nếu đối tác của bạn đã vận chuyển, hãy bấm nút xác nhận ở dưới.</p>
                   <br />
                   <div class="columns is-mobile">
                     <div class="column"></div>
                     <div class="column is-narrow">
-                      <b-button type="is-green" @click="ship">✅ Tôi đã giao hàng!</b-button>
+                      <b-button type="is-green" @click="ship">✅ Tôi đã nhận hàng!</b-button>
                     </div>
                   </div>
                 </b-carousel-item>
                 <!-- payment -->
                 <b-carousel-item
                   style="overflow: visible !important;"
-                  v-if="user.id === affair.buyer_user_id && (contract.contract_status === 1 || contract.contract_status === 2) && contract.payment_date !== null"
+                  v-if="contract.payment_date !== null && contract.shipment_user_id !== null"
                 >
                   <!-- status -->
-                  <p class="home-section-title">💵 Đến ngày thanh toán</p>
-                  <p>Nhớ chuyển tiền cho người bán thật sớm nhé!</p>
+                  <p class="home-section-title">💵 Xác nhận thanh toán</p>
+                  <p
+                    v-if="user.id === affair.buyer_user_id && (contract.contract_status === 1 || contract.contract_status === 2)"
+                  >Hãy chuyển tiền cho người bán thật sớm nhé!</p>
+                  <p
+                    v-if="user.id === affair.seller_user_id && (contract.contract_status === 1 || contract.contract_status === 2)"
+                  >Hãy bấm nút xác nhận dưới đây ngay khi bạn đã nhận được tiền từ đối tác nhé!</p>
+                  <p
+                    v-if="contract.contract_status === 3 || contract.contract_status === 4 || contract.contract_status === 5"
+                  >Thanh toán đã hoàn tất.</p>
                   <br />
+                  <!-- total -->
                   <div class="columns is-mobile">
-                    <div class="column"></div>
+                    <div class="column">
+                      <p>TỔNG TIỀN</p>
+                      <p class="deposit-content">{{ formatCurrency(totalTransactionFee) }}</p>
+                    </div>
+                  </div>
+                  <!-- notes -->
+                  <div
+                    class="notification is-light is-info"
+                    v-if="contract.shipment_user_id !== null"
+                  >
+                    <!-- if buyer is in charge of shipment -->
+                    <p
+                      v-if="contract.shipment_user_id === affair.buyer_user_id && contract.shipment_late_fee !== null"
+                    >➖ Giảm {{ formatCurrency(contract.shipment_late_fee) }} tiền vận chuyển.</p>
+                    <p
+                      v-if="contract.shipment_user_id !== affair.buyer_user_id && contract.shipment_late_fee !== null"
+                    >➕ Gồm {{ formatCurrency(contract.shipment_late_fee) }} tiền vận chuyển.</p>
+                    <p
+                      v-if="Date.parse(contract.payment_date) - Date.now() < 0 && contract.payment_date !== null"
+                    >➕ Gồm {{ formatCurrency(contract.payment_late_fee) }} phí thanh toán muộn.</p>
+                  </div>
+                  <!-- button and msg -->
+                  <div class="columns is-mobile">
+                    <div class="column">
+                      <p
+                        v-if="contract.contract_status === 1 || contract.contract_status === 2"
+                      >Người bán chưa nhận được tiền</p>
+                    </div>
                     <div class="column is-narrow">
-                      <b-button type="is-green" @click="pay">✅ Tôi đã thanh toán!</b-button>
+                      <b-button
+                        type="is-green"
+                        v-if="user.id === affair.seller_user_id && (contract.contract_status === 1 || contract.contract_status === 2)"
+                        @click="pay"
+                      >✅ Tôi đã nhận tiền!</b-button>
                     </div>
                   </div>
                 </b-carousel-item>
@@ -274,17 +314,6 @@
     </div>
 
     <b-modal
-      :active.sync="isPay"
-      trap-focus
-      aria-role="dialog"
-      aria-modal
-      destroy-on-hide
-      style="width: auto;"
-    >
-      <AffairTransactionModal style="margin: auto;" @close="payDone"></AffairTransactionModal>
-    </b-modal>
-
-    <b-modal
       :active.sync="isRate"
       trap-focus
       aria-role="dialog"
@@ -307,8 +336,6 @@ export default {
   },
   components: {
     AffairProductCard: () => import("@/components/Affair/AffairProductCard"),
-    AffairTransactionModal: () =>
-      import("@/components/Affair/AffairTransactionModal"),
     AffairRatingModal: () => import("@/components/Affair/AffairRatingModal"),
   },
   computed: {
@@ -320,6 +347,24 @@ export default {
       chats: (state) => state.affair.chats,
       user: (state) => state.user.user,
     }),
+
+    totalTransactionFee: function () {
+      let baseAmount = this.product.price_cur;
+
+      // if the buyer is in charge of shipping
+      if (this.contract.shipment_user_id === this.affair.buyer_user_id) {
+        baseAmount -= this.contract.shipment_late_fee || 0;
+      } else {
+        baseAmount += this.contract.shipment_late_fee || 0;
+      }
+
+      // if the transaction is late behind payment deadline
+      if (Date.parse(this.contract.payment_date) - Date.now() > 0) {
+        baseAmount += this.contract.payment_late_fee || 0;
+      }
+
+      return baseAmount;
+    },
 
     deposit: function () {
       return this.affair.Deposit;
@@ -416,7 +461,6 @@ export default {
       message: "",
       affair_chats: [],
       interval: null,
-      isPay: false,
       isRate: false,
       // isDisabled: true
     };
@@ -432,6 +476,17 @@ export default {
     ]),
     ...mapActions("wallet", ["payd"]),
 
+    formatCurrency(currency) {
+      return currency !== null
+        ? new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          }).format(currency)
+        : new Intl.NumberFormat("vi-VN", {
+            style: "currency",
+            currency: "VND",
+          }).format(0);
+    },
     intoContract() {
       clearInterval(this.interval);
       this.$router.push({
@@ -486,10 +541,22 @@ export default {
     },
     // pay
     pay() {
-      this.isPay = true;
-    },
-    payDone() {
-      this.isPay = false;
+      this.changec({
+        id: this.contract.id,
+        status: "PAY",
+      })
+        .then(() => {
+          this.$buefy.toast.open({
+            type: "is-success",
+            message: "Tuyệt! 😍",
+          });
+        })
+        .catch((error) => {
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message: `${error.data.message}`,
+          });
+        });
     },
     // pay deposit
     payDep() {
@@ -526,32 +593,31 @@ export default {
   },
   async mounted() {
     // console.log(this.affair);
-    this.populate(this.$route.params.id)
-      .then(() => {
-        this.getcs();
+    let vm = this;
 
-        let vm = this;
-        // scroll to bottom of the chat section
-        setTimeout(function () {
-          let chatWindow = vm.$refs.chats;
-          chatWindow.scrollTop = chatWindow.scrollHeight;
-        }, 500);
+    this.interval = setInterval(
+      function () {
+        vm.populate(this.$route.params.id)
+          .then(() => {
+            vm.getcs();
 
-        this.interval = setInterval(
-          function () {
-            this.getcs();
-          }.bind(this),
-          4000
-        );
-      })
-      .catch((error) => {
-        console.info(error);
+            // scroll to bottom of the chat section
+            setTimeout(function () {
+              let chatWindow = vm.$refs.chats;
+              chatWindow.scrollTop = chatWindow.scrollHeight;
+            }, 500);
+          })
+          .catch((error) => {
+            console.info(error);
 
-        this.$buefy.toast.open({
-          type: "is-danger",
-          message: "Oh no!",
-        });
-      });
+            vm.$buefy.toast.open({
+              type: "is-danger",
+              message: "Oh no!",
+            });
+          });
+      }.bind(this),
+      4000
+    );
   },
   watch: {
     chats: function () {

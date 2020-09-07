@@ -211,7 +211,7 @@ export default {
     }),
     submitIdentity() {
       this.isLoading = true;
-      console.log(this.user.id);
+      // console.log(this.user.id);
       this.addi({
         user_id: this.user.id,
         front_img_url: this.front,

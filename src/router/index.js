@@ -31,6 +31,11 @@ const routes = [
     component: () => import(/* webpackChunkName: "Login" */'@/views/login/Login')
   },
   {
+    path: '/reset',
+    name: 'Reset',
+    component: () => import('@/views/login/Reset')
+  },
+  {
     path: '/auction/:id',
     name: 'Auction',
     props: true,
