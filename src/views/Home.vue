@@ -80,10 +80,8 @@ export default {
     }),
   },
   async mounted() {
-    this.isLoading = true
-
     this.populateh()
-    .finally(() => {
+    .then(() => {
       this.isLoading = false
     })
   },

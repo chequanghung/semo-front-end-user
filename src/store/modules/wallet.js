@@ -33,9 +33,6 @@ export default {
         deleted: (state, deposit) => {
             state.deposit = state.deposit.map(item => item.id === deposit.id ? {...item, user_status: 1} : item)
         },
-        addm: (state, amount) => {
-            state.wallet.amount += amount
-        },
         subm: (state, amount) => {
             state.wallet.amount -= amount
         }
@@ -65,15 +62,12 @@ export default {
                 })
         },
         // add money
-        addm: async ({ state, commit }, amount) => {
+        addm: async ({ state }, request) => {
             return axios.post(`/wallet/topUp`, {
-                id: state.wallet.id,
-                amount: amount
+                id: request.id,
+                src_wallet_id: state.wallet.id,
+                amount: request.amount,
             })
-                .then((response) => {
-                    commit('addm', amount)
-                    return response
-                })
         },
         // pay for deposit
         payd: async ({ state, commit }, deposit) => {

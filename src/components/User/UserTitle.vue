@@ -24,7 +24,8 @@
           </div>
           <div class="column is-narrow">
             <p class="section-title">THAM GIA</p>
-            <p class="section-content">{{ user.membership }} tháng</p>
+            <p class="section-content" v-if="user.membership > 0">{{ user.membership }} tháng</p>
+            <p class="section-content" v-else>Mới tham gia</p>
           </div>
           <div class="column is-narrow">
             <b-button type="is-danger" @click="logOut">🚪 Đăng xuất</b-button>

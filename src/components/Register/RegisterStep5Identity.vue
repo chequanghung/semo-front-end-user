@@ -74,15 +74,6 @@
         expanded
       ></b-button>
     </form>
-
-    <hr style="border: 0.25px solid #70707040;" />
-    <p
-      class="home-section-title"
-      style="margin: 0; font-size: 14px; color: #212121; text-align: center;"
-    >
-      Bạn muốn dùng số điện thoại khác?
-      <a @click="$emit('first')">Bấm vào đây để quay lại.</a>
-    </p>
   </div>
 </template>
 
@@ -231,6 +222,11 @@ export default {
         })
         .catch(() => {
           this.isLoading = false;
+
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message: "Chứng minh thư này đã được sử dụng tại semo rồi. 😪",
+          });
         });
     },
     updateFront(url) {

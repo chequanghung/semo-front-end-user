@@ -7,11 +7,11 @@
       <div class="column is-narrow">
         <div
           style="width: 40px; height: 40px; border-radius: 50%; background-size: cover; background-position: center;"
-          :style="{backgroundImage: `url(${affair.buyer.img_url})`}"
+          :style="{backgroundImage: `url(${affair.seller.img_url})`}"
         ></div>
       </div>
       <div class="column is-narrow">
-        <p class="home-section-title">{{ affair.buyer.name }}</p>
+        <p class="home-section-title">{{ affair.seller.name }}</p>
       </div>
     </div>
 
@@ -65,7 +65,7 @@ export default {
 
           this.createf({
               rater_user_id: this.user.id,
-              rated_user_id: this.affair.buyer.id,
+              rated_user_id: this.affair.seller.id,
               rate: this.rate,
               description: this.description,
           })

@@ -20,6 +20,7 @@ moment.tz.setDefault('America/Scoresbysund')
 
 Vue.use(VueAxios, axios)
 axios.defaults.baseURL = "https://project-zero-on-air.herokuapp.com/"
+// axios.defaults.baseURL = "http://localhost:3003"
 
 Vue.config.productionTip = false
 

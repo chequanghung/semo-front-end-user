@@ -323,6 +323,7 @@
     >
       <AffairRatingModal style="margin: auto;" @close="isRate = false"></AffairRatingModal>
     </b-modal>
+    <b-loading is-full-page v-model="isLoading"></b-loading>
   </div>
 </template>
 
@@ -462,6 +463,7 @@ export default {
       affair_chats: [],
       interval: null,
       isRate: false,
+      isLoading: true,
       // isDisabled: true
     };
   },
@@ -592,32 +594,40 @@ export default {
     },
   },
   async mounted() {
-    // console.log(this.affair);
-    let vm = this;
+    this.populate(this.$route.params.id)
+    .then(() => {
+      this.isLoading = false
+      this.getcs();
 
-    this.interval = setInterval(
-      function () {
-        vm.populate(this.$route.params.id)
-          .then(() => {
-            vm.getcs();
+      let vm = this;
 
-            // scroll to bottom of the chat section
-            setTimeout(function () {
-              let chatWindow = vm.$refs.chats;
-              chatWindow.scrollTop = chatWindow.scrollHeight;
-            }, 500);
-          })
-          .catch((error) => {
-            console.info(error);
+      this.interval = setInterval(
+        function () {
+          vm.populate(this.$route.params.id)
+            .then(() => {
+              vm.getcs();
 
-            vm.$buefy.toast.open({
-              type: "is-danger",
-              message: "Oh no!",
+              // scroll to bottom of the chat section
+              setTimeout(function () {
+                let chatWindow = vm.$refs.chats;
+                chatWindow.scrollTop = chatWindow.scrollHeight;
+              }, 500);
+            })
+            .catch((error) => {
+              console.info(error);
+
+              vm.$buefy.toast.open({
+                type: "is-danger",
+                message: "Oh no!",
+              });
             });
-          });
-      }.bind(this),
-      4000
-    );
+        }.bind(this),
+        4000
+      );
+    })
+    .catch(() => {
+      this.isLoading = false
+    })
   },
   watch: {
     chats: function () {

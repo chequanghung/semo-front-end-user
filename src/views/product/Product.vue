@@ -28,6 +28,8 @@
         </transition>
       </div>
     </div>
+
+    <b-loading is-full-page v-model="isLoading"></b-loading>
   </div>
 </template>
 
@@ -56,6 +58,7 @@ export default {
       productMorph: {},
       product_type: "",
       product_id: "",
+      isLoading: false,
     };
   },
   async mounted() {
@@ -70,6 +73,8 @@ export default {
     },
     async addProduct(product) {
       // add product
+      this.isLoading = true;
+
       axios
         .post(`/product/`, {
           user_id: this.user.id,
@@ -85,7 +90,7 @@ export default {
           price_step: product.price_step,
           notes: product.notes,
           product_type: this.productMorph.product_type,
-          img_dir: product.dir
+          img_dir: product.dir,
         })
         // added successfully
         .then((response) => {
@@ -103,6 +108,7 @@ export default {
             })
           )
             .then(() => {
+              this.isLoading = false;
               // redirect to my product page
               if (this.product === undefined) {
                 // success toast
@@ -121,12 +127,11 @@ export default {
                   message: "Đã sửa sản phẩm thành công. 😎",
                 });
                 // back to product page
-                this.$router.go(-1)
+                this.$router.go(-1);
               }
             })
-            .catch((error) => {
-              console.info(error.data.message);
-              console.info(error.response);
+            .catch(() => {
+              this.isLoading = false;
               this.$buefy.toast.open({
                 type: "is-danger",
                 position: "is-top",
@@ -134,9 +139,8 @@ export default {
               });
             });
         })
-        .catch((error) => {
-          console.info(error.message);
-          console.info(error.response);
+        .catch(() => {
+          this.isLoading = false;
           this.$buefy.toast.open({
             type: "is-danger",
             position: "is-top",

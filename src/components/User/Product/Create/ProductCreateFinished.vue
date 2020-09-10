@@ -88,6 +88,8 @@ export default {
     ...mapActions("product", ["geti"]),
   },
   async mounted() {
+    window.scrollTo(0,0)
+    
     this.geti().then(() => {
       this.provinces = [
         ...new Set(this.institutions.map((item) => item.province)),

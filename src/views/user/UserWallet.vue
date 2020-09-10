@@ -21,6 +21,7 @@
     </div>
 
     <!-- modal -->
+    <!-- money input -->
     <b-modal :active.sync="isAddModal" trap-focus has-modal-card>
       <div class="modal-card">
         <p class="home-section-title">➕ Nạp tiền vào ví</p>
@@ -40,6 +41,122 @@
           </div>
         </div>
         <b-button type="is-green" @click="submitTopUp" :disabled="isDisabled">💳 Nạp tiền</b-button>
+        <b-loading is-full-page v-model="isTopUpLoading"></b-loading>
+      </div>
+    </b-modal>
+
+    <!-- transaction -->
+    <b-modal :active.sync="isMessageModal" trap-focus has-modal-card scroll="keep">
+      <div class="modal-card" style="overflow-y: scroll;">
+        <p class="home-section-title">👌 Hãy chuyển khoản cho chúng tôi</p>
+
+        <div class="notification is-light is-info">
+          <p>💵 Ví của bạn sẽ tăng sau khi semo nhận được tiền chuyển khoản. Hãy nhớ ghi nội dung chuyển khoản như ở dưới để chúng tôi biết bạn là ai nhé.</p>
+        </div>
+
+        <!-- money amount -->
+        <div class="notification is-light is-success">
+          <!-- price -->
+          <div class="columns is-mobile">
+            <div class="column">
+              <p>MÃ GIAO DỊCH</p>
+              <p class="deposit-content">{{ requestId }}</p>
+            </div>
+            <div class="column">
+              <p>SỐ TIỀN CẦN NẠP</p>
+              <p class="deposit-content">{{ formatCurrency(amount) }}</p>
+            </div>
+          </div>
+        </div>
+
+        <!-- bank info -->
+        <div class="tile is-ancestor">
+          <div class="tile is-parent is-vertical">
+            <div class="tile is-child box">
+              <img src="@/assets/Techcombank_logo.png" style="height: 40px;" />
+              <p>
+                <strong>Ngân hàng TMCP Kỹ Thương Việt Nam - Techcombank</strong>
+              </p>
+              <p>Phòng giao dịch Trần Đăng Ninh - chi nhánh Hoàng Quốc Việt - TP Hà Nội</p>
+              <hr />
+              <p>
+                Số tài khoản:
+                <strong>19130401201019</strong>
+              </p>
+              <p>
+                Chủ tài khoản:
+                <strong>CONG TY TNHH DICH VU SEMO</strong>
+              </p>
+              <p>
+                Nội dung:
+                <strong>{{ user.phone }} NAP TIEN {{ requestId }}</strong>
+              </p>
+            </div>
+            <div class="tile is-child box">
+              <img src="@/assets/sacombank-logo.png" style="height: 40px;" />
+              <p>
+                <strong>Ngân hàng TMCP Sài Gòn Thương Tín - Sacombank</strong>
+              </p>
+              <p>Chi nhánh Đông Đô - TP Hà Nội</p>
+              <hr />
+              <p>
+                Số tài khoản:
+                <strong>020042439399</strong>
+              </p>
+              <p>
+                Chủ tài khoản:
+                <strong>CONG TY TNHH DICH VU SEMO</strong>
+              </p>
+              <p>
+                Nội dung:
+                <strong>{{ user.phone }} NAP TIEN {{ requestId }}</strong>
+              </p>
+            </div>
+            <div class="tile is-child box">
+              <img src="@/assets/vietcombank-logo.png" style="height: 40px;" />
+              <p>
+                <strong>Ngân hàng TMCP Ngoại thương Việt Nam - Vietcombank</strong>
+              </p>
+              <p>Chi nhánh Thăng Long - TP Hà Nội</p>
+              <hr />
+              <p>
+                Số tài khoản:
+                <strong>0491001700825</strong>
+              </p>
+              <p>
+                Chủ tài khoản:
+                <strong>CONG TY TNHH DICH VU SEMO</strong>
+              </p>
+              <p>
+                Nội dung:
+                <strong>{{ user.phone }} NAP TIEN {{ requestId }}</strong>
+              </p>
+            </div>
+            <div class="tile is-child box">
+              <img src="@/assets/achaubank-logo.png" style="height: 40px;" />
+              <p>
+                <strong>Ngân hàng TMCP Á Châu - ACB</strong>
+              </p>
+              <p>PGD Trần Quốc Hoàn - TP Hà Nội</p>
+              <hr />
+              <p>
+                Số tài khoản:
+                <strong>85885588</strong>
+              </p>
+              <p>
+                Chủ tài khoản:
+                <strong>CONG TY TNHH DICH VU SEMO</strong>
+              </p>
+              <p>
+                Nội dung:
+                <strong>{{ user.phone }} NAP TIEN {{ requestId }}</strong>
+              </p>
+            </div>
+          </div>
+        </div>
+
+        <!-- last  -->
+        <b-button type="is-green" @click="isMessageModal = false">💳 Tôi đã chuyển khoản xong!</b-button>
       </div>
     </b-modal>
   </div>
@@ -47,6 +164,7 @@
 
 <script>
 import { mapState, mapActions } from "vuex";
+import uniqid from "uniqid";
 
 export default {
   name: "UserInfo",
@@ -56,7 +174,8 @@ export default {
     UserMenu: () => import("@/components/User/UserMenu"),
     UserWalletBalance: () =>
       import("@/components/User/Wallet/UserWalletBalance"),
-      UserWalletTransaction: () => import('@/components/User/Wallet/UserWalletTransaction')
+    UserWalletTransaction: () =>
+      import("@/components/User/Wallet/UserWalletTransaction"),
   },
   computed: {
     ...mapState({
@@ -104,6 +223,9 @@ export default {
       index: 1,
       amount: 150000,
       isAddModal: false,
+      isMessageModal: false,
+      isTopUpLoading: false,
+      requestId: "",
     };
   },
   methods: {
@@ -111,26 +233,41 @@ export default {
     changeSideIndex(index) {
       this.index = index;
     },
+    formatCurrency(amount) {
+      return new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount)
+    },
     topUp() {
       this.isAddModal = true;
+      this.amount = 150000
     },
     submitTopUp() {
-      this.addm(this.amount).then((response) => {
-        this.amount = 150000;
-        this.isAddModal = false;
+      this.requestId = uniqid.process();
+      this.isTopUpLoading = true
 
-        this.$buefy.toast.open({
-          type: "is-success",
-          message: `${response.data.message}`,
-          position: "is-top",
-        });
-      }).catch(error => {
+      this.addm({
+        id: this.requestId,
+        amount: this.amount,
+      })
+        .then((response) => {
+          this.isAddModal = false;
+          this.isMessageModal = true;
+
           this.$buefy.toast.open({
-          type: "is-danger",
-          message: `${error.response.data.message}`,
-          position: "is-top",
-        });
-      });
+            type: "is-success",
+            message: `${response.data.message}`,
+            position: "is-top",
+          });
+        })
+        .catch((error) => {
+          this.$buefy.toast.open({
+            type: "is-danger",
+            message: `${error.response.data.message}`,
+            position: "is-top",
+          });
+        })
+        .finally(() => {
+          this.isTopUpLoading = false
+        })
     },
   },
 };
@@ -142,5 +279,10 @@ export default {
   padding: 24px;
   border-radius: 10px;
   /* width: 480px; */
+}
+
+.deposit-content {
+  font-weight: 900;
+  font-size: 24px;
 }
 </style>

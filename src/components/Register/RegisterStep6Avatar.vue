@@ -29,15 +29,6 @@
         @click="next"
       ></b-button>
     </form>
-
-    <hr style="border: 0.25px solid #70707040;" />
-    <p
-      class="home-section-title"
-      style="margin: 0; font-size: 14px; color: #212121; text-align: center;"
-    >
-      Bạn muốn dùng số điện thoại khác?
-      <a @click="$emit('first')">Bấm vào đây để quay lại.</a>
-    </p>
   </div>
 </template>
 
@@ -69,7 +60,11 @@ export default {
     ...mapActions("user", ["addi", "editua"]),
     // load provinces
     updateAvatar(url) {
-      this.editua(url).catch(() => {
+      this.editua(url)
+      .then(() => {
+        this.avatar = url
+      })
+      .catch(() => {
         this.$buefy.toast.open({
           type: "is-error",
           message: "Úi, hãy thử lại sau nhé. 😪",
