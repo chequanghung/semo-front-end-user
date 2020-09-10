@@ -9,6 +9,9 @@
       <div class="column">
         <p class="home-section-title" style="margin: 0;">⭐ Đánh giá</p>
       </div>
+      <div class="column is-narrow">
+          <p v-if="!isLoading">{{ feedbacks.length }} đánh giá | ★ {{ user.rate }}</p>
+      </div>
     </div>
 
     <div v-if="isLoading" class="tile is-ancestor is-vertical">
@@ -125,6 +128,7 @@ export default {
   computed: {
     ...mapState({
       feedbacks: (state) => state.user.feedbacks,
+      user: state => state.user.user
     }),
     totalIndex: function () {
       return this.feedbacks.length % 6 === 0
