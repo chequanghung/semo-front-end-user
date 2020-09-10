@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <UserTitle :user="user"></UserTitle>
+    <UserTitle :user="user" @feedbacks="viewFeedbacks"></UserTitle>
     <PageSubtitle :menus="menus"></PageSubtitle>
 
     <!-- content -->
@@ -285,6 +285,9 @@ export default {
         confirmText: "🔄 Khôi phục",
       });
     },
+    viewFeedbacks() {
+      this.$emit('feedbacks')
+    }
   },
 };
 </script>

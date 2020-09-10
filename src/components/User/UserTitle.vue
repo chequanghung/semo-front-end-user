@@ -18,7 +18,7 @@
       <hr />
       <div class="column">
         <div class="columns is-vcentered is-centered is-mobile">
-          <div class="column is-narrow">
+          <div class="column is-narrow" style="cursor: pointer;" @click="viewFeedbacks">
             <p class="section-title">ĐÁNH GIÁ</p>
             <p class="section-content">★ {{ user.rate }}</p>
           </div>
@@ -48,9 +48,9 @@ export default {
     }),
     province: function () {
       if (this.address.length > 0) {
-        return this.address[0].province
+        return this.address[0].province;
       } else {
-        return null
+        return null;
       }
     },
   },
@@ -58,6 +58,9 @@ export default {
     logOut() {
       localStorage.clear();
       this.$router.go();
+    },
+    viewFeedbacks() {
+      this.$emit("feedbacks");
     },
   },
 };

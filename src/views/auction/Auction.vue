@@ -100,7 +100,7 @@
         <div class="remain" style="margin-top: 28px;">
           <div class="columns is-centered">
             <div class="column">
-              <data-block v-if="auction !== undefined">
+              <data-block v-if="auction !== undefined && auction.Auctions[0].auction_status === 1">
                 <template v-slot:title>THỜI GIAN CÒN LẠI</template>
                 <template v-slot:content>
                   <p
@@ -112,6 +112,9 @@
                   >{{ format_time(auction.Auctions[0].remain_time) }}</p>
                 </template>
               </data-block>
+              <div class="notification is-danger is-light" v-if="auction !== undefined && auction.Auctions[0].auction_status === 0">
+              <p class="home-section-title" style="color: #fd5e53; text-align: center; margin-bottom: 0;">🔒 Phiên đấu giá đã kết thúc.</p>
+              </div>
             </div>
           </div>
         </div>

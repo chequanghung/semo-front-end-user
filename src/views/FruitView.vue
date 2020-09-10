@@ -26,7 +26,7 @@ import { mapState, mapActions } from "vuex";
 
 export default {
   props: ["id"],
-  beforeDestroy() {
+  async beforeDestroy() {
     this.clear()
   },
   components: {

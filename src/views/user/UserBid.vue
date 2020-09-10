@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <UserTitle :user="user"></UserTitle>
+    <UserTitle :user="user" @feedbacks="viewFeedbacks"></UserTitle>
     <PageSubtitle :menus="menus"></PageSubtitle>
 
     <!-- content -->
@@ -144,6 +144,9 @@ export default {
     intoAffair(info) {
       this.$router.push({ name: "Affair", params: { id: info.id } });
     },
+    viewFeedbacks() {
+      this.$emit('feedbacks')
+    }
   },
 };
 </script>

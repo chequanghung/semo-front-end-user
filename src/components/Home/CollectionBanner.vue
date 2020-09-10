@@ -16,7 +16,6 @@
           class="banner-item"
           v-for="(banner, i) in banners"
           :key="i"
-          @click="intoCollection(banner)"
           :style="{backgroundImage: 'linear-gradient(rgb(0,0,0,0.7), rgb(1,210,142, 0.3)), url(' + banner.img_url+ ')'}"
         >
           <div class="columns is-vcentered is-centered">
@@ -32,7 +31,7 @@
     <!-- collection tiles -->
 
     <div class="tiles columns is-variable is-2 is-multiline">
-      <div class="tile column" v-for="(tile, i) in tiles" :key="i" @click="intoCollection(tile)">
+      <div class="tile column" v-for="(tile, i) in tiles" :key="i">
         <div
           class="tile"
           :style="{backgroundImage: 'linear-gradient(rgb(0,0,0,0.7), rgb(1,210,142, 0.3)), url(' + tile.img_url+ ')'}"
@@ -71,10 +70,6 @@ export default {
   },
   methods: {
     ...mapActions("home", ["populatehc"]),
-
-    intoCollection(collection) {
-      this.$emit("into", collection);
-    },
   },
 };
 </script>

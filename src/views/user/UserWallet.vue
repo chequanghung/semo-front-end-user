@@ -1,6 +1,6 @@
 <template>
   <div class="home">
-    <UserTitle :user="user"></UserTitle>
+    <UserTitle :user="user" @feedbacks="viewFeedbacks"></UserTitle>
     <PageSubtitle :menus="menus"></PageSubtitle>
 
     <div class="container" style="padding: 0;">
@@ -269,6 +269,9 @@ export default {
           this.isTopUpLoading = false
         })
     },
+    viewFeedbacks() {
+      this.$emit('feedbacks')
+    }
   },
 };
 </script>
