@@ -60,7 +60,7 @@ export default {
       this.$router.go();
     },
     viewFeedbacks() {
-      this.$emit("feedbacks");
+      this.$router.push({ path: '/user/feedback' })
     },
   },
 };

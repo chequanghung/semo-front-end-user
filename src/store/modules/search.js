@@ -6,13 +6,13 @@ export default {
 
     state: {
         auctions: [],
-        collections: []
+        users: []
     },
 
 
     getters: {
         auctions: state => state.auctions,
-        collections: state => state.collections
+        users: state => state.users
     },
 
 
@@ -20,8 +20,8 @@ export default {
         geta: (state, auctions) => {
             state.auctions = auctions
         },
-        getc: (state, collections) => {
-            state.collections = collections
+        getu: (state, users) => {
+            state.users = users
         }
     },
 
@@ -31,6 +31,12 @@ export default {
             return axios.get(`/auction/search/${title}`)
                 .then(({ data }) => {
                     commit('geta', data)
+                })
+        },
+        getu: async ({ commit }, title) => {
+            return axios.get(`/user/search/${title}`)
+                .then(({ data }) => {
+                    commit('getu', data)
                 })
         }
     }

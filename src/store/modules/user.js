@@ -14,6 +14,8 @@ export default {
         identity: {},
         // wallet
         wallet: {},
+        // feedbacks
+        feedbacks: [],
     },
 
 
@@ -22,7 +24,8 @@ export default {
         user: state => state.user,
         address: state => state.address,
         identity: state => state.identity,
-        wallet: state => state.wallet
+        wallet: state => state.wallet,
+        feedbacks: state => state.feedbacks
     },
 
 
@@ -66,6 +69,10 @@ export default {
         // get wallet
         getw: (state, wallet) => {
             state.wallet = wallet
+        },
+        // get feedbacks
+        getfs: (state, feedbacks) => {
+            state.feedbacks = feedbacks
         },
         // logout
         logout: (state) => {
@@ -178,8 +185,11 @@ export default {
                 new_password: passwords.new_password
             })
         },
-        // logout: ({ state }) => {
-
-        // }
+        getfs: async ({ state, commit }) => {
+            return axios.get(`/user/feedbacks/${state.user.id}`)
+            .then(({ data }) => {
+                commit('getfs', data)
+            })
+        }
     }
 }

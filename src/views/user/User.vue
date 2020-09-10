@@ -13,6 +13,7 @@
     </div>
 
     <!-- content -->
+    <!-- welcome -->
     <div class="columns is-vcentered is-multiline" v-if="user !== undefined && user !== null">
       <div class="column">
         <div class="columns is-vcentered is-centered is-mobile">
@@ -37,7 +38,8 @@
           </div>
           <div class="column is-narrow">
             <p class="section-title">THAM GIA</p>
-            <p class="section-content">{{ user.membership }} tháng</p>
+            <p class="section-content" v-if="user.membership > 0">{{ user.membership }} tháng</p>
+            <p class="section-content" v-else>Mới tham gia</p>
           </div>
         </div>
       </div>
@@ -45,7 +47,10 @@
 
     <!-- auctions -->
     <!-- 404 -->
-    <div class="container" v-if="isLoading === false && user !== undefined && user !== null && auctions.length === 0">
+    <div
+      class="container"
+      v-if="isLoading === false && user !== undefined && user !== null && auctions.length === 0"
+    >
       <div class="columns is-centered">
         <div class="column is-narrow">
           <p style="font-size: 70px; text-align: center;">🤷‍♂️</p>
@@ -53,6 +58,10 @@
           <p style="font-size: 20px; text-align: center;">Người dùng này không mở buổi đấu giá nào.</p>
         </div>
       </div>
+    </div>
+
+    <div class="welcome" v-if="auctions.length > 0">
+      <p class="welcome-title">Các buổi đấu giá do người dùng đang mở</p>
     </div>
     <!-- content -->
     <AuctionGridList
@@ -74,7 +83,12 @@ export default {
   },
   computed: {
     province: function () {
-      if (this.user !== undefined && this.user.Addresses !== undefined && this.user.Addresses !== null && this.user.Addresses.length > 0) {
+      if (
+        this.user !== undefined &&
+        this.user.Addresses !== undefined &&
+        this.user.Addresses !== null &&
+        this.user.Addresses.length > 0
+      ) {
         return this.user.Addresses[0].province;
       } else {
         return null;

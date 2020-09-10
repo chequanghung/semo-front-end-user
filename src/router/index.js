@@ -76,6 +76,13 @@ const routes = [
     }
   },
   {
+    path: '/user/feedback',
+    component: () => import('@/views/user/UserFeedback'),
+    meta: {
+      requiresAuth: true
+    }
+  },
+  {
     path: '/create',
     name: 'Create',
     component: () => import('@/views/product/Product'),

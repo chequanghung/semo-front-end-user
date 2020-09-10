@@ -10,42 +10,108 @@
       </p>
     </div>
 
-    <!-- 404 -->
-    <div class="container" v-if="auctions.length === 0">
-      <div class="columns is-centered">
-        <div class="column is-narrow">
-          <p style="font-size: 70px; text-align: center;">🤷‍♂️</p>
-          <br/>
-          <p style="font-size: 20px; text-align: center;">Chúng tôi không có thứ bạn đang tìm rồi.</p>
-        </div>
-      </div>
-    </div>
-
-    <!-- tabs -->
     <div class="container">
-      <!-- filter -->
-      <div class="filters columns is-multiline" v-if="auctions.length > 0">
-        <div class="column">
-          <p style="font-weight: 700">Sắp xếp theo:</p>
-        </div>
-        <div class="column">
-          <b-switch v-model="closing" type="is-green">Sắp kết thúc</b-switch>
-        </div>
-        <div class="column">
-          <b-switch v-model="hottest" type="is-green">Được xem nhiều</b-switch>
-        </div>
-      </div>
-    </div>
-    <!-- grid list -->
-    <AuctionGridList
-      :auctions="auctions.slice(pageIndex * 20, (pageIndex + 1) * 20)"
-      :index="pageIndex"
-      :totalPage="pageTotal"
-      @prev="prev"
-      @next="next"
-    ></AuctionGridList>
+      <b-tabs expanded type="is-toggle" v-model="index">
+        <b-tab-item label="🍎 Buổi đấu giá">
+          <div>
+            <!-- 404 -->
+            <div class="container" v-if="auctions.length === 0">
+              <div class="columns is-centered">
+                <div class="column is-narrow">
+                  <p style="font-size: 70px; text-align: center;">🤷‍♂️</p>
+                  <br />
+                  <p
+                    style="font-size: 20px; text-align: center;"
+                  >Chúng tôi không có thứ bạn đang tìm rồi.</p>
+                </div>
+              </div>
+            </div>
 
-    <b-loading is-full-page v-model="isLoading"></b-loading>
+            <!-- tabs -->
+            <div class="container">
+              <!-- filter -->
+              <div class="filters columns is-multiline" v-if="auctions.length > 0">
+                <div class="column">
+                  <p style="font-weight: 700">Sắp xếp theo:</p>
+                </div>
+                <div class="column">
+                  <b-switch v-model="closing" type="is-green">Sắp kết thúc</b-switch>
+                </div>
+                <div class="column">
+                  <b-switch v-model="hottest" type="is-green">Được xem nhiều</b-switch>
+                </div>
+              </div>
+            </div>
+            <!-- grid list -->
+            <AuctionGridList
+              :auctions="auctions.slice(pageIndex * 20, (pageIndex + 1) * 20)"
+              :index="pageIndex"
+              :totalPage="pageTotal"
+              @prev="prev"
+              @next="next"
+            ></AuctionGridList>
+
+            <b-loading is-full-page v-model="isLoading"></b-loading>
+          </div>
+        </b-tab-item>
+        <b-tab-item label="👱‍♂️ Người dùng">
+          <div>
+            <!-- 404 -->
+            <div class="container" v-if="users.length === 0">
+              <div class="columns is-centered">
+                <div class="column is-narrow">
+                  <p style="font-size: 70px; text-align: center;">🤷‍♂️</p>
+                  <br />
+                  <p
+                    style="font-size: 20px; text-align: center;"
+                  >Chúng tôi không có thứ bạn đang tìm rồi.</p>
+                </div>
+              </div>
+            </div>
+
+            <!-- tabs -->
+            <div class="container">
+              <br/>
+              <br/>
+              <!-- grid list -->
+              <div class="columns is-multiline">
+                <div
+                  class="column is-half-mobile is-one-third-tablet is-one-quarter-desktop is-one-fifth-widescreen is-2-fullhd"
+                  v-for="user in users.slice(pageIndex * 20, (pageIndex + 1) * 20)"
+                  :key="user.id"
+                >
+                  <div
+                    @click="$router.push({ path: `/user/id/${user.id}` })"
+                    class="user-box"
+                    style="background-color: white; box-shadow: 0 2px 8px #00000016; border-radius: 10px; overflow: hidden; transition: .25s; cursor: pointer;"
+                  >
+                    <div
+                      style="width: 100%; height: 180px; background-size: cover; background-position: center; padding: 0;"
+                      :style="{backgroundImage: `url(${user.img_url})`}"
+                    ></div>
+                    <div class="box-content" style="padding: 16px">
+                      <p
+                        style="font-size: 16px; font-weight: 900; height: 50px; overflow: hidden"
+                      >{{ user.name }}</p>
+                      <div class="columns is-mobile">
+                        <div class="column">
+                          <p>{{ user.Addresses[0].province }}</p>
+                        </div>
+                        <div class="column is-narrow">
+                          <p>⭐ {{ user.rate }}</p>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+
+            <b-loading is-full-page v-model="isLoading"></b-loading>
+          </div>
+        </b-tab-item>
+      </b-tabs>
+    </div>
   </div>
 </template>
 
@@ -60,7 +126,7 @@ export default {
   computed: {
     ...mapState({
       auctions: (state) => state.search.auctions,
-      collections: (state) => state.search.collections,
+      users: (state) => state.search.users,
     }),
   },
   data() {
@@ -70,6 +136,7 @@ export default {
       closing: false,
       hottest: false,
       isLoading: true,
+      index: 0,
     };
   },
   watch: {
@@ -107,9 +174,29 @@ export default {
         this.closing = true;
       }
     },
+    index: function () {
+      this.pageIndex = 0;
+      this.pageTotal = 0;
+
+      if (this.index === 1 && this.users.length === 0) {
+        this.getu(this.search).then(() => {
+          this.pageTotal =
+            this.users.length % 20 === 0
+              ? this.users.length / 20
+              : Math.ceil(this.users.length / 20);
+        });
+      } else if (this.index === 0) {
+        this.geta(this.search).then(() => {
+          this.pageTotal =
+            this.auctions.length % 20 === 0
+              ? this.auctions.length / 20
+              : Math.ceil(this.auctions.length / 20);
+        });
+      }
+    },
   },
   methods: {
-    ...mapActions("search", ["geta", "getc"]),
+    ...mapActions("search", ["geta", "getu"]),
     prev() {
       window.scrollTo(0, 0);
       --this.pageIndex;
@@ -118,24 +205,14 @@ export default {
       window.scrollTo(0, 0);
       ++this.pageIndex;
     },
-    changeIndex() {
-      if (this.index === 0) {
-        this.geta(this.search);
-        this.pageIndex = 0;
-        this.pageTotal =
-          this.auctions.length % 20 > 0
-            ? Math.ceil(this.auctions.length / 20)
-            : Math.floor(this.auctions.length / 20);
-      } else if (this.index === 1) {
-        alert("ok");
-      }
-    },
     searchItem() {
       this.isLoading = true;
 
-      this.geta(this.search).finally(() => {
-        this.isLoading = false;
-      });
+      if (this.index === 0) {
+        this.geta(this.search).finally(() => {
+          this.isLoading = false;
+        });
+      }
     },
   },
   async mounted() {
@@ -145,4 +222,7 @@ export default {
 </script>
 
 <style scoped>
+.user-box:hover {
+  box-shadow: 0 4px 16px #00000036;
+}
 </style>
