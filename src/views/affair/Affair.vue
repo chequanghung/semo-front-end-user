@@ -112,7 +112,7 @@
                     </div>
                     <div class="column is-narrow">
                       <p>NGÀY THANH TOÁN</p>
-                      <p class="deposit-content">{{ deadline }}</p>
+                      <p class="deposit-content">{{ deadlineDate }}</p>
                     </div>
                   </div>
                   <!-- button -->

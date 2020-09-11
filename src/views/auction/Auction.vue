@@ -31,7 +31,7 @@
         </div>
         <div class="column">
           <p>NGÀY THANH TOÁN</p>
-          <p class="deposit-content">{{ deadline }}</p>
+          <p class="deposit-content">{{ date }}</p>
         </div>
       </div>
       <!-- button -->
@@ -656,6 +656,7 @@ export default {
     deadline: function () {
       return Date.parse(this.deposit.date_created) + 1000 * 60 * 60 * 48;
     },
+
     elapsed: function () {
       let deadline = moment(this.deadline);
       let now = moment(new Date());
@@ -669,7 +670,7 @@ export default {
         : false;
     },
     date: function () {
-      return moment(this.deadline + 1000 * 60 * 60 * 48).format("DD-MM-YYYY");
+      return moment(this.deadline).format("DD-MM-YYYY");
     },
 
     balance: function () {
