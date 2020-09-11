@@ -31,7 +31,7 @@
         </div>
         <div class="column">
           <p>NGÀY THANH TOÁN</p>
-          <p class="deposit-content">{{ date }}</p>
+          <p class="deposit-content">{{ deadline }}</p>
         </div>
       </div>
       <!-- button -->

@@ -48,10 +48,6 @@
                 rounded
                 expanded
               ></b-button>
-              <br />
-              <div style="display: flex; justify-content: center;">
-                <router-link to="/reset">Quên mật khẩu</router-link>
-              </div>
             </form>
 
             <hr style="border: 0.25px solid #70707040;" />
