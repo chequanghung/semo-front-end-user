@@ -98,10 +98,10 @@
                     v-if="deposit !== undefined && deposit.user_status === 0"
                   >
                     <div class="column is-narrow">
-                      <p
+                      <!-- <p
                         class="card-title"
                         style="margin-top: 12px; font-weight: 700;"
-                      >Còn: {{ elapsed }} phút</p>
+                      >Còn: {{ elapsed }} phút</p> -->
                     </div>
                   </div>
                   <!-- price -->

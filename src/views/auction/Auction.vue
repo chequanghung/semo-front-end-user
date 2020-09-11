@@ -18,11 +18,11 @@
       >🤗 Cảm ơn bạn! Đấu giá sẽ được tiếp diễn.</p>
 
       <!-- content -->
-      <div class="columns is-vcentered">
-        <div class="column is-5">
-          <p class="card-title" style="margin-top: 12px; font-weight: 700;">Còn: {{ elapsed }} phút</p>
-        </div>
-      </div>
+      <!-- <div class="columns is-vcentered"> -->
+        <!-- <div class="column is-5"> -->
+          <!-- <p class="card-title" style="margin-top: 12px; font-weight: 700;">Còn: {{ elapsed }} phút</p> -->
+        <!-- </div> -->
+      <!-- </div> -->
       <!-- price -->
       <div class="columns is-mobile">
         <div class="column">
